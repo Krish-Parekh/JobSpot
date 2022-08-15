@@ -7,4 +7,18 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Custom Colors -->
+    <color name="dark_blue">#0D0140</color>
+    <color name="blue">#130160</color>
+    <color name="blue_magenta">#524B6B</color>
+    <color name="orange">#FCA34D</color>
+    <color name="kimberly">#6A6388</color>
+    <color name="grey">#AAA6B9</color>
+    <color name="lavender">#D6CDFE</color>
+    <color name="light_lavender">#E6E1FF</color>
+    <color name="off_white">#F9F9F9</color>
+
+    <!-- Component Colors-->
+    <color name="splash_screen_background">@color/dark_blue</color>
 </resources>

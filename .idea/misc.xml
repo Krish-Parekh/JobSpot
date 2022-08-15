@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/JobSpot/app/src/main/res/drawable-night/drawable.xml" value="0.299" />
+        <entry key="..\:/JobSpot/app/src/main/res/drawable/ic_light_logo.xml" value="0.196" />
+        <entry key="..\:/JobSpot/app/src/main/res/drawable/ic_splash_screen_logo.xml" value="0.196" />
         <entry key="..\:/JobSpot/app/src/main/res/font/fonts.xml" value="0.2171875" />
       </map>
     </option>
