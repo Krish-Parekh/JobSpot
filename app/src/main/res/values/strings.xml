@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">JobSpot</string>
+    <string name="on_boarding_heading">Find Your \nDream Job \nHere!</string>
+    <string name="on_boarding_sub_heading">Explore all the most exciting job roles based on your interest and study major.</string>
 </resources>

@@ -21,4 +21,9 @@
 
     <!-- Component Colors-->
     <color name="splash_screen_background">@color/dark_blue</color>
+    <color name="background_color">@color/off_white</color>
+    <color name="on_boarding_text_color">@color/black</color>
+    <color name="on_boarding_span_text_color">@color/orange</color>
+    <color name="on_boarding_sub_heading_text_color">@color/blue_magenta</color>
+    <color name="status_bar_color">@color/white</color>
 </resources>

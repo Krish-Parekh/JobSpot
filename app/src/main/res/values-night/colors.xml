@@ -2,5 +2,9 @@
 <resources>
 
     <color name="splash_screen_background">@color/off_white</color>
-
+    <color name="background_color">@color/dark_blue</color>
+    <color name="on_boarding_text_color">@color/white</color>
+    <color name="on_boarding_sub_heading_text_color">@color/grey</color>
+    <color name="status_bar_color">@color/dark_blue</color>
+    <color name="on_boarding_span_text_color">@color/orange</color>
 </resources>

@@ -4,15 +4,98 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_color"
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/appName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="@dimen/large_margin"
+        android:fontFamily="@font/dm_sans_bold"
+        android:text="@string/app_name"
+        android:textColor="@color/on_boarding_text_color"
+        android:textSize="18sp"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivOnBoarding"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_on_boarding"
+        app:layout_constraintBottom_toBottomOf="@+id/horizontal_two"
+        app:layout_constraintLeft_toLeftOf="@+id/vertical_one"
+        app:layout_constraintRight_toRightOf="@+id/vertical_two"
+        app:layout_constraintTop_toTopOf="@+id/horizontal_one"
+        app:layout_constraintVertical_bias="0.1" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal_one"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal_two"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.55" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical_one"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.1" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical_two"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.9" />
+
+    <TextView
+        android:id="@+id/onBoardingHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/large_margin"
+        android:fontFamily="@font/dm_sans_bold"
+        android:text="@string/on_boarding_heading"
+        android:textColor="@color/on_boarding_text_color"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toTopOf="@+id/onBoardingSubHeading"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivOnBoarding" />
+
+    <TextView
+        android:id="@+id/onBoardingSubHeading"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_margin"
+        android:fontFamily="@font/dm_sans_regular"
+        android:text="@string/on_boarding_sub_heading"
+        android:textColor="@color/on_boarding_sub_heading_text_color"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/onBoardingHeading" />
+
+
+    <ImageView
+        android:id="@+id/ivFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/medium_margin"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_fab_icon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
