@@ -2,4 +2,11 @@
     <string name="app_name">JobSpot</string>
     <string name="on_boarding_heading">Find Your \nDream Job \nHere!</string>
     <string name="on_boarding_sub_heading">Explore all the most exciting job roles based on your interest and study major.</string>
+    <string name="login_fragment_heading">Welcome Back</string>
+    <string name="login_fragment_sub_heading">Let’s Login. Fill in your details to apply for jobs!</string>
+    <string name="field_email">Email</string>
+    <string name="field_password">Password</string>
+    <string name="field_login">Login</string>
+    <string name="field_forgot_password">Forgot Password ?</string>
+    <string name="sign_up_prompt">You don\'t have an account yet? Sign up</string>
 </resources>

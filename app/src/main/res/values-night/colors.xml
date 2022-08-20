@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <!-- Component Colors-->
     <color name="splash_screen_background">@color/off_white</color>
     <color name="background_color">@color/dark_blue</color>
     <color name="on_boarding_text_color">@color/white</color>
     <color name="on_boarding_sub_heading_text_color">@color/grey</color>
     <color name="status_bar_color">@color/dark_blue</color>
     <color name="on_boarding_span_text_color">@color/orange</color>
+    <color name="text_color">@color/off_white</color>
+    <color name="box_stroke_color">@color/white</color>
+    <color name="button_color">@color/white</color>
+    <color name="button_text_color">@color/dark_blue</color>
+    <color name="subheading_color">@color/white</color>
+
 </resources>
