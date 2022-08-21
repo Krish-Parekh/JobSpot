@@ -12,5 +12,8 @@
     <color name="button_color">@color/white</color>
     <color name="button_text_color">@color/dark_blue</color>
     <color name="subheading_color">@color/white</color>
+    <color name="button_tint_color">@color/dark_blue</color>
+    <color name="button_tint_text_color">@color/white</color>
+    <color name="button_tint_border_color">@color/white</color>
 
 </resources>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color"
+    tools:context=".auth.fragments.EmailFragment">
+
+    <TextView
+        android:id="@+id/tvEmailHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/large_margin"
+        android:fontFamily="@font/dm_sans_bold"
+        android:text="@string/email_fragment_heading"
+        android:textAlignment="center"
+        android:textColor="@color/text_color"
+        android:textSize="32sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvEmailSubHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/small_margin"
+        android:fontFamily="@font/dm_sans_regular"
+        android:padding="@dimen/small_padding"
+        android:text="@string/email_fragment_sub_heading"
+        android:textAlignment="center"
+        android:textColor="@color/subheading_color"
+        app:layout_constraintLeft_toLeftOf="@+id/tvEmailHeading"
+        app:layout_constraintRight_toRightOf="@+id/tvEmailHeading"
+        app:layout_constraintTop_toBottomOf="@+id/tvEmailHeading" />
+
+    <LinearLayout
+        android:id="@+id/EmailContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/extra_large_margin"
+        android:orientation="vertical"
+        android:padding="@dimen/medium_margin"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvEmailSubHeading">
+
+        <ImageView
+            android:id="@+id/ivForgotPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:contentDescription="@null"
+            android:padding="@dimen/medium_padding"
+            android:src="@drawable/ic_check_email" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnOpenEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/medium_margin"
+            android:layout_marginTop="@dimen/medium_margin"
+            android:backgroundTint="@color/button_color"
+            android:fontFamily="@font/dm_sans_medium"
+            android:padding="@dimen/button_padding"
+            android:text="@string/field_open_email"
+            android:textColor="@color/button_text_color"
+            android:textSize="16sp"
+            app:cornerRadius="6dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnBackToLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/medium_margin"
+            android:layout_marginVertical="@dimen/extra_small_margin"
+            android:backgroundTint="@color/button_tint_color"
+            android:fontFamily="@font/dm_sans_medium"
+            android:padding="@dimen/button_padding"
+            android:text="@string/field_back_to_login"
+            android:textColor="@color/button_tint_text_color"
+            android:textSize="16sp"
+            app:cornerRadius="6dp"
+            app:strokeColor="@color/button_tint_border_color"
+            app:strokeWidth="2dp" />
+
+        <TextView
+            android:id="@+id/tvEmailResend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/email_resend_prompt"
+            android:textColor="@color/text_color"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

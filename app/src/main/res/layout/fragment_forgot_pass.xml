@@ -5,15 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_color"
-    tools:context=".auth.fragments.LoginFragment">
+    tools:context=".auth.fragments.ForgotPassFragment">
 
     <TextView
-        android:id="@+id/tvLoginHeading"
+        android:id="@+id/tvForgetPassHeading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/large_margin"
         android:fontFamily="@font/dm_sans_bold"
-        android:text="@string/login_fragment_heading"
+        android:text="@string/field_forgot_password"
+        android:textAlignment="center"
         android:textColor="@color/text_color"
         android:textSize="32sp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -21,19 +22,21 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tvLoginSubHeading"
+        android:id="@+id/tvForgetPassSubHeading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/small_margin"
         android:fontFamily="@font/dm_sans_regular"
-        android:text="@string/login_fragment_sub_heading"
+        android:padding="@dimen/small_padding"
+        android:text="@string/forget_pass_fragment_sub_heading"
+        android:textAlignment="center"
         android:textColor="@color/subheading_color"
-        app:layout_constraintLeft_toLeftOf="@+id/tvLoginHeading"
-        app:layout_constraintRight_toRightOf="@+id/tvLoginHeading"
-        app:layout_constraintTop_toBottomOf="@+id/tvLoginHeading" />
+        app:layout_constraintLeft_toLeftOf="@+id/tvForgetPassHeading"
+        app:layout_constraintRight_toRightOf="@+id/tvForgetPassHeading"
+        app:layout_constraintTop_toBottomOf="@+id/tvForgetPassHeading" />
 
     <LinearLayout
-        android:id="@+id/loginContainer"
+        android:id="@+id/ForgetPassContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/extra_large_margin"
@@ -41,12 +44,22 @@
         android:padding="@dimen/medium_margin"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvLoginSubHeading">
+        app:layout_constraintTop_toBottomOf="@+id/tvForgetPassSubHeading">
+
+        <ImageView
+            android:id="@+id/ivForgotPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:contentDescription="@null"
+            android:padding="@dimen/medium_padding"
+            android:src="@drawable/ic_forget_password" />
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/medium_margin"
             android:hint="@string/field_email"
             app:boxStrokeColor="@color/box_stroke_color"
             app:errorEnabled="true"
@@ -63,60 +76,34 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/field_password"
-            app:boxStrokeColor="@color/box_stroke_color"
-            app:endIconMode="password_toggle"
-            app:errorEnabled="true"
-            app:hintTextColor="@color/text_color"
-            app:startIconDrawable="@drawable/ic_password">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/dm_sans_medium"
-                android:inputType="textPassword" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:id="@+id/tvForgetPassword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:text="@string/field_forgot_password"
-            android:fontFamily="@font/dm_sans_regular"
-            android:textColor="@color/text_color"
-            android:textSize="14sp" />
-
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnLogin"
+            android:id="@+id/btnResetPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/medium_margin"
-            android:layout_marginVertical="@dimen/medium_margin"
             android:backgroundTint="@color/button_color"
             android:fontFamily="@font/dm_sans_medium"
             android:padding="@dimen/button_padding"
-            android:text="@string/field_login"
+            android:text="@string/field_reset_password"
             android:textColor="@color/button_text_color"
             android:textSize="16sp"
             app:cornerRadius="6dp" />
 
-        <TextView
-            android:id="@+id/tvSignup"
-            android:layout_width="wrap_content"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnBackToLogin"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/sign_up_prompt"
-            android:textColor="@color/text_color"
-            android:textSize="14sp" />
-
+            android:layout_marginHorizontal="@dimen/medium_margin"
+            android:layout_marginVertical="@dimen/extra_small_margin"
+            android:backgroundTint="@color/button_tint_color"
+            android:fontFamily="@font/dm_sans_medium"
+            android:padding="@dimen/button_padding"
+            android:text="@string/field_back_to_login"
+            android:textColor="@color/button_tint_text_color"
+            android:textSize="16sp"
+            app:cornerRadius="6dp"
+            app:strokeColor="@color/button_tint_border_color"
+            app:strokeWidth="2dp" />
 
     </LinearLayout>
 

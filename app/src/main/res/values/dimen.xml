@@ -11,4 +11,6 @@
     <dimen name="medium_margin">16dp</dimen>
     <dimen name="large_margin">32dp</dimen>
     <dimen name="extra_large_margin">42dp</dimen>
+
+    <dimen name="button_padding">12dp</dimen>
 </resources>

@@ -31,5 +31,8 @@
     <color name="box_stroke_color">@color/dark_blue</color>
     <color name="button_color">@color/dark_blue</color>
     <color name="button_text_color">@color/off_white</color>
+    <color name="button_tint_color">@color/off_white</color>
+    <color name="button_tint_text_color">@color/dark_blue</color>
+    <color name="button_tint_border_color">@color/dark_blue</color>
 
 </resources>

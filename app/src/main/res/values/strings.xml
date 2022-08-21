@@ -4,9 +4,24 @@
     <string name="on_boarding_sub_heading">Explore all the most exciting job roles based on your interest and study major.</string>
     <string name="login_fragment_heading">Welcome Back</string>
     <string name="login_fragment_sub_heading">Let’s Login. Fill in your details to apply for jobs!</string>
+    <string name="signup_fragment_heading">Create an Account</string>
+    <string name="signup_fragment_sub_heading">Let’s Signup. Fill in your details to apply for jobs!</string>
+    <string name="forget_pass_fragment_sub_heading">To reset your password, you need your email or mobile number that can be authenticated</string>
+    <string name="email_fragment_heading">Check Your Email</string>
+    <string name="email_fragment_sub_heading">We have sent the reset password to the email address brandonelouis@gmial.com</string>
+
+    <string name="field_username">Username</string>
     <string name="field_email">Email</string>
     <string name="field_password">Password</string>
     <string name="field_login">Login</string>
+    <string name="field_signup">Sign Up</string>
+    <string name="field_back_to_login">Back to login</string>
+    <string name="field_open_email">Open Your Email</string>
+    <string name="field_reset_password">Reset Password</string>
     <string name="field_forgot_password">Forgot Password ?</string>
+    <string name="login_prompt">Already have an account? Login</string>
     <string name="sign_up_prompt">You don\'t have an account yet? Sign up</string>
+    <string name="email_resend_prompt">You have not received the email? Resend</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
