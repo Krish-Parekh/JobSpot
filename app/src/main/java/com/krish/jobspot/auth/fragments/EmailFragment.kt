@@ -1,15 +1,16 @@
 package com.krish.jobspot.auth.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.krish.jobspot.R
 import com.krish.jobspot.databinding.FragmentEmailBinding
 
@@ -36,6 +37,13 @@ class EmailFragment : Fragment() {
         resendText.setSpan(UnderlineSpan(), 33, resendText.length, 0)
         resendText.setSpan(resendColor, 33, resendText.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
         binding.tvEmailResend.text = resendText
+
+        binding.btnOpenEmail.setOnClickListener {
+            val mailIntent = Intent(Intent.ACTION_MAIN)
+            mailIntent.addCategory(Intent.CATEGORY_APP_EMAIL)
+            mailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            activity?.startActivity(mailIntent)
+        }
     }
 
 

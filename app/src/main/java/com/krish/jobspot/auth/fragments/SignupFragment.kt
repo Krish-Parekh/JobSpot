@@ -5,6 +5,7 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,8 +13,10 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import com.krish.jobspot.R
 import com.krish.jobspot.databinding.FragmentSignupBinding
+import com.krish.jobspot.util.InputValidation
 
 
+private const val TAG = "SIGN_UP_FRAGMENT"
 class SignupFragment : Fragment() {
     private lateinit var binding: FragmentSignupBinding
     override fun onCreateView(
@@ -35,5 +38,11 @@ class SignupFragment : Fragment() {
         loginText.setSpan(UnderlineSpan(), 25, loginText.length, 0)
         loginText.setSpan(loginColor, 25, loginText.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
         binding.tvLogin.text = loginText
+
+        binding.btnSignup.setOnClickListener {
+            val username = binding.etUsername.text.toString().trim { it <= ' '}
+            val email = binding.etEmail.text.toString().trim{ it <= ' '}
+            val password = binding.etPassword.text.toString().trim { it <= ' '}
+        }
     }
 }

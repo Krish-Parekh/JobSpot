@@ -5,6 +5,7 @@
       <map>
         <entry key="..\:/JobSpot/app/src/main/res/drawable-night/drawable.xml" value="0.299" />
         <entry key="..\:/JobSpot/app/src/main/res/drawable-night/ic_fab_icon.xml" value="0.3205" />
+        <entry key="..\:/JobSpot/app/src/main/res/drawable-night/ic_forget_password.xml" value="0.196" />
         <entry key="..\:/JobSpot/app/src/main/res/drawable-night/ic_forgot_password.xml" value="0.3205" />
         <entry key="..\:/JobSpot/app/src/main/res/drawable/button_border.xml" value="0.3205" />
         <entry key="..\:/JobSpot/app/src/main/res/drawable/ciruclar_shape.xml" value="0.342" />
@@ -24,7 +25,7 @@
         <entry key="..\:/JobSpot/app/src/main/res/layout/fragment_email.xml" value="0.33" />
         <entry key="..\:/JobSpot/app/src/main/res/layout/fragment_forgot_pass.xml" value="0.33" />
         <entry key="..\:/JobSpot/app/src/main/res/layout/fragment_login.xml" value="0.33" />
-        <entry key="..\:/JobSpot/app/src/main/res/layout/fragment_signup.xml" value="0.1" />
+        <entry key="..\:/JobSpot/app/src/main/res/layout/fragment_signup.xml" value="0.33" />
         <entry key="..\:/JobSpot/app/src/main/res/layout/on_boarding.xml" value="0.27379873073436084" />
       </map>
     </option>
