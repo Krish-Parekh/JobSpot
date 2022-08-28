@@ -4,10 +4,10 @@ import java.util.regex.Pattern
 
 class InputValidation {
     companion object {
-        private val EMAIL_ADDRESS_PATTERN = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\\\.[A-Z]{2,6}\$", Pattern.CASE_INSENSITIVE)
-        private val PASSWORD_PATTERN = Pattern.compile("^(?=.*[@#$%^&+=])(?=\\S+$).{4,}$")
+        private val EMAIL_ADDRESS_PATTERN = Pattern.compile("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+\$")
+        private val PASSWORD_PATTERN = Pattern.compile("^.*(?=.{4,})(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!&\$%&? \"]).*\$")
 
-        private fun checkNullity(input: String): Boolean {
+        fun checkNullity(input: String): Boolean {
             return input.isNotEmpty();
         }
 

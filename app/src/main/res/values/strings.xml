@@ -19,9 +19,19 @@
     <string name="field_open_email">Open Your Email</string>
     <string name="field_reset_password">Reset Password</string>
     <string name="field_forgot_password">Forgot Password ?</string>
+
     <string name="login_prompt">Already have an account? Login</string>
     <string name="sign_up_prompt">You don\'t have an account yet? Sign up</string>
     <string name="email_resend_prompt">You have not received the email? Resend</string>
+
+    <string name="auth_pass">Authentication Success</string>
+    <string name="auth_fail">Authentication Failed</string>
+
+    <string name="field_error_username">Enter valid username</string>
+    <string name="field_error_email">Enter valid email ID</string>
+    <string name="field_error_password">Enter valid password</string>
+    <string name="reset_pass">Reset Password Send Success</string>
+    <string name="reset_fail">Reset Password Failed</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
