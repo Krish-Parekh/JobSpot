@@ -11,21 +11,28 @@
         <entry key="..\:/JobSpot/app/src/main/res/drawable/ciruclar_shape.xml" value="0.342" />
         <entry key="..\:/JobSpot/app/src/main/res/drawable/edit_text_field.xml" value="0.3675" />
         <entry key="..\:/JobSpot/app/src/main/res/drawable/ic_check_email.xml" value="0.3205" />
+        <entry key="..\:/JobSpot/app/src/main/res/drawable/ic_date.xml" value="0.3475" />
         <entry key="..\:/JobSpot/app/src/main/res/drawable/ic_email.xml" value="0.3205" />
         <entry key="..\:/JobSpot/app/src/main/res/drawable/ic_fab_icon.xml" value="0.2555" />
         <entry key="..\:/JobSpot/app/src/main/res/drawable/ic_forget_password.xml" value="0.3675" />
         <entry key="..\:/JobSpot/app/src/main/res/drawable/ic_forgot_password.xml" value="0.3205" />
+        <entry key="..\:/JobSpot/app/src/main/res/drawable/ic_image_picker.xml" value="0.3475" />
         <entry key="..\:/JobSpot/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2555" />
         <entry key="..\:/JobSpot/app/src/main/res/drawable/ic_light_logo.xml" value="0.196" />
         <entry key="..\:/JobSpot/app/src/main/res/drawable/ic_password.xml" value="0.3135" />
+        <entry key="..\:/JobSpot/app/src/main/res/drawable/ic_phone.xml" value="0.3475" />
+        <entry key="..\:/JobSpot/app/src/main/res/drawable/ic_remember_me.xml" value="0.3475" />
         <entry key="..\:/JobSpot/app/src/main/res/drawable/ic_splash_screen_logo.xml" value="0.196" />
+        <entry key="..\:/JobSpot/app/src/main/res/drawable/spinner_background.xml" value="0.3475" />
         <entry key="..\:/JobSpot/app/src/main/res/font/fonts.xml" value="0.2171875" />
         <entry key="..\:/JobSpot/app/src/main/res/layout/activity_auth.xml" value="0.33" />
         <entry key="..\:/JobSpot/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/JobSpot/app/src/main/res/layout/activity_user_detail.xml" value="0.30085470085470084" />
         <entry key="..\:/JobSpot/app/src/main/res/layout/fragment_email.xml" value="0.33" />
         <entry key="..\:/JobSpot/app/src/main/res/layout/fragment_forgot_pass.xml" value="0.33" />
-        <entry key="..\:/JobSpot/app/src/main/res/layout/fragment_login.xml" value="0.33" />
+        <entry key="..\:/JobSpot/app/src/main/res/layout/fragment_login.xml" value="0.1" />
         <entry key="..\:/JobSpot/app/src/main/res/layout/fragment_signup.xml" value="0.33" />
+        <entry key="..\:/JobSpot/app/src/main/res/layout/fragment_student_detail.xml" value="0.25" />
         <entry key="..\:/JobSpot/app/src/main/res/layout/on_boarding.xml" value="0.27379873073436084" />
       </map>
     </option>

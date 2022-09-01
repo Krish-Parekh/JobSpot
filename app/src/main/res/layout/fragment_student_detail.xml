@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color"
+    tools:context=".user_details.fragments.StudentDetailFragment">
+
+
+    <TextView
+        android:id="@+id/tvDetailHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/large_margin"
+        android:fontFamily="@font/dm_sans_bold"
+        android:text="@string/student_detail_fragment_heading"
+        android:textColor="@color/text_color"
+        android:textSize="26sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/large_margin"
+        android:orientation="vertical"
+        android:padding="@dimen/medium_margin"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDetailHeading">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imagePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_image_picker" />
+
+        <TextView
+            android:id="@+id/tvUploadImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginVertical="@dimen/small_margin"
+            android:fontFamily="@font/dm_sans_medium"
+            android:text="@string/upload_image"
+            android:textColor="@color/text_color"
+            android:textSize="16sp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/etSapIdContainer"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/field_sap_id"
+            app:boxStrokeColor="@color/box_stroke_color"
+            app:errorEnabled="true"
+            app:startIconDrawable="@drawable/ic_remember_me"
+            app:hintTextColor="@color/text_color"
+            app:placeholderText="eg. 53003205035">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etSapId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/dm_sans_medium"
+                android:inputType="text" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/etMobileContainer"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/field_mobile"
+            app:boxStrokeColor="@color/box_stroke_color"
+            app:errorEnabled="true"
+            app:hintTextColor="@color/text_color"
+            app:placeholderText="8356056213"
+            app:prefixText="+91"
+            app:startIconDrawable="@drawable/ic_phone">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etMobile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/dm_sans_medium"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etDateContainer"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginEnd="@dimen/small_margin"
+                android:layout_weight="1"
+                android:hint="@string/field_dob"
+                app:boxStrokeColor="@color/box_stroke_color"
+                app:endIconDrawable="@drawable/ic_date"
+                app:endIconMode="custom"
+                app:errorEnabled="true"
+                app:hintTextColor="@color/text_color">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/dm_sans_medium"
+                    android:inputType="phone" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.skydoves.powerspinner.PowerSpinnerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|start"
+                android:layout_marginStart="@dimen/small_margin"
+                android:layout_marginTop="6dp"
+                android:layout_weight="1"
+                android:background="@drawable/spinner_background"
+                app:spinner_popup_background="@drawable/spinner_background"
+                android:fontFamily="@font/dm_sans_medium"
+                android:hint="@string/field_gender"
+                android:padding="15dp"
+                android:textColor="@color/text_color"
+                app:spinner_arrow_gravity="end"
+                app:spinner_arrow_padding="@dimen/small_padding"
+                app:spinner_arrow_tint="@color/power_spinner_arrow_tint"
+                app:spinner_divider_color="@color/power_spinner_arrow_tint"
+                app:spinner_item_array="@array/gender"
+                app:spinner_item_height="46dp" />
+
+
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/medium_margin"
+            android:layout_marginVertical="@dimen/medium_margin"
+            android:backgroundTint="@color/button_color"
+            android:fontFamily="@font/dm_sans_medium"
+            android:padding="@dimen/button_padding"
+            android:text="@string/field_next"
+            android:textColor="@color/button_text_color"
+            android:textSize="16sp"
+            app:cornerRadius="6dp" />
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

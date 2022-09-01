@@ -15,5 +15,8 @@
     <color name="button_tint_color">@color/dark_blue</color>
     <color name="button_tint_text_color">@color/white</color>
     <color name="button_tint_border_color">@color/white</color>
+    <color name="power_spinner_arrow_tint">@color/white</color>
+    <color name="power_spinner_border_active">@color/white</color>
+    <color name="power_spinner_border_in_active">@color/black</color>
 
 </resources>

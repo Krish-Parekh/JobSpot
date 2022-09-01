@@ -14,14 +14,16 @@
         android:theme="@style/Theme.JobSpot"
         tools:targetApi="31">
         <activity
+            android:name=".user_details.UserDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".auth.AuthActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.JobSpotSplashTheme"
-            >
+            android:theme="@style/Theme.JobSpotSplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

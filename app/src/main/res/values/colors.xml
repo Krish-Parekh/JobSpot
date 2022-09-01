@@ -15,6 +15,7 @@
     <color name="orange">#FCA34D</color>
     <color name="kimberly">#6A6388</color>
     <color name="grey">#AAA6B9</color>
+    <color name="dark_grey">#9e9e9e</color>
     <color name="lavender">#D6CDFE</color>
     <color name="light_lavender">#E6E1FF</color>
     <color name="off_white">#F9F9F9</color>
@@ -34,5 +35,8 @@
     <color name="button_tint_color">@color/off_white</color>
     <color name="button_tint_text_color">@color/dark_blue</color>
     <color name="button_tint_border_color">@color/dark_blue</color>
+    <color name="power_spinner_arrow_tint">@color/dark_blue</color>
+    <color name="power_spinner_border_active">@color/dark_blue</color>
+    <color name="power_spinner_border_in_active">@color/dark_grey</color>
 
 </resources>

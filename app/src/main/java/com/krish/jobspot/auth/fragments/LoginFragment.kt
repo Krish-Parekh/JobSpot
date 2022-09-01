@@ -1,6 +1,7 @@
 package com.krish.jobspot.auth.fragments
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -17,6 +18,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.krish.jobspot.R
 import com.krish.jobspot.databinding.FragmentLoginBinding
+import com.krish.jobspot.user_details.UserDetailActivity
 import com.krish.jobspot.util.InputValidation
 import com.krish.jobspot.util.addTextWatcher
 import com.krish.jobspot.util.clearText
@@ -55,6 +57,7 @@ class LoginFragment : Fragment() {
         binding.etEmailContainer.addTextWatcher()
         binding.etPasswordContainer.addTextWatcher()
 
+
         binding.btnLogin.setOnClickListener {
             val email = binding.etEmail.text.toString().trim { it <= ' ' }
             val password = binding.etPassword.text.toString().trim { it <= ' ' }
@@ -80,11 +83,18 @@ class LoginFragment : Fragment() {
                 val uid = mAuth.currentUser?.uid
                 Log.d(TAG, "UID : $uid")
                 Toast.makeText(requireContext(), getString(R.string.auth_pass), Toast.LENGTH_SHORT).show()
+                navigateToUserDetail()
             }
             .addOnFailureListener { error ->
                 Log.d(TAG, "Exception: ${error.message}")
                 Toast.makeText(requireContext(), getString(R.string.auth_fail), Toast.LENGTH_SHORT).show()
             }
+    }
+
+    private fun navigateToUserDetail() {
+        val userDetailActivity = Intent(requireContext(), UserDetailActivity::class.java)
+        activity?.startActivity(userDetailActivity)
+        activity?.finish()
     }
 
     // Verify user details and show message if error

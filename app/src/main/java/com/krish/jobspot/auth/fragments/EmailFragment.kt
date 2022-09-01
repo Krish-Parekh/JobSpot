@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.krish.jobspot.R
 import com.krish.jobspot.databinding.FragmentEmailBinding
 
@@ -39,6 +40,10 @@ class EmailFragment : Fragment() {
         resendText.setSpan(UnderlineSpan(), 33, resendText.length, 0)
         resendText.setSpan(resendColor, 33, resendText.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
         binding.tvEmailResend.text = resendText
+
+        binding.btnBackToLogin.setOnClickListener {
+            findNavController().popBackStack(R.id.loginFragment, false)
+        }
 
         binding.btnOpenEmail.setOnClickListener {
             val mailIntent = Intent(Intent.ACTION_MAIN)

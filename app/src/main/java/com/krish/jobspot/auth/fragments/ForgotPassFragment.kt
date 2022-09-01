@@ -33,11 +33,14 @@ class ForgotPassFragment : Fragment() {
 
     private fun setupView() {
 
+        binding.btnBackToLogin.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         binding.etEmailContainer.addTextWatcher()
 
         binding.btnResetPassword.setOnClickListener {
             val email = binding.etEmail.text.toString().trim{it <= ' '}
-
             if(InputValidation.emailValidation(email)){
                 mAuth.sendPasswordResetEmail(email)
                     .addOnSuccessListener {

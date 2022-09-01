@@ -9,6 +9,7 @@
     <string name="forget_pass_fragment_sub_heading">To reset your password, you need your email or mobile number that can be authenticated</string>
     <string name="email_fragment_heading">Check Your Email</string>
     <string name="email_fragment_sub_heading">We have sent the reset password to the email address brandonelouis@gmial.com</string>
+    <string name="student_detail_fragment_heading">Add Details</string>
 
     <string name="field_username">Username</string>
     <string name="field_email">Email</string>
@@ -33,5 +34,18 @@
     <string name="reset_pass">Reset Password Send Success</string>
     <string name="reset_fail">Reset Password Failed</string>
 
+    <string name="upload_image">Upload Profile</string>
+    <string name="field_sap_id">Sap ID</string>
+    <string name="field_mobile">Mobile</string>
+    <string name="field_gender">Gender</string>
+    <string name="field_dob">DOB</string>
+    <string name="field_next">Next</string>
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="gender">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Other</item>
+    </string-array>
 </resources>
