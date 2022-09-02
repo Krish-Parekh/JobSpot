@@ -56,8 +56,12 @@ dependencies {
 
     //Circular ImageView
     implementation "de.hdodenhof:circleimageview:$circular_iv_version"
-
+    //Image Picker
+    implementation "com.github.dhaval2404:imagepicker:$image_picker_version"
+    
     //PowerSpinner
-    implementation "com.github.skydoves:powerspinner:1.2.4"
+    implementation "com.github.skydoves:powerspinner:$power_spinner_version"
+
+
 
 }

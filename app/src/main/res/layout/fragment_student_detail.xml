@@ -31,22 +31,23 @@
         app:layout_constraintTop_toBottomOf="@+id/tvDetailHeading">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imagePicker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/profileImage"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
             android:layout_gravity="center"
             android:src="@drawable/ic_image_picker" />
 
         <TextView
-            android:id="@+id/tvUploadImage"
-            android:layout_width="wrap_content"
+            android:id="@+id/tvImagePicker"
+            android:layout_width="match_parent"
+            android:textAlignment="center"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginVertical="@dimen/small_margin"
             android:fontFamily="@font/dm_sans_medium"
             android:text="@string/upload_image"
             android:textColor="@color/text_color"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/etSapIdContainer"
@@ -107,6 +108,7 @@
                 android:layout_marginEnd="@dimen/small_margin"
                 android:layout_weight="1"
                 android:hint="@string/field_dob"
+                android:focusable="false"
                 app:boxStrokeColor="@color/box_stroke_color"
                 app:endIconDrawable="@drawable/ic_date"
                 app:endIconMode="custom"
@@ -118,6 +120,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/dm_sans_medium"
+                    android:textSize="12sp"
                     android:inputType="phone" />
 
             </com.google.android.material.textfield.TextInputLayout>

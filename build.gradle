@@ -3,6 +3,8 @@ buildscript{
         splash_screen_version="1.0.0"
         nav_version = "2.5.1"
         circular_iv_version="3.1.0"
+        power_spinner_version="1.2.4"
+        image_picker_version="2.1"
     }
     dependencies {
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
