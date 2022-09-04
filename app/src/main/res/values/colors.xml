@@ -38,5 +38,6 @@
     <color name="power_spinner_arrow_tint">@color/dark_blue</color>
     <color name="power_spinner_border_active">@color/dark_blue</color>
     <color name="power_spinner_border_in_active">@color/dark_grey</color>
+    <color name="icon_tint">@color/dark_blue</color>
 
 </resources>

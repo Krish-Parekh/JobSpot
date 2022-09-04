@@ -32,6 +32,8 @@
         <entry key="..\:/JobSpot/app/src/main/res/layout/fragment_forgot_pass.xml" value="0.33" />
         <entry key="..\:/JobSpot/app/src/main/res/layout/fragment_login.xml" value="0.1" />
         <entry key="..\:/JobSpot/app/src/main/res/layout/fragment_signup.xml" value="0.33" />
+        <entry key="..\:/JobSpot/app/src/main/res/layout/fragment_student_academic.xml" value="0.33" />
+        <entry key="..\:/JobSpot/app/src/main/res/layout/fragment_student_address.xml" value="0.25" />
         <entry key="..\:/JobSpot/app/src/main/res/layout/fragment_student_detail.xml" value="0.25" />
         <entry key="..\:/JobSpot/app/src/main/res/layout/on_boarding.xml" value="0.27379873073436084" />
       </map>

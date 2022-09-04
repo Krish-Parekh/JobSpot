@@ -9,5 +9,23 @@
         android:id="@+id/studentDetailFragment"
         android:name="com.krish.jobspot.user_details.fragments.StudentDetailFragment"
         android:label="fragment_student_detail"
-        tools:layout="@layout/fragment_student_detail" />
+        tools:layout="@layout/fragment_student_detail" >
+        <action
+            android:id="@+id/action_studentDetailFragment_to_studentAddressFragment"
+            app:destination="@id/studentAddressFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/studentAddressFragment"
+        android:name="com.krish.jobspot.user_details.fragments.StudentAddressFragment"
+        android:label="fragment_student_address"
+        tools:layout="@layout/fragment_student_address" >
+        <action
+            android:id="@+id/action_studentAddressFragment_to_studentAcademicFragment"
+            app:destination="@id/studentAcademicFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/studentAcademicFragment"
+        android:name="com.krish.jobspot.user_details.fragments.StudentAcademicFragment"
+        android:label="fragment_student_academic"
+        tools:layout="@layout/fragment_student_academic" />
 </navigation>

@@ -10,6 +10,8 @@
     <string name="email_fragment_heading">Check Your Email</string>
     <string name="email_fragment_sub_heading">We have sent the reset password to the email address brandonelouis@gmial.com</string>
     <string name="student_detail_fragment_heading">Add Details</string>
+    <string name="address_detail_fragment_heading">Add Address</string>
+    <string name="student_academic_fragment_heading">Add SGPI</string>
 
     <string name="field_username">Username</string>
     <string name="field_email">Email</string>
@@ -40,6 +42,16 @@
     <string name="field_gender">Gender</string>
     <string name="field_dob">DOB</string>
     <string name="field_next">Next</string>
+    <string name="field_hint">Address</string>
+    <string name="field_city">City</string>
+    <string name="field_state">State</string>
+    <string name="zip_code">Zip Code</string>
+    <string name="field_sem_1">Semester 1</string>
+    <string name="field_sem_2">Semester 2</string>
+    <string name="field_sem_3">Semester 3</string>
+    <string name="field_sem_4">Semester 4</string>
+    <string name="field_avg_sem">Average of SGPI</string>
+
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

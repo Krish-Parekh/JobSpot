@@ -18,5 +18,6 @@
     <color name="power_spinner_arrow_tint">@color/white</color>
     <color name="power_spinner_border_active">@color/white</color>
     <color name="power_spinner_border_in_active">@color/black</color>
+    <color name="icon_tint">@color/white</color>
 
 </resources>

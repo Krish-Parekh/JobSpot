@@ -57,7 +57,6 @@ class LoginFragment : Fragment() {
         binding.etEmailContainer.addTextWatcher()
         binding.etPasswordContainer.addTextWatcher()
 
-
         binding.btnLogin.setOnClickListener {
             val email = binding.etEmail.text.toString().trim { it <= ' ' }
             val password = binding.etPassword.text.toString().trim { it <= ' ' }
@@ -103,7 +102,6 @@ class LoginFragment : Fragment() {
         password: String
     ): Boolean {
         return if (!InputValidation.emailValidation(email)) {
-            Log.d(TAG, "$email : ${InputValidation.emailValidation(email)}")
             binding.etEmailContainer.error = getString(R.string.field_error_email)
             false
         } else if (!InputValidation.passwordValidation(password)) {
