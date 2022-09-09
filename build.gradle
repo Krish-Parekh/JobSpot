@@ -1,7 +1,7 @@
 buildscript{
     ext{
         splash_screen_version="1.0.0"
-        nav_version = "2.5.1"
+        nav_version = "2.5.2"
         circular_iv_version="3.1.0"
         power_spinner_version="1.2.4"
         image_picker_version="2.1"

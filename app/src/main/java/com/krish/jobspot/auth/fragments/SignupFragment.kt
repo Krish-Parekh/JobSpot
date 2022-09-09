@@ -1,5 +1,6 @@
 package com.krish.jobspot.auth.fragments
 
+import android.content.Intent
 import android.os.Bundle
 
 import android.text.Spannable
@@ -17,12 +18,13 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.krish.jobspot.R
 import com.krish.jobspot.databinding.FragmentSignupBinding
+import com.krish.jobspot.user_details.UserDetailActivity
 import com.krish.jobspot.util.InputValidation
 import com.krish.jobspot.util.addTextWatcher
 import com.krish.jobspot.util.clearText
 
 
-private const val TAG = "SIGN_UP_FRAGMENT"
+private const val TAG = "SignupFragment"
 class SignupFragment : Fragment() {
     private lateinit var binding: FragmentSignupBinding
     private val mAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
@@ -59,7 +61,8 @@ class SignupFragment : Fragment() {
             val email = binding.etEmail.text.toString().trim { it <= ' ' }
             val password = binding.etPassword.text.toString().trim { it <= ' ' }
             if (detailVerification(username, email, password)) {
-                authenticateUser(username, email, password)
+                navigateToUserDetail(username, email)
+//                authenticateUser(username, email, password)
                 clearField()
             }
         }
@@ -80,6 +83,14 @@ class SignupFragment : Fragment() {
                 Log.d(TAG, "Exception: ${error.message}")
                 Toast.makeText(requireContext(), getString(R.string.auth_fail), Toast.LENGTH_SHORT).show()
             }
+    }
+
+    private fun navigateToUserDetail(username: String, email: String) {
+        val userDetailActivity = Intent(requireContext(), UserDetailActivity::class.java)
+        userDetailActivity.putExtra("USERNAME", username)
+        userDetailActivity.putExtra("EMAIL", email)
+        requireActivity().startActivity(userDetailActivity)
+        requireActivity().finish()
     }
 
     private fun clearField() {

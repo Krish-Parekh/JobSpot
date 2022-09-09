@@ -1,7 +1,6 @@
 package com.krish.jobspot.user_details.fragments
 
 import android.app.Activity
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,28 +13,46 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.firebase.auth.FirebaseAuth
 import com.krish.jobspot.R
-import com.krish.jobspot.auth.fragments.LoginFragmentDirections
 import com.krish.jobspot.databinding.FragmentStudentDetailBinding
+import com.krish.jobspot.model.Details
+import com.krish.jobspot.model.Student
 import com.krish.jobspot.util.InputValidation
 import com.krish.jobspot.util.addTextWatcher
 
 private const val TAG = "StudentDetailFragment"
+
 class StudentDetailFragment : Fragment() {
 
     private lateinit var binding: FragmentStudentDetailBinding
-    private var imageUri: String = ""
     private val startForProfileImageResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             handleCapturedImage(result)
         }
-    private var gender : String = ""
+    private var username: String = ""
+    private var email: String = ""
+    private var gender: String = ""
+    private var imageUri: String = ""
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentStudentDetailBinding.inflate(inflater, container, false)
+
+        val userData: Bundle? = requireActivity().intent.extras
+        if (
+            userData != null &&
+            userData.containsKey("USERNAME") &&
+            userData.containsKey("EMAIL")
+        ) {
+            username = requireActivity().intent.extras?.getString("USERNAME").toString()
+            email = requireActivity().intent.extras?.getString("EMAIL").toString()
+        }
+
         setupView()
+
         return binding.root
     }
 
@@ -50,22 +67,34 @@ class StudentDetailFragment : Fragment() {
             showCalendar()
         }
 
-        binding.genderSpinner.setOnSpinnerItemSelectedListener<String> { _, _, _, newText ->
+        binding.genderSpinner.setOnSpinnerItemSelectedListener<String> { _, _, _, selectedGender ->
             binding.genderSpinner.error = null
-            gender = newText
+            gender = selectedGender
         }
 
         binding.etSapIdContainer.addTextWatcher()
         binding.etMobileContainer.addTextWatcher()
 
         binding.btnNext.setOnClickListener {
-            val sapId = binding.etSapId.text.toString().trim { it <= ' '}
+            val sapId = binding.etSapId.text.toString().trim { it <= ' ' }
             val mobile = binding.etMobile.text.toString().trim { it <= ' ' }
             val dob = binding.etDate.text.toString().trim { it <= ' ' }
-            if(detailVerification(sapId, mobile, dob, gender, imageUri)){
-                Log.d(TAG, "Error : $sapId, $mobile, $dob, $gender, $imageUri")
-                navigateToAddress()
+
+            if (detailVerification(sapId, mobile, dob, gender, imageUri)) {
+                val detail = Details(
+                    username = username,
+                    email = email,
+                    sapId = sapId,
+                    imageUrl = imageUri,
+                    mobile = mobile,
+                    dob = dob,
+                    gender = gender
+                )
+                val student = Student(details = detail)
+                Log.d(TAG, "Student : $student")
+                navigateToAddress(student)
             }
+
         }
     }
 
@@ -116,34 +145,35 @@ class StudentDetailFragment : Fragment() {
         dob: String,
         gender: String,
         imageUri: String
-    ) : Boolean {
+    ): Boolean {
 
-        return if(!InputValidation.sapIdValidation(sapId)) {
-            binding.etSapIdContainer.error = "Please enter valid Sap Id"
+        return if (!InputValidation.sapIdValidation(sapId)) {
+            binding.etSapIdContainer.error = getString(R.string.field_error_sap_id)
             false
-        } else if(!InputValidation.mobileValidation(mobile)){
-            binding.etMobileContainer.error = "Please enter valid mobile no."
+        } else if (!InputValidation.mobileValidation(mobile)) {
+            binding.etMobileContainer.error = getString(R.string.field_error_mobile)
             false
-        } else if(!InputValidation.dobValidation(dob)){
+        } else if (!InputValidation.dobValidation(dob)) {
             binding.etDateContainer.apply {
-                error = "Please enter valid date"
+                error = getString(R.string.field_error_dob)
                 setErrorIconOnClickListener {
                     error = null
                 }
             }
             false
-        }else if(!InputValidation.genderValidation(gender)){
+        } else if (!InputValidation.genderValidation(gender)) {
             binding.genderSpinner.error = ""
             false
-        }else if(imageUri.isEmpty()){
-            Toast.makeText(requireContext(), "Please select Image", Toast.LENGTH_SHORT).show()
+        } else if (imageUri.isEmpty()) {
+            Toast.makeText(requireContext(), getString(R.string.field_error_image), Toast.LENGTH_SHORT).show()
             false
-        }else{
+        } else {
             true
         }
     }
 
-    private fun navigateToAddress() {
-        findNavController().navigate(R.id.action_studentDetailFragment_to_studentAddressFragment)
+    private fun navigateToAddress(student: Student) {
+        val direction = StudentDetailFragmentDirections.actionStudentDetailFragmentToStudentAddressFragment(student = student)
+        findNavController().navigate(direction)
     }
 }

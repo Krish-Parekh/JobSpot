@@ -82,18 +82,11 @@ class LoginFragment : Fragment() {
                 val uid = mAuth.currentUser?.uid
                 Log.d(TAG, "UID : $uid")
                 Toast.makeText(requireContext(), getString(R.string.auth_pass), Toast.LENGTH_SHORT).show()
-                navigateToUserDetail()
             }
             .addOnFailureListener { error ->
                 Log.d(TAG, "Exception: ${error.message}")
                 Toast.makeText(requireContext(), getString(R.string.auth_fail), Toast.LENGTH_SHORT).show()
             }
-    }
-
-    private fun navigateToUserDetail() {
-        val userDetailActivity = Intent(requireContext(), UserDetailActivity::class.java)
-        activity?.startActivity(userDetailActivity)
-        activity?.finish()
     }
 
     // Verify user details and show message if error

@@ -52,6 +52,15 @@
     <string name="field_sem_4">Semester 4</string>
     <string name="field_avg_sem">Average of SGPI</string>
 
+    <string name="field_error_sap_id">Enter valid Sap Id</string>
+    <string name="field_error_mobile">Enter valid Mobile No.</string>
+    <string name="field_error_dob">Enter valid Date</string>
+    <string name="field_error_image">Please Select Image</string>
+    <string name="field_error_address">Enter valid Address</string>
+    <string name="field_error_city">Enter valid City</string>
+    <string name="field_error_state">Enter valid State</string>
+    <string name="field_error_zip_code">Enter valid Zip Code</string>
+    <string name="field_error_score">Enter valid Score</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

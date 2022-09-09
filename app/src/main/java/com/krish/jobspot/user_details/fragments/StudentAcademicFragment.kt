@@ -8,13 +8,17 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import com.krish.jobspot.R
 import com.krish.jobspot.databinding.FragmentStudentAcademicBinding
+import com.krish.jobspot.model.Academic
 import com.krish.jobspot.util.InputValidation
 import com.krish.jobspot.util.addTextWatcher
 
 private const val TAG = "StudentAcademicFragment"
 class StudentAcademicFragment : Fragment() {
     private lateinit var binding: FragmentStudentAcademicBinding
+    private val args by navArgs<StudentAcademicFragmentArgs>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,6 +51,15 @@ class StudentAcademicFragment : Fragment() {
             val avgScore = binding.etAvgScore.text.toString().trim { it <= ' ' }
             if(detailVerification(sem1, sem2, sem3, sem4, avgScore)){
                 Log.d(TAG, "Details : $sem1 , $sem2, $sem3, $sem4, $avgScore")
+                val academic = Academic(
+                    sem1 = sem1,
+                    sem2 = sem2,
+                    sem3 = sem3,
+                    sem4 = sem4,
+                    avgScore = avgScore,
+                )
+                args.student.academic = academic
+                Log.d(TAG, "Student : ${args.student}")
             }
         }
 
@@ -60,19 +73,19 @@ class StudentAcademicFragment : Fragment() {
         avgScore: String
     ) : Boolean{
         return if(!InputValidation.scoreValidation(sem1)){
-            binding.etSemOneContainer.error = "Enter valid score"
+            binding.etSemOneContainer.error = getString(R.string.field_error_score)
             false
         }else if(!InputValidation.scoreValidation(sem2)){
-            binding.etSemTwoContainer.error = "Enter valid score"
+            binding.etSemTwoContainer.error = getString(R.string.field_error_score)
             false
         }else if(!InputValidation.scoreValidation(sem3)){
-            binding.etSemThreeContainer.error = "Enter valid score"
+            binding.etSemThreeContainer.error = getString(R.string.field_error_score)
             false
         }else if(!InputValidation.scoreValidation(sem4)){
-            binding.etSemFourContainer.error = "Enter valid score"
+            binding.etSemFourContainer.error = getString(R.string.field_error_score)
             false
         }else if(!InputValidation.scoreValidation(avgScore)){
-            binding.etAvgScoreContainer.error = "Enter valid Score"
+            binding.etAvgScoreContainer.error = getString(R.string.field_error_score)
             false
         }else{
             true

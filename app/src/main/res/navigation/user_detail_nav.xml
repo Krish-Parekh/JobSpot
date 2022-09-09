@@ -22,10 +22,17 @@
         <action
             android:id="@+id/action_studentAddressFragment_to_studentAcademicFragment"
             app:destination="@id/studentAcademicFragment" />
+        <argument
+            android:name="student"
+            app:argType="com.krish.jobspot.model.Student" />
     </fragment>
     <fragment
         android:id="@+id/studentAcademicFragment"
         android:name="com.krish.jobspot.user_details.fragments.StudentAcademicFragment"
         android:label="fragment_student_academic"
-        tools:layout="@layout/fragment_student_academic" />
+        tools:layout="@layout/fragment_student_academic" >
+        <argument
+            android:name="student"
+            app:argType="com.krish.jobspot.model.Student" />
+    </fragment>
 </navigation>
