@@ -12,6 +12,9 @@
     <string name="student_detail_fragment_heading">Add Details</string>
     <string name="address_detail_fragment_heading">Add Address</string>
     <string name="student_academic_fragment_heading">Add SGPI</string>
+    <string name="resume_fragment_heading">Add Resume</string>
+    <string name="bottom_sheet_heading">Remove File</string>
+    <string name="bottom_sheet_sub_heading">Are you sure you want to delete this File?</string>
 
     <string name="field_username">Username</string>
     <string name="field_email">Email</string>
@@ -62,7 +65,11 @@
     <string name="field_error_zip_code">Enter valid Zip Code</string>
     <string name="field_error_score">Enter valid Score</string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="resume_meta_data">%1$s Mb · %2$s</string>
+    <string name="resume_guideline">Upload files in PDF format up to 5 MB. Just upload it once and you can use it in your next application.</string>
+    <string name="bottom_sheet_button_text">No</string>
+
+
 
     <string-array name="gender">
         <item>Male</item>

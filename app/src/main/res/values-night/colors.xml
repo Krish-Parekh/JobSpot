@@ -20,4 +20,9 @@
     <color name="power_spinner_border_in_active">@color/black</color>
     <color name="icon_tint">@color/white</color>
 
+    <color name="bottom_sheet_background_color">@color/white</color>
+    <color name="bottom_sheet_view_color">@color/dark_blue</color>
+    <color name="bottom_sheet_text_color">@color/dark_blue</color>
+    <color name="bottom_sheet_sub_text">@color/blue_magenta</color>
+    <color name="bottom_sheet_button_text_color">@color/white</color>
 </resources>

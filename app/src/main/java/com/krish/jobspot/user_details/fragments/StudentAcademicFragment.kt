@@ -60,9 +60,14 @@ class StudentAcademicFragment : Fragment() {
                 )
                 args.student.academic = academic
                 Log.d(TAG, "Student : ${args.student}")
+                navigateToResume()
             }
         }
 
+    }
+
+    private fun navigateToResume(){
+        findNavController().navigate(R.id.action_studentAcademicFragment_to_studentResumeFragment)
     }
 
     private fun detailVerification(

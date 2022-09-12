@@ -72,10 +72,8 @@
             app:startIconDrawable="@drawable/ic_address"
             app:boxStrokeColor="@color/box_stroke_color"
             app:errorEnabled="true"
-            app:helperTextEnabled="true"
-            app:helperText="(optional)"
             app:hintTextColor="@color/text_color"
-            app:placeholderText="Address line 2">
+            app:placeholderText="Address line 2 (optional)">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etAddressTwo"
