@@ -16,11 +16,14 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import com.krish.jobspot.R
 import com.krish.jobspot.databinding.FragmentStudentResumeBinding
+import com.krish.jobspot.user_details.viewmodel.UserDetailViewModel
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -30,6 +33,8 @@ private const val TAG = "StudentResumeFragment"
 class StudentResumeFragment : Fragment() {
 
     private lateinit var binding: FragmentStudentResumeBinding
+    private val args by navArgs<StudentResumeFragmentArgs>()
+    private val userDetailViewModel : UserDetailViewModel by  viewModels()
     private val pdfLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             handleCapturedPdf(result)
@@ -63,6 +68,10 @@ class StudentResumeFragment : Fragment() {
             showDeleteDialog()
         }
 
+        binding.btnSubmit.setOnClickListener {
+            val imageUri = Uri.parse(args.student.details?.imageUrl)
+            userDetailViewModel.uploadStudentData(pdfUri, imageUri, args.student)
+        }
     }
 
 
@@ -142,7 +151,6 @@ class StudentResumeFragment : Fragment() {
         dialog.setContentView(bottomSheet)
         dialog.show()
     }
-
 
     private fun hidePdfUploadView() {
         binding.layoutUploadPdf.root.visibility = View.GONE

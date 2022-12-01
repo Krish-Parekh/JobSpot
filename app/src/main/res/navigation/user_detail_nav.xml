@@ -42,5 +42,9 @@
         android:id="@+id/studentResumeFragment"
         android:name="com.krish.jobspot.user_details.fragments.StudentResumeFragment"
         android:label="fragment_student_resume"
-        tools:layout="@layout/fragment_student_resume" />
+        tools:layout="@layout/fragment_student_resume" >
+        <argument
+            android:name="student"
+            app:argType="com.krish.jobspot.model.Student" />
+    </fragment>
 </navigation>

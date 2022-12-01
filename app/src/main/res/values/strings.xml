@@ -68,7 +68,7 @@
     <string name="resume_meta_data">%1$s Mb · %2$s</string>
     <string name="resume_guideline">Upload files in PDF format up to 5 MB. Just upload it once and you can use it in your next application.</string>
     <string name="bottom_sheet_button_text">No</string>
-
+    <string name="button_submit_text">Submit</string>
 
 
     <string-array name="gender">

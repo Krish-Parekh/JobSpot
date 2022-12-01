@@ -30,6 +30,7 @@ class StudentDetailFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             handleCapturedImage(result)
         }
+    private val mAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
     private var username: String = ""
     private var email: String = ""
     private var gender: String = ""
@@ -90,7 +91,7 @@ class StudentDetailFragment : Fragment() {
                     dob = dob,
                     gender = gender
                 )
-                val student = Student(details = detail)
+                val student = Student( uid = mAuth.currentUser?.uid ,details = detail)
                 Log.d(TAG, "Student : $student")
                 navigateToAddress(student)
             }

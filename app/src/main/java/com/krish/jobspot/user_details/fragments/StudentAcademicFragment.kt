@@ -12,6 +12,7 @@ import androidx.navigation.fragment.navArgs
 import com.krish.jobspot.R
 import com.krish.jobspot.databinding.FragmentStudentAcademicBinding
 import com.krish.jobspot.model.Academic
+import com.krish.jobspot.model.Student
 import com.krish.jobspot.util.InputValidation
 import com.krish.jobspot.util.addTextWatcher
 
@@ -59,15 +60,17 @@ class StudentAcademicFragment : Fragment() {
                     avgScore = avgScore,
                 )
                 args.student.academic = academic
+                val student = args.student
                 Log.d(TAG, "Student : ${args.student}")
-                navigateToResume()
+                navigateToResume(student)
             }
         }
 
     }
 
-    private fun navigateToResume(){
-        findNavController().navigate(R.id.action_studentAcademicFragment_to_studentResumeFragment)
+    private fun navigateToResume(student : Student){
+        val direction  = StudentAcademicFragmentDirections.actionStudentAcademicFragmentToStudentResumeFragment(student = student)
+        findNavController().navigate(direction)
     }
 
     private fun detailVerification(
