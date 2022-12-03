@@ -20,6 +20,8 @@ import com.krish.jobspot.model.Details
 import com.krish.jobspot.model.Student
 import com.krish.jobspot.util.InputValidation
 import com.krish.jobspot.util.addTextWatcher
+import com.krish.jobspot.util.getInputValue
+import com.krish.jobspot.util.showToast
 
 private const val TAG = "StudentDetailFragment"
 
@@ -77,9 +79,9 @@ class StudentDetailFragment : Fragment() {
         binding.etMobileContainer.addTextWatcher()
 
         binding.btnNext.setOnClickListener {
-            val sapId = binding.etSapId.text.toString().trim { it <= ' ' }
-            val mobile = binding.etMobile.text.toString().trim { it <= ' ' }
-            val dob = binding.etDate.text.toString().trim { it <= ' ' }
+            val sapId = binding.etSapId.getInputValue()
+            val mobile = binding.etMobile.getInputValue()
+            val dob = binding.etDate.getInputValue()
 
             if (detailVerification(sapId, mobile, dob, gender, imageUri)) {
                 val detail = Details(
@@ -124,7 +126,7 @@ class StudentDetailFragment : Fragment() {
                     .show()
             }
             else -> {
-                Toast.makeText(requireContext(), "Task Cancelled", Toast.LENGTH_SHORT).show()
+                showToast(requireContext(), "Task Cancelled")
             }
         }
     }
@@ -147,30 +149,32 @@ class StudentDetailFragment : Fragment() {
         gender: String,
         imageUri: String
     ): Boolean {
-
-        return if (!InputValidation.sapIdValidation(sapId)) {
-            binding.etSapIdContainer.error = getString(R.string.field_error_sap_id)
-            false
-        } else if (!InputValidation.mobileValidation(mobile)) {
-            binding.etMobileContainer.error = getString(R.string.field_error_mobile)
-            false
-        } else if (!InputValidation.dobValidation(dob)) {
-            binding.etDateContainer.apply {
-                error = getString(R.string.field_error_dob)
-                setErrorIconOnClickListener {
-                    error = null
+        binding.apply {
+            return if (!InputValidation.sapIdValidation(sapId)) {
+                etSapIdContainer.error = getString(R.string.field_error_sap_id)
+                false
+            } else if (!InputValidation.mobileValidation(mobile)) {
+                etMobileContainer.error = getString(R.string.field_error_mobile)
+                false
+            } else if (!InputValidation.dobValidation(dob)) {
+                etDateContainer.apply {
+                    error = getString(R.string.field_error_dob)
+                    setErrorIconOnClickListener {
+                        error = null
+                    }
                 }
+                false
+            } else if (!InputValidation.genderValidation(gender)) {
+                genderSpinner.error = ""
+                false
+            } else if (imageUri.isEmpty()) {
+                showToast(requireContext(), getString(R.string.field_error_image))
+                false
+            } else {
+                true
             }
-            false
-        } else if (!InputValidation.genderValidation(gender)) {
-            binding.genderSpinner.error = ""
-            false
-        } else if (imageUri.isEmpty()) {
-            Toast.makeText(requireContext(), getString(R.string.field_error_image), Toast.LENGTH_SHORT).show()
-            false
-        } else {
-            true
         }
+
     }
 
     private fun navigateToAddress(student: Student) {

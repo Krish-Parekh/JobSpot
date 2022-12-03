@@ -15,6 +15,7 @@ import com.krish.jobspot.model.Academic
 import com.krish.jobspot.model.Student
 import com.krish.jobspot.util.InputValidation
 import com.krish.jobspot.util.addTextWatcher
+import com.krish.jobspot.util.getInputValue
 
 private const val TAG = "StudentAcademicFragment"
 class StudentAcademicFragment : Fragment() {
@@ -45,11 +46,11 @@ class StudentAcademicFragment : Fragment() {
 
 
         binding.btnNext.setOnClickListener {
-            val sem1 = binding.etSemOne.text.toString().trim { it <= ' ' }
-            val sem2 = binding.etSemTwo.text.toString().trim { it <= ' ' }
-            val sem3 = binding.etSemThree.text.toString().trim { it <= ' ' }
-            val sem4 = binding.etSemFour.text.toString().trim { it <= ' ' }
-            val avgScore = binding.etAvgScore.text.toString().trim { it <= ' ' }
+            val sem1 = binding.etSemOne.getInputValue()
+            val sem2 = binding.etSemTwo.getInputValue()
+            val sem3 = binding.etSemThree.getInputValue()
+            val sem4 = binding.etSemFour.getInputValue()
+            val avgScore = binding.etAvgScore.getInputValue()
             if(detailVerification(sem1, sem2, sem3, sem4, avgScore)){
                 Log.d(TAG, "Details : $sem1 , $sem2, $sem3, $sem4, $avgScore")
                 val academic = Academic(
@@ -80,23 +81,26 @@ class StudentAcademicFragment : Fragment() {
         sem4: String,
         avgScore: String
     ) : Boolean{
-        return if(!InputValidation.scoreValidation(sem1)){
-            binding.etSemOneContainer.error = getString(R.string.field_error_score)
-            false
-        }else if(!InputValidation.scoreValidation(sem2)){
-            binding.etSemTwoContainer.error = getString(R.string.field_error_score)
-            false
-        }else if(!InputValidation.scoreValidation(sem3)){
-            binding.etSemThreeContainer.error = getString(R.string.field_error_score)
-            false
-        }else if(!InputValidation.scoreValidation(sem4)){
-            binding.etSemFourContainer.error = getString(R.string.field_error_score)
-            false
-        }else if(!InputValidation.scoreValidation(avgScore)){
-            binding.etAvgScoreContainer.error = getString(R.string.field_error_score)
-            false
-        }else{
-            true
+        binding.apply {
+            return if(!InputValidation.scoreValidation(sem1)){
+                etSemOneContainer.error = getString(R.string.field_error_score)
+                false
+            }else if(!InputValidation.scoreValidation(sem2)){
+                etSemTwoContainer.error = getString(R.string.field_error_score)
+                false
+            }else if(!InputValidation.scoreValidation(sem3)){
+                etSemThreeContainer.error = getString(R.string.field_error_score)
+                false
+            }else if(!InputValidation.scoreValidation(sem4)){
+                etSemFourContainer.error = getString(R.string.field_error_score)
+                false
+            }else if(!InputValidation.scoreValidation(avgScore)){
+                etAvgScoreContainer.error = getString(R.string.field_error_score)
+                false
+            }else{
+                true
+            }
         }
+
     }
 }

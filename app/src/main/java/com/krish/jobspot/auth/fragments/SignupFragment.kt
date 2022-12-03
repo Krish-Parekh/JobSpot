@@ -2,7 +2,6 @@ package com.krish.jobspot.auth.fragments
 
 import android.content.Intent
 import android.os.Bundle
-
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -11,7 +10,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -19,12 +17,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.krish.jobspot.R
 import com.krish.jobspot.databinding.FragmentSignupBinding
 import com.krish.jobspot.user_details.UserDetailActivity
-import com.krish.jobspot.util.InputValidation
-import com.krish.jobspot.util.addTextWatcher
-import com.krish.jobspot.util.clearText
+import com.krish.jobspot.util.*
 
 
 private const val TAG = "SignupFragment"
+
 class SignupFragment : Fragment() {
     private lateinit var binding: FragmentSignupBinding
     private val mAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
@@ -57,9 +54,9 @@ class SignupFragment : Fragment() {
         binding.etPasswordContainer.addTextWatcher()
 
         binding.btnSignup.setOnClickListener {
-            val username = binding.etUsername.text.toString().trim { it <= ' ' }
-            val email = binding.etEmail.text.toString().trim { it <= ' ' }
-            val password = binding.etPassword.text.toString().trim { it <= ' ' }
+            val username = binding.etUsername.getInputValue()
+            val email = binding.etEmail.getInputValue()
+            val password = binding.etPassword.getInputValue()
             if (detailVerification(username, email, password)) {
                 authenticateUser(username, email, password)
                 clearField()
@@ -76,12 +73,12 @@ class SignupFragment : Fragment() {
             .addOnSuccessListener {
                 val uid = mAuth.currentUser?.uid
                 Log.d(TAG, "UID : $uid")
-                Toast.makeText(requireContext(), getString(R.string.auth_pass), Toast.LENGTH_SHORT).show()
+                showToast(requireContext(), getString(R.string.auth_pass))
                 navigateToUserDetail(username, email)
             }
             .addOnFailureListener { error ->
                 Log.d(TAG, "Exception: ${error.message}")
-                Toast.makeText(requireContext(), getString(R.string.auth_fail), Toast.LENGTH_SHORT).show()
+                showToast(requireContext(), getString(R.string.auth_fail))
             }
     }
 
@@ -105,18 +102,21 @@ class SignupFragment : Fragment() {
         email: String,
         password: String
     ): Boolean {
-        return if (!InputValidation.checkNullity(username)) {
-            binding.etUsernameContainer.error = getString(R.string.field_error_username)
-            false
-        } else if (!InputValidation.emailValidation(email)) {
-            binding.etEmailContainer.error = getString(R.string.field_error_email)
-            false
-        } else if (!InputValidation.passwordValidation(password)) {
-            binding.etPasswordContainer.error = getString(R.string.field_error_password)
-            false
-        } else {
-            true
+        binding.apply {
+            return if (!InputValidation.checkNullity(username)) {
+                binding.etUsernameContainer.error = getString(R.string.field_error_username)
+                false
+            } else if (!InputValidation.emailValidation(email)) {
+                binding.etEmailContainer.error = getString(R.string.field_error_email)
+                false
+            } else if (!InputValidation.passwordValidation(password)) {
+                binding.etPasswordContainer.error = getString(R.string.field_error_password)
+                false
+            } else {
+                true
+            }
         }
     }
+
 
 }

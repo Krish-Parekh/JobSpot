@@ -11,45 +11,31 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.asDeferred
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 private const val TAG = "UserDetailViewModel"
+
 class UserDetailViewModel : ViewModel() {
 
     private val mFireStorage: FirebaseStorage by lazy { FirebaseStorage.getInstance() }
     private val mFireStore: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
 
-    fun uploadStudentData(pdfUri: Uri, imageUri: Uri, student: Student){
+    fun uploadStudentData(pdfUri: Uri, imageUri: Uri, student: Student) {
         val studentName = student.details?.username
         val studentUid = student.uid
         val fileName = "$studentName:$studentUid"
 
         viewModelScope.launch(Dispatchers.IO) {
-            val ref = mFireStorage.reference
-            val resumeUploadTask = ref
-                .child("students/resume/${fileName}")
-                .putFile(pdfUri)
-                .asDeferred()
-                .await()
+            val resumeDownloadUrl = withContext(Dispatchers.IO) {
+                uploadData(path = "students/resume/${fileName}", fileUri = pdfUri)
+            }
+            student.academic?.resumeUrl = resumeDownloadUrl
 
-            Log.d(TAG, "Resume Upload Success")
-            val resumeDownloadUrl = ref
-                .child("students/resume/${fileName}")
-                .downloadUrl.asDeferred().await()
-            student.academic?.resumeUrl = resumeDownloadUrl.toString()
-            Log.d(TAG, "Resume Download Url Success")
+            val imageDownloadUrl = withContext(Dispatchers.IO) {
+                uploadData(path = "students/profileImage/${fileName}", fileUri = imageUri)
+            }
 
-            val imageUploadTask = ref
-                .child("students/profileImage/${fileName}")
-                .putFile(imageUri)
-                .asDeferred()
-                .await()
-            Log.d(TAG, "Image Upload Success")
-
-            val imageDownloadUrl = ref
-                .child("students/profileImage/${fileName}")
-                .downloadUrl.asDeferred().await()
-            student.details?.imageUrl = imageDownloadUrl.toString()
-            Log.d(TAG, "Image Download Url Success")
+            student.details?.imageUrl = imageDownloadUrl
 
             val uploadData = mFireStore
                 .collection("students")
@@ -58,7 +44,16 @@ class UserDetailViewModel : ViewModel() {
                 .await()
 
             Log.d(TAG, "Upload Student Data Success: ")
+
         }
+    }
+
+    private suspend fun uploadData(path: String, fileUri: Uri): String {
+        val ref = mFireStorage.reference.child(path)
+        ref.putFile(fileUri).asDeferred().await()
+
+        val downloadUrl = ref.downloadUrl.asDeferred().await().toString()
+        return downloadUrl
     }
 
 }

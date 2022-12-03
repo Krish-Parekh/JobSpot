@@ -14,6 +14,7 @@ import com.krish.jobspot.util.InputValidation
 import com.krish.jobspot.util.addTextWatcher
 import com.krish.jobspot.model.Address
 import com.krish.jobspot.model.Student
+import com.krish.jobspot.util.getInputValue
 
 private const val TAG = "StudentAddressFragment"
 class StudentAddressFragment : Fragment() {
@@ -41,12 +42,12 @@ class StudentAddressFragment : Fragment() {
         binding.etZipCodeContainer.addTextWatcher()
 
         binding.btnNext.setOnClickListener {
-            val addressOne = binding.etAddressOne.text.toString().trim { it <= ' '}
-            val addressTwo = binding.etAddressTwo.text.toString().trim{ it <= ' '}
+            val addressOne = binding.etAddressOne.getInputValue()
+            val addressTwo = binding.etAddressTwo.getInputValue()
             val finalAddress = "$addressOne $addressTwo"
-            val city = binding.etCity.text.toString().trim { it <= ' ' }
-            val state = binding.etState.text.toString().trim{ it <= ' ' }
-            val zipCode = binding.etZipCode.text.toString().trim { it <= ' ' }
+            val city = binding.etCity.getInputValue()
+            val state = binding.etState.getInputValue()
+            val zipCode = binding.etZipCode.getInputValue()
             if(detailVerification(addressOne, city, state, zipCode)){
                 Log.d(TAG, "$finalAddress ,$city ,$state, $zipCode")
                 val address = Address(
@@ -69,21 +70,24 @@ class StudentAddressFragment : Fragment() {
         state: String,
         zipCode: String
     ) : Boolean {
-        return if(!InputValidation.addressValidation(address)){
-            binding.etAddressOneContainer.error = getString(R.string.field_error_address)
-            false
-        }else if(!InputValidation.cityValidation(city)){
-            binding.etCityContainer.error = getString(R.string.field_error_city)
-            false
-        }else if(!InputValidation.stateValidation(state)){
-            binding.etStateContainer.error = getString(R.string.field_error_state)
-            false
-        }else if(!InputValidation.zipCodeValidation(zipCode)){
-            binding.etZipCodeContainer.error = getString(R.string.field_error_zip_code)
-            false
-        }else{
-            true
+        binding.apply {
+            return if(!InputValidation.addressValidation(address)){
+                etAddressOneContainer.error = getString(R.string.field_error_address)
+                false
+            }else if(!InputValidation.cityValidation(city)){
+                etCityContainer.error = getString(R.string.field_error_city)
+                false
+            }else if(!InputValidation.stateValidation(state)){
+                etStateContainer.error = getString(R.string.field_error_state)
+                false
+            }else if(!InputValidation.zipCodeValidation(zipCode)){
+                etZipCodeContainer.error = getString(R.string.field_error_zip_code)
+                false
+            }else{
+                true
+            }
         }
+
     }
 
     private fun navigateToAcademic(student: Student) {
