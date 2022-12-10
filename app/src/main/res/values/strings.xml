@@ -70,6 +70,12 @@
     <string name="bottom_sheet_button_text">No</string>
     <string name="button_submit_text">Submit</string>
 
+    <string name="invalid_credentials">Invalid email or password</string>
+    <string name="invalid_user">The specified user does not exist</string>
+    <string name="network_error">A network error occurred</string>
+
+    <string name="loading">Loading</string>
+    <string name="completed">Done</string>
 
     <string-array name="gender">
         <item>Male</item>

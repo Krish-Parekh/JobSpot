@@ -24,8 +24,11 @@ import com.google.android.material.button.MaterialButton
 import com.krish.jobspot.R
 import com.krish.jobspot.databinding.FragmentStudentResumeBinding
 import com.krish.jobspot.user_details.viewmodel.UserDetailViewModel
+import com.krish.jobspot.util.showToast
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import androidx.lifecycle.Observer
+import com.krish.jobspot.util.LoadingDialog
 import java.util.*
 
 private const val TAG = "StudentResumeFragment"
@@ -39,7 +42,7 @@ class StudentResumeFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             handleCapturedPdf(result)
         }
-    private lateinit var pdfUri: Uri
+    private val loadingDialog : LoadingDialog by lazy { LoadingDialog(requireContext()) }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -53,25 +56,48 @@ class StudentResumeFragment : Fragment() {
     }
 
     private fun setupView() {
-        binding.ivPopOut.setOnClickListener {
-            findNavController().popBackStack()
-        }
 
-        binding.layoutUploadPdf.root.setOnClickListener {
-            val intent = Intent(Intent.ACTION_GET_CONTENT);
-            intent.type = "application/pdf";
-            intent.addCategory(Intent.CATEGORY_OPENABLE)
-            pdfLauncher.launch(intent)
-        }
+        binding.apply {
+            ivPopOut.setOnClickListener {
+                findNavController().popBackStack()
+            }
+            layoutUploadPdf.root.setOnClickListener {
+                val intent = Intent(Intent.ACTION_GET_CONTENT);
+                intent.type = "application/pdf";
+                intent.addCategory(Intent.CATEGORY_OPENABLE)
+                pdfLauncher.launch(intent)
+            }
 
-        binding.layoutUploadedPdf.llFileRemoveContainer.setOnClickListener {
-            showDeleteDialog()
-        }
+            layoutUploadedPdf.llFileRemoveContainer.setOnClickListener {
+                showDeleteDialog()
+            }
 
-        binding.btnSubmit.setOnClickListener {
-            val imageUri = Uri.parse(args.student.details?.imageUrl)
-            userDetailViewModel.uploadStudentData(pdfUri, imageUri, args.student)
+            btnSubmit.setOnClickListener {
+                val imageUri = Uri.parse(args.student.details?.imageUrl)
+                val pdfUri = userDetailViewModel.getPdfUri()
+                if(pdfUri != null){
+                    Log.d(TAG, "User: ${args.student}")
+                    userDetailViewModel.uploadStudentData(pdfUri, imageUri, args.student)
+                    handleUploadResponse()
+                } else {
+                    showToast(requireContext(), "Please attach your resume")
+                }
+            }
         }
+    }
+
+    private fun handleUploadResponse() {
+        userDetailViewModel.uploadDataStatus.observe(viewLifecycleOwner, Observer { uiState ->
+            if(uiState.loading){
+                loadingDialog.show()
+            }else if(uiState.success){
+                hidePdfUploadedView()
+                userDetailViewModel.setPdfUri(null)
+                loadingDialog.dismiss()
+            }else if(uiState.failed){
+                loadingDialog.dismiss()
+            }
+        })
     }
 
 
@@ -80,9 +106,9 @@ class StudentResumeFragment : Fragment() {
         val data = result.data
         when (resultCode) {
             Activity.RESULT_OK -> {
-                pdfUri = data?.data!!
-                Log.d(TAG, "Data : $pdfUri")
-                getFileInfo(pdfUri)
+                userDetailViewModel.setPdfUri(pdfUri = data?.data!!)
+                Log.d(TAG, "Data : ${userDetailViewModel.getPdfUri()}")
+                getFileInfo(userDetailViewModel.getPdfUri()!!)
             }
             Activity.RESULT_CANCELED -> {
                 Log.d(TAG, "TASK CANCELLED")

@@ -1,6 +1,7 @@
 package com.krish.jobspot.user_details.fragments
 
 import android.app.Activity
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -18,6 +20,7 @@ import com.krish.jobspot.R
 import com.krish.jobspot.databinding.FragmentStudentDetailBinding
 import com.krish.jobspot.model.Details
 import com.krish.jobspot.model.Student
+import com.krish.jobspot.user_details.viewmodel.UserDetailViewModel
 import com.krish.jobspot.util.InputValidation
 import com.krish.jobspot.util.addTextWatcher
 import com.krish.jobspot.util.getInputValue
@@ -33,10 +36,10 @@ class StudentDetailFragment : Fragment() {
             handleCapturedImage(result)
         }
     private val mAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
+    private val userDetailViewModel : UserDetailViewModel by viewModels()
     private var username: String = ""
     private var email: String = ""
     private var gender: String = ""
-    private var imageUri: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,44 +63,51 @@ class StudentDetailFragment : Fragment() {
     }
 
     private fun setupView() {
-        binding.profileImage.setOnClickListener {
-            startCrop()
-        }
-
-        binding.etDate.isCursorVisible = false
-        binding.etDate.keyListener = null
-        binding.etDateContainer.setEndIconOnClickListener {
-            showCalendar()
-        }
-
-        binding.genderSpinner.setOnSpinnerItemSelectedListener<String> { _, _, _, selectedGender ->
-            binding.genderSpinner.error = null
-            gender = selectedGender
-        }
-
-        binding.etSapIdContainer.addTextWatcher()
-        binding.etMobileContainer.addTextWatcher()
-
-        binding.btnNext.setOnClickListener {
-            val sapId = binding.etSapId.getInputValue()
-            val mobile = binding.etMobile.getInputValue()
-            val dob = binding.etDate.getInputValue()
-
-            if (detailVerification(sapId, mobile, dob, gender, imageUri)) {
-                val detail = Details(
-                    username = username,
-                    email = email,
-                    sapId = sapId,
-                    imageUrl = imageUri,
-                    mobile = mobile,
-                    dob = dob,
-                    gender = gender
-                )
-                val student = Student( uid = mAuth.currentUser?.uid ,details = detail)
-                Log.d(TAG, "Student : $student")
-                navigateToAddress(student)
+        binding.apply {
+            if (userDetailViewModel.getImageUri() != null) {
+                profileImage.setImageURI(userDetailViewModel.getImageUri())
             }
 
+            profileImage.setOnClickListener {
+                startCrop()
+            }
+
+            etDate.isCursorVisible = false
+            etDate.keyListener = null
+            etDateContainer.setEndIconOnClickListener {
+                showCalendar()
+            }
+
+            genderSpinner.dismissWhenNotifiedItemSelected = true
+            genderSpinner.setOnSpinnerItemSelectedListener<String> { _, _, _, selectedGender ->
+                binding.genderSpinner.error = null
+                gender = selectedGender
+            }
+
+            etSapIdContainer.addTextWatcher()
+            etMobileContainer.addTextWatcher()
+
+            btnNext.setOnClickListener {
+                val sapId = etSapId.getInputValue()
+                val mobile = etMobile.getInputValue()
+                val dob = etDate.getInputValue()
+                val imageUri = userDetailViewModel.getImageUri()
+                val uid = mAuth.currentUser?.uid
+                if (detailVerification(sapId, mobile, dob, gender, imageUri)) {
+                    val detail = Details(
+                        username = username,
+                        email = email,
+                        sapId = sapId,
+                        imageUrl = imageUri.toString(),
+                        mobile = mobile,
+                        dob = dob,
+                        gender = gender
+                    )
+                    val student = Student( uid = uid,details = detail)
+                    Log.d(TAG, "Student : $student")
+                    navigateToAddress(student)
+                }
+            }
         }
     }
 
@@ -118,8 +128,8 @@ class StudentDetailFragment : Fragment() {
 
         when (resultCode) {
             Activity.RESULT_OK -> {
-                imageUri = data?.data!!.toString()
-                binding.profileImage.setImageURI(data.data!!)
+                userDetailViewModel.setImageUri(imageUri = data?.data!!)
+                binding.profileImage.setImageURI(userDetailViewModel.getImageUri())
             }
             ImagePicker.RESULT_ERROR -> {
                 Toast.makeText(requireContext(), ImagePicker.getError(data), Toast.LENGTH_SHORT)
@@ -147,31 +157,36 @@ class StudentDetailFragment : Fragment() {
         mobile: String,
         dob: String,
         gender: String,
-        imageUri: String
+        imageUri: Uri?,
     ): Boolean {
         binding.apply {
-            return if (!InputValidation.sapIdValidation(sapId)) {
+            if (imageUri == null) {
+                showToast(requireContext(), getString(R.string.field_error_image))
+                return false
+            }
+            else if (!InputValidation.sapIdValidation(sapId)) {
                 etSapIdContainer.error = getString(R.string.field_error_sap_id)
-                false
-            } else if (!InputValidation.mobileValidation(mobile)) {
+                return false
+            }
+            else if (!InputValidation.mobileValidation(mobile)) {
                 etMobileContainer.error = getString(R.string.field_error_mobile)
-                false
-            } else if (!InputValidation.dobValidation(dob)) {
+                return false
+            }
+            else if (!InputValidation.dobValidation(dob)) {
                 etDateContainer.apply {
                     error = getString(R.string.field_error_dob)
                     setErrorIconOnClickListener {
                         error = null
                     }
                 }
-                false
-            } else if (!InputValidation.genderValidation(gender)) {
+                return false
+            }
+            else if (!InputValidation.genderValidation(gender)) {
                 genderSpinner.error = ""
-                false
-            } else if (imageUri.isEmpty()) {
-                showToast(requireContext(), getString(R.string.field_error_image))
-                false
-            } else {
-                true
+                return false
+            }
+            else {
+                return true
             }
         }
 

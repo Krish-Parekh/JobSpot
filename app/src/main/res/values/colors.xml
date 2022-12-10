@@ -46,4 +46,7 @@
     <color name="bottom_sheet_sub_text">@color/grey</color>
     <color name="bottom_sheet_button_text_color">@color/dark_blue</color>
 
+    <color name="loading_dialog_background_color">@color/dark_blue</color>
+    <color name="loading_dialog_text_color">@color/white</color>
+
 </resources>

@@ -16,6 +16,7 @@ private const val TAG = "FORGOT_PASSWORD"
 class ForgotPassFragment : Fragment() {
     private val mAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
     private lateinit var binding: FragmentForgotPassBinding
+    private val loadingDialog : LoadingDialog by lazy { LoadingDialog(requireContext()) }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -30,27 +31,32 @@ class ForgotPassFragment : Fragment() {
 
     private fun setupView() {
 
-        binding.btnBackToLogin.setOnClickListener {
-            findNavController().popBackStack()
-        }
+        binding.apply {
+            btnBackToLogin.setOnClickListener {
+                findNavController().popBackStack()
+            }
 
-        binding.etEmailContainer.addTextWatcher()
+            etEmailContainer.addTextWatcher()
 
-        binding.btnResetPassword.setOnClickListener {
-            val email = binding.etEmail.getInputValue()
-            if(InputValidation.emailValidation(email)){
-                mAuth.sendPasswordResetEmail(email)
-                    .addOnSuccessListener {
-                        showToast(requireContext(), getString(R.string.reset_pass))
-                        findNavController().navigate(R.id.action_forgotPassFragment_to_emailFragment)
-                    }
-                    .addOnFailureListener { error ->
-                        Log.d(TAG, "Exception: ${error.message}")
-                        showToast(requireContext(), getString(R.string.reset_fail))
-                    }
-                clearField()
-            }else{
-                binding.etEmailContainer.error = getString(R.string.field_error_email)
+            btnResetPassword.setOnClickListener {
+                val email = etEmail.getInputValue()
+                if(InputValidation.emailValidation(email)){
+                    loadingDialog.show()
+                    mAuth.sendPasswordResetEmail(email)
+                        .addOnSuccessListener {
+                            loadingDialog.dismiss()
+                            showToast(requireContext(), getString(R.string.reset_pass))
+                            findNavController().navigate(R.id.action_forgotPassFragment_to_emailFragment)
+                        }
+                        .addOnFailureListener { error ->
+                            loadingDialog.dismiss()
+                            Log.d(TAG, "Exception: ${error.message}")
+                            showToast(requireContext(), getString(R.string.reset_fail))
+                        }
+                    clearField()
+                }else{
+                    etEmailContainer.error = getString(R.string.field_error_email)
+                }
             }
         }
     }

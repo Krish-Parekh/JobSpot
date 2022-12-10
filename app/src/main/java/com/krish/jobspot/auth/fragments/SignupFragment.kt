@@ -12,12 +12,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.firestore.FirebaseFirestore
 import com.krish.jobspot.R
 import com.krish.jobspot.databinding.FragmentSignupBinding
 import com.krish.jobspot.user_details.UserDetailActivity
 import com.krish.jobspot.util.*
+import com.krish.jobspot.util.Constants.Companion.ROLE_TYPE_STUDENT
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 
 private const val TAG = "SignupFragment"
@@ -25,6 +32,8 @@ private const val TAG = "SignupFragment"
 class SignupFragment : Fragment() {
     private lateinit var binding: FragmentSignupBinding
     private val mAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
+    private val mFirestore : FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
+    private val loadingDialog : LoadingDialog by lazy { LoadingDialog(requireContext()) }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,30 +47,35 @@ class SignupFragment : Fragment() {
     }
 
     private fun setupView() {
+        binding.apply {
+            tvLogin.text = createLoginText()
+            tvLogin.setOnClickListener {
+                findNavController().popBackStack(R.id.loginFragment, false)
+            }
+
+            etUsernameContainer.addTextWatcher()
+            etEmailContainer.addTextWatcher()
+            etPasswordContainer.addTextWatcher()
+
+            btnSignup.setOnClickListener {
+                val username = binding.etUsername.getInputValue()
+                val email = binding.etEmail.getInputValue()
+                val password = binding.etPassword.getInputValue()
+                if (detailVerification(username, email, password)) {
+                    authenticateUser(username, email, password)
+                    clearField()
+                }
+            }
+        }
+    }
+
+    private fun createLoginText(): SpannableString {
         val loginText = SpannableString(getString(R.string.login_prompt))
         val color = ContextCompat.getColor(requireActivity(), R.color.on_boarding_span_text_color)
         val loginColor = ForegroundColorSpan(color)
         loginText.setSpan(UnderlineSpan(), 25, loginText.length, 0)
         loginText.setSpan(loginColor, 25, loginText.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-        binding.tvLogin.text = loginText
-
-        binding.tvLogin.setOnClickListener {
-            findNavController().popBackStack(R.id.loginFragment, false)
-        }
-
-        binding.etUsernameContainer.addTextWatcher()
-        binding.etEmailContainer.addTextWatcher()
-        binding.etPasswordContainer.addTextWatcher()
-
-        binding.btnSignup.setOnClickListener {
-            val username = binding.etUsername.getInputValue()
-            val email = binding.etEmail.getInputValue()
-            val password = binding.etPassword.getInputValue()
-            if (detailVerification(username, email, password)) {
-                authenticateUser(username, email, password)
-                clearField()
-            }
-        }
+        return loginText
     }
 
     private fun authenticateUser(
@@ -69,17 +83,27 @@ class SignupFragment : Fragment() {
         email: String,
         password: String
     ) {
-        mAuth.createUserWithEmailAndPassword(email, password)
-            .addOnSuccessListener {
-                val uid = mAuth.currentUser?.uid
-                Log.d(TAG, "UID : $uid")
+        lifecycleScope.launch {
+            try {
+                loadingDialog.show()
+                mAuth.createUserWithEmailAndPassword(email, password).await()
+                val currentUser = mAuth.currentUser!!
+                val profileUpdates = UserProfileChangeRequest.Builder().setDisplayName(username).build()
+                val currentUserRole = hashMapOf("role" to ROLE_TYPE_STUDENT)
+                mFirestore.collection("role").document(currentUser.uid).set(currentUserRole).await()
+                currentUser.updateProfile(profileUpdates).await()
                 showToast(requireContext(), getString(R.string.auth_pass))
+                Log.d(TAG, "Navigate user to UserDetail Activity")
                 navigateToUserDetail(username, email)
-            }
-            .addOnFailureListener { error ->
-                Log.d(TAG, "Exception: ${error.message}")
+            }catch (error : FirebaseAuthUserCollisionException){
+                showToast(requireContext(), "Email already exists")
+            }catch (error : Exception) {
                 showToast(requireContext(), getString(R.string.auth_fail))
+                Log.d(TAG, "Exception : ${error.message}")
+            } finally {
+                loadingDialog.dismiss()
             }
+        }
     }
 
     private fun navigateToUserDetail(username: String, email: String) {
@@ -103,17 +127,17 @@ class SignupFragment : Fragment() {
         password: String
     ): Boolean {
         binding.apply {
-            return if (!InputValidation.checkNullity(username)) {
+            if (!InputValidation.checkNullity(username)) {
                 binding.etUsernameContainer.error = getString(R.string.field_error_username)
-                false
+                return false
             } else if (!InputValidation.emailValidation(email)) {
                 binding.etEmailContainer.error = getString(R.string.field_error_email)
-                false
+                return false
             } else if (!InputValidation.passwordValidation(password)) {
                 binding.etPasswordContainer.error = getString(R.string.field_error_password)
-                false
+                return false
             } else {
-                true
+                return true
             }
         }
     }

@@ -33,40 +33,37 @@ class StudentAcademicFragment : Fragment() {
     }
 
     private fun setupView() {
+        binding.apply {
+            ivPopOut.setOnClickListener {
+                findNavController().popBackStack()
+            }
+            etSemOneContainer.addTextWatcher()
+            etSemTwoContainer.addTextWatcher()
+            etSemThreeContainer.addTextWatcher()
+            etSemFourContainer.addTextWatcher()
+            etAvgScoreContainer.addTextWatcher()
 
-        binding.ivPopOut.setOnClickListener {
-            findNavController().popBackStack()
-        }
-
-        binding.etSemOneContainer.addTextWatcher()
-        binding.etSemTwoContainer.addTextWatcher()
-        binding.etSemThreeContainer.addTextWatcher()
-        binding.etSemFourContainer.addTextWatcher()
-        binding.etAvgScoreContainer.addTextWatcher()
-
-
-        binding.btnNext.setOnClickListener {
-            val sem1 = binding.etSemOne.getInputValue()
-            val sem2 = binding.etSemTwo.getInputValue()
-            val sem3 = binding.etSemThree.getInputValue()
-            val sem4 = binding.etSemFour.getInputValue()
-            val avgScore = binding.etAvgScore.getInputValue()
-            if(detailVerification(sem1, sem2, sem3, sem4, avgScore)){
-                Log.d(TAG, "Details : $sem1 , $sem2, $sem3, $sem4, $avgScore")
-                val academic = Academic(
-                    sem1 = sem1,
-                    sem2 = sem2,
-                    sem3 = sem3,
-                    sem4 = sem4,
-                    avgScore = avgScore,
-                )
-                args.student.academic = academic
-                val student = args.student
-                Log.d(TAG, "Student : ${args.student}")
-                navigateToResume(student)
+            btnNext.setOnClickListener {
+                val sem1 = etSemOne.getInputValue()
+                val sem2 = etSemTwo.getInputValue()
+                val sem3 = etSemThree.getInputValue()
+                val sem4 = etSemFour.getInputValue()
+                val avgScore = etAvgScore.getInputValue()
+                if(detailVerification(sem1, sem2, sem3, sem4, avgScore)){
+                    val academic = Academic(
+                        sem1 = sem1,
+                        sem2 = sem2,
+                        sem3 = sem3,
+                        sem4 = sem4,
+                        avgScore = avgScore,
+                    )
+                    args.student.academic = academic
+                    val student = args.student
+                    Log.d(TAG, "Student : ${args.student}")
+                    navigateToResume(student)
+                }
             }
         }
-
     }
 
     private fun navigateToResume(student : Student){

@@ -31,35 +31,36 @@ class StudentAddressFragment : Fragment() {
     }
 
     private fun setupView() {
+        binding.apply {
+            ivPopOut.setOnClickListener {
+                findNavController().popBackStack()
+            }
 
-        binding.ivPopOut.setOnClickListener {
-            findNavController().popBackStack()
-        }
+            etAddressOneContainer.addTextWatcher()
+            etCityContainer.addTextWatcher()
+            etStateContainer.addTextWatcher()
+            etZipCodeContainer.addTextWatcher()
 
-        binding.etAddressOneContainer.addTextWatcher()
-        binding.etCityContainer.addTextWatcher()
-        binding.etStateContainer.addTextWatcher()
-        binding.etZipCodeContainer.addTextWatcher()
-
-        binding.btnNext.setOnClickListener {
-            val addressOne = binding.etAddressOne.getInputValue()
-            val addressTwo = binding.etAddressTwo.getInputValue()
-            val finalAddress = "$addressOne $addressTwo"
-            val city = binding.etCity.getInputValue()
-            val state = binding.etState.getInputValue()
-            val zipCode = binding.etZipCode.getInputValue()
-            if(detailVerification(addressOne, city, state, zipCode)){
-                Log.d(TAG, "$finalAddress ,$city ,$state, $zipCode")
-                val address = Address(
-                    address = finalAddress,
-                    city = city,
-                    state = state,
-                    zipCode = zipCode
-                )
-                args.student.address = address
-                val student = args.student
-                Log.d(TAG, "Student : ${args.student}")
-                navigateToAcademic(student)
+            btnNext.setOnClickListener {
+                val addressOne = etAddressOne.getInputValue()
+                val addressTwo = etAddressTwo.getInputValue()
+                val finalAddress = "$addressOne $addressTwo"
+                val city = etCity.getInputValue()
+                val state = etState.getInputValue()
+                val zipCode = etZipCode.getInputValue()
+                if(detailVerification(addressOne, city, state, zipCode)){
+                    Log.d(TAG, "$finalAddress ,$city ,$state, $zipCode")
+                    val address = Address(
+                        address = finalAddress,
+                        city = city,
+                        state = state,
+                        zipCode = zipCode
+                    )
+                    args.student.address = address
+                    val student = args.student
+                    Log.d(TAG, "Student : ${args.student}")
+                    navigateToAcademic(student)
+                }
             }
         }
     }
@@ -87,7 +88,6 @@ class StudentAddressFragment : Fragment() {
                 true
             }
         }
-
     }
 
     private fun navigateToAcademic(student: Student) {
