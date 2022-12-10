@@ -105,9 +105,9 @@ class LoginFragment : Fragment() {
                 val currentUserRole = mFirestore.collection(COLLECTION_PATH_ROLE).document(currentUserUid)
                 val roleDocument: DocumentSnapshot = currentUserRole.get().await()
                 val roleType: String = roleDocument.get("role") as String
-
+                Log.d(TAG, "RoleType = $roleType and $currentUserUid")
                 // to check if current user is student because RBA
-                if(roleType === ROLE_TYPE_STUDENT){
+                if(roleType == ROLE_TYPE_STUDENT){
                     // to check if student have entered all his detail
                     if(userDocument.exists()){
                         Log.d(TAG, "Transfer user to Home Activity")

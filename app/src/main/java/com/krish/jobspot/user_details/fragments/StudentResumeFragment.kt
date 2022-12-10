@@ -68,7 +68,13 @@ class StudentResumeFragment : Fragment() {
                 pdfLauncher.launch(intent)
             }
 
+            if(userDetailViewModel.getPdfUri() != null){
+                hidePdfUploadView()
+                getFileInfo(userDetailViewModel.getPdfUri()!!)
+            }
+
             layoutUploadedPdf.llFileRemoveContainer.setOnClickListener {
+                userDetailViewModel.setPdfUri(null)
                 showDeleteDialog()
             }
 
@@ -144,10 +150,14 @@ class StudentResumeFragment : Fragment() {
 
                         val fileSizeInMb = fileSize.toDouble() / (1024 * 1024)
                         val sizeInFormat = DecimalFormat("#.##").format(fileSizeInMb)
-
-                        setupFileView(fileName, sizeInFormat, formattedDtm)
-
-                        hidePdfUploadView()
+                        val maxSize = 5  // 5 MB in bytes
+                        Log.d(TAG, "FileSize : $fileSizeInMb, MaxFileSize : $maxSize")
+                        if(fileSizeInMb > maxSize){
+                            showToast(requireContext(), "File size above 5MB")
+                        }else{
+                            setupFileView(fileName, sizeInFormat, formattedDtm)
+                            hidePdfUploadView()
+                        }
                     }
                 }
             }
