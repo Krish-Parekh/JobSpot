@@ -7,7 +7,8 @@ buildscript{
         image_picker_version="2.1"
         lifecycle_version = "2.5.1"
         viewmodel_version = "2.5.1"
-        lottieVersion = "3.4.0"
+        lottie_version = "3.4.0"
+        smooth_bottom_bar_version = "1.7.9"
     }
     dependencies {
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"

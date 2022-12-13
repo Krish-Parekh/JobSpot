@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".home.HomeActivity">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/homeNavHostContainer"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toTopOf="@+id/bottomHomeNav"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/home_nav" />
+
+
+    <me.ibrahimsn.lib.SmoothBottomBar
+        android:id="@+id/bottomHomeNav"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        app:backgroundColor="@color/bottom_nav_background_color"
+        app:iconSize="24dp"
+        android:contentDescription="@null"
+        app:iconTint="@color/bottom_nav_icon_tint"
+        app:iconTintActive="@color/bottom_nav_icon_tint_active"
+        app:indicatorColor="@color/bottom_nav_indicator_color"
+        app:indicatorRadius="10dp"
+        app:itemFontFamily="@font/dm_sans_regular"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:menu="@menu/home_menu"
+        app:sideMargins="10dp"
+        app:textColor="@color/text_color" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

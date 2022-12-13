@@ -19,6 +19,8 @@
     <color name="lavender">#D6CDFE</color>
     <color name="light_lavender">#E6E1FF</color>
     <color name="off_white">#F9F9F9</color>
+    <color name="light_blue">#FF96CFFA</color>
+    <color name="light_orange">#FFBE7E</color>
 
     <!-- Component Colors-->
     <color name="splash_screen_background">@color/dark_blue</color>
@@ -49,4 +51,11 @@
     <color name="loading_dialog_background_color">@color/dark_blue</color>
     <color name="loading_dialog_text_color">@color/white</color>
 
+    <color name="bottom_nav_icon_tint">@color/dark_grey</color>
+    <color name="bottom_nav_icon_tint_active">@color/dark_blue</color>
+    <color name="bottom_nav_background_color">@color/off_white</color>
+    <color name="bottom_nav_indicator_color">@color/light_lavender</color>
+
+    <color name="company_card_background">@color/light_blue</color>
+    <color name="job_applied_card_background">@color/light_orange</color>
 </resources>

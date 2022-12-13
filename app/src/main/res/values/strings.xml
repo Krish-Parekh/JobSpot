@@ -70,6 +70,13 @@
     <string name="bottom_sheet_button_text">No</string>
     <string name="button_submit_text">Submit</string>
 
+
+    <string name="home_fragment_field_status">Status</string>
+    <string name="home_fragment_field_companies">Companies</string>
+    <string name="home_fragment_field_job_applied">Jobs Applied</string>
+    <string name="home_fragment_job_list">Recent Job List</string>
+    <string name="field_value_count">%s!</string>
+
     <string name="invalid_credentials">Invalid email or password</string>
     <string name="invalid_user">The specified user does not exist</string>
     <string name="network_error">A network error occurred</string>
@@ -82,4 +89,6 @@
         <item>Female</item>
         <item>Other</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

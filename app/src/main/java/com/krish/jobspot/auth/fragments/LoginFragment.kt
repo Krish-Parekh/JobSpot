@@ -23,6 +23,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.krish.jobspot.R
 import com.krish.jobspot.databinding.FragmentLoginBinding
+import com.krish.jobspot.home.HomeActivity
 import com.krish.jobspot.user_details.UserDetailActivity
 import com.krish.jobspot.util.*
 import com.krish.jobspot.util.Constants.Companion.COLLECTION_PATH_ROLE
@@ -110,7 +111,7 @@ class LoginFragment : Fragment() {
                 if(roleType == ROLE_TYPE_STUDENT){
                     // to check if student have entered all his detail
                     if(userDocument.exists()){
-                        Log.d(TAG, "Transfer user to Home Activity")
+                        navigateToHomeActivity()
                     }else{
                         navigateToUserDetail(username = currentUsername, email = email)
                     }
@@ -133,6 +134,12 @@ class LoginFragment : Fragment() {
             }
         }
 
+    }
+
+    private fun navigateToHomeActivity() {
+        val homeIntent = Intent(requireContext(), HomeActivity::class.java)
+        startActivity(homeIntent)
+        requireActivity().finish()
     }
 
     private fun navigateToUserDetail(username: String, email: String) {
