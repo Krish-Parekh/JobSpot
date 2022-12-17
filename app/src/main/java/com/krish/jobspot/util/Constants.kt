@@ -6,6 +6,7 @@ class Constants {
 
         const val COLLECTION_PATH_STUDENT = "student"
         const val COLLECTION_PATH_ROLE = "role"
+        const val COLLECTION_PATH_COMPANY = "company"
 
         const val RESUME_PATH = "students/resume"
         const val PROFILE_IMAGE_PATH = "students/profileImage"

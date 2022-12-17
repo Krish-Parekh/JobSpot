@@ -2,9 +2,12 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cvJob"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/medium_margin"
+    android:layout_marginHorizontal="@dimen/medium_margin"
+    android:layout_marginVertical="@dimen/small_margin"
+    app:cardBackgroundColor="@color/card_background"
     app:cardCornerRadius="12dp"
     app:cardElevation="6dp">
 
@@ -44,7 +47,7 @@
                 tools:text="Product Designer" />
 
             <TextView
-                android:id="@+id/tvCompanyName"
+                android:id="@+id/tvCompanyNameLocation"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/dm_sans_regular"
@@ -57,10 +60,9 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
-            android:id="@+id/tvCompanyPackage"
+            android:id="@+id/tvSalary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/small_margin"
             android:layout_marginTop="@dimen/small_margin"
             android:fontFamily="@font/dm_sans_bold"
             android:padding="@dimen/small_padding"
@@ -72,8 +74,7 @@
         <LinearLayout
             android:id="@+id/llCtaContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/small_margin">
+            android:layout_height="wrap_content">
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipDesignation"
@@ -81,12 +82,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/small_margin"
                 android:layout_weight="2"
+                android:text="Intern"
                 android:textAlignment="center"
-                app:chipCornerRadius="8dp"
-                tools:text="Intern" />
+                app:chipCornerRadius="8dp" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chipWorkTime"
+                android:id="@+id/chipWorkType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/small_margin"
@@ -101,10 +102,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/small_margin"
                 android:layout_weight="1"
+                android:text="@string/field_apply"
                 android:textAlignment="center"
                 app:chipBackgroundColor="@color/light_orange"
-                app:chipCornerRadius="8dp"
-                tools:text="Apply" />
+                app:chipCornerRadius="8dp" />
         </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

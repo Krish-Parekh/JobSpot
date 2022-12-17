@@ -32,4 +32,6 @@
     <color name="bottom_nav_icon_tint_active">@color/off_white</color>
     <color name="bottom_nav_background_color">@color/dark_blue</color>
     <color name="bottom_nav_indicator_color">@color/kimberly</color>
+
+    <color name="card_background">@color/blue</color>
 </resources>

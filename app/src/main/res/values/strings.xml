@@ -54,6 +54,21 @@
     <string name="field_sem_3">Semester 3</string>
     <string name="field_sem_4">Semester 4</string>
     <string name="field_avg_sem">Average of SGPI</string>
+    <string name="field_company_and_location">%s \u2022 %s</string>
+    <string name="heading_student_applied">Student Applied</string>
+    <string name="student_count"> %s </string>
+    <string name="header_job_description">Job Description</string>
+    <string name="header_salary">Salary</string>
+    <string name="header_responsibilities">Responsibilities</string>
+    <string name="header_skill_set">Required Skills</string>
+    <string name="header_all_jobs">All Jobs</string>
+    <string name="field_search">Search</string>
+    <string name="field_apply">Apply</string>
+
+    <string name="menu_field_home">Home</string>
+    <string name="menu_field_alert">Alerts</string>
+    <string name="menu_field_test">Tests</string>
+    <string name="menu_field_jobs">Jobs</string>
 
     <string name="field_error_sap_id">Enter valid Sap Id</string>
     <string name="field_error_mobile">Enter valid Mobile No.</string>

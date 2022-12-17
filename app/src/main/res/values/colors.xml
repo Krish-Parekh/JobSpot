@@ -58,4 +58,6 @@
 
     <color name="company_card_background">@color/light_blue</color>
     <color name="job_applied_card_background">@color/light_orange</color>
+
+    <color name="card_background">@color/off_white</color>
 </resources>

@@ -29,6 +29,7 @@ import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import androidx.lifecycle.Observer
 import com.krish.jobspot.util.LoadingDialog
+import com.krish.jobspot.util.UiState
 import java.util.*
 
 private const val TAG = "StudentResumeFragment"
@@ -62,8 +63,8 @@ class StudentResumeFragment : Fragment() {
                 findNavController().popBackStack()
             }
             layoutUploadPdf.root.setOnClickListener {
-                val intent = Intent(Intent.ACTION_GET_CONTENT);
-                intent.type = "application/pdf";
+                val intent = Intent(Intent.ACTION_GET_CONTENT)
+                intent.type = "application/pdf"
                 intent.addCategory(Intent.CATEGORY_OPENABLE)
                 pdfLauncher.launch(intent)
             }
@@ -74,7 +75,6 @@ class StudentResumeFragment : Fragment() {
             }
 
             layoutUploadedPdf.llFileRemoveContainer.setOnClickListener {
-                userDetailViewModel.setPdfUri(null)
                 showDeleteDialog()
             }
 
@@ -94,14 +94,19 @@ class StudentResumeFragment : Fragment() {
 
     private fun handleUploadResponse() {
         userDetailViewModel.uploadDataStatus.observe(viewLifecycleOwner, Observer { uiState ->
-            if(uiState.loading){
-                loadingDialog.show()
-            }else if(uiState.success){
-                hidePdfUploadedView()
-                userDetailViewModel.setPdfUri(null)
-                loadingDialog.dismiss()
-            }else if(uiState.failed){
-                loadingDialog.dismiss()
+            when(uiState){
+                UiState.LOADING -> {
+                    loadingDialog.show()
+                }
+                UiState.SUCCESS -> {
+                    hidePdfUploadedView()
+                    userDetailViewModel.setPdfUri(null)
+                    loadingDialog.dismiss()
+                }
+                UiState.FAILURE -> {
+                    loadingDialog.dismiss()
+                }
+                else -> Unit
             }
         })
     }
@@ -181,6 +186,7 @@ class StudentResumeFragment : Fragment() {
             dialog.dismiss()
         }
         btnRemove.setOnClickListener {
+            userDetailViewModel.setPdfUri(null)
             dialog.dismiss()
             hidePdfUploadedView()
         }

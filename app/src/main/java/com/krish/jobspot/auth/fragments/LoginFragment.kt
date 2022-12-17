@@ -133,7 +133,6 @@ class LoginFragment : Fragment() {
                 loadingDialog.dismiss()
             }
         }
-
     }
 
     private fun navigateToHomeActivity() {

@@ -14,8 +14,16 @@
         android:theme="@style/Theme.JobSpot"
         tools:targetApi="31">
         <activity
-            android:name=".home.HomeActivity"
+            android:name=".home.JobViewActivity"
             android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".home.HomeActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

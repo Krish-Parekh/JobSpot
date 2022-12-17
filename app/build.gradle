@@ -74,4 +74,7 @@ dependencies {
 
     // SmoothBottomBar
     implementation "com.github.ibrahimsn98:SmoothBottomBar:$smooth_bottom_bar_version"
+
+    //Coil Image
+    implementation "io.coil-kt:coil:$coil_version"
 }

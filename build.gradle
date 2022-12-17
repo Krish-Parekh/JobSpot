@@ -9,6 +9,7 @@ buildscript{
         viewmodel_version = "2.5.1"
         lottie_version = "3.4.0"
         smooth_bottom_bar_version = "1.7.9"
+        coil_version = "2.2.2"
     }
     dependencies {
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"

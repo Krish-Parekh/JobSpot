@@ -12,25 +12,21 @@ import com.krish.jobspot.model.Student
 import com.krish.jobspot.util.Constants.Companion.COLLECTION_PATH_STUDENT
 import com.krish.jobspot.util.Constants.Companion.PROFILE_IMAGE_PATH
 import com.krish.jobspot.util.Constants.Companion.RESUME_PATH
+import com.krish.jobspot.util.UiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
-data class UiState(
-    var loading: Boolean = false,
-    var success: Boolean = false,
-    val failed: Boolean = false,
-)
 
 private const val TAG = "UserDetailViewModel"
 
 class UserDetailViewModel : ViewModel() {
-    private var imageUri: Uri? = null;
+    private var imageUri: Uri? = null
     private var pdfUri: Uri? = null
     private val mFireStorage: FirebaseStorage by lazy { FirebaseStorage.getInstance() }
     private val mFireStore: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
 
-    private val _uploadDataStatus: MutableLiveData<UiState> = MutableLiveData(UiState())
+    private val _uploadDataStatus: MutableLiveData<UiState> = MutableLiveData(UiState.LOADING)
     val uploadDataStatus: LiveData<UiState> = _uploadDataStatus
 
     fun setPdfUri(pdfUri: Uri?) {
@@ -54,7 +50,7 @@ class UserDetailViewModel : ViewModel() {
         val fileName = studentUid
 
         try {
-            _uploadDataStatus.postValue(UiState(loading = true))
+            _uploadDataStatus.postValue(UiState.LOADING)
             viewModelScope.launch(Dispatchers.IO) {
                 val resumeDownloadUrl =
                     uploadData(path = "$RESUME_PATH/$fileName", fileUri = pdfUri)
@@ -67,12 +63,12 @@ class UserDetailViewModel : ViewModel() {
                 Log.d(TAG, "Final user: $student")
                 mFireStore.collection(COLLECTION_PATH_STUDENT).document(studentUid).set(student)
                     .await()
-                _uploadDataStatus.postValue(UiState(success = true))
+                _uploadDataStatus.postValue(UiState.SUCCESS)
                 Log.d(TAG, "Upload Student Data Success: ")
             }
         } catch (error: Exception) {
             Log.d(TAG, "Error : ${error.message}")
-            _uploadDataStatus.postValue(UiState(failed = true))
+            _uploadDataStatus.postValue(UiState.FAILURE)
         }
     }
 
