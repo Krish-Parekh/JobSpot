@@ -33,5 +33,9 @@
     <color name="bottom_nav_background_color">@color/dark_blue</color>
     <color name="bottom_nav_indicator_color">@color/kimberly</color>
 
+
     <color name="card_background">@color/blue</color>
+
+    <color name="chip_text_color">@color/off_white</color>
+    <color name="chip_background_color">@color/blue</color>
 </resources>

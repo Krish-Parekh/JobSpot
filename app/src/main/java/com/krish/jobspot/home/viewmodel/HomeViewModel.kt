@@ -16,27 +16,6 @@ class HomeViewModel : ViewModel() {
     private val _jobs: MutableLiveData<MutableList<Job>> = MutableLiveData(mutableListOf())
     val jobs: LiveData<MutableList<Job>> = _jobs
 
-    fun fetchRecentJobs(){
-        val threeDaysAgo = Calendar.getInstance().apply {
-            add(Calendar.DATE, -3)
-        }.time
-        viewModelScope.launch {
-
-            mFireStore.collection(COLLECTION_PATH_COMPANY).whereLessThan("uid",threeDaysAgo)
-                .addSnapshotListener { value, error ->
-                    if (error != null) {
-                        return@addSnapshotListener
-                    }
-                    _jobs.value?.clear()
-                    val documents = value!!.documents
-                    val jobList = documents.map { document ->
-                        document.toObject(Job::class.java)!!
-                    }
-                    _jobs.postValue(jobList.toMutableList())
-                }
-        }
-    }
-
     fun fetchJobs() {
         viewModelScope.launch {
             mFireStore.collection(COLLECTION_PATH_COMPANY)

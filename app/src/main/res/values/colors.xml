@@ -21,6 +21,8 @@
     <color name="off_white">#F9F9F9</color>
     <color name="light_blue">#FF96CFFA</color>
     <color name="light_orange">#FFBE7E</color>
+    <color name="baby_blue">#EAF5FE</color>
+    <color name="dark_purple">#514B6B</color>
 
     <!-- Component Colors-->
     <color name="splash_screen_background">@color/dark_blue</color>
@@ -60,4 +62,8 @@
     <color name="job_applied_card_background">@color/light_orange</color>
 
     <color name="card_background">@color/off_white</color>
+
+
+    <color name="chip_text_color">@color/dark_purple</color>
+    <color name="chip_background_color">@color/baby_blue</color>
 </resources>

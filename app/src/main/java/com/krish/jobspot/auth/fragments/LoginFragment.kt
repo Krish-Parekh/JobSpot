@@ -72,7 +72,7 @@ class LoginFragment : Fragment() {
                     clearField()
                 }
             }
-        }
+        } 
     }
 
     private fun createSignupText() : SpannableString{
@@ -100,6 +100,7 @@ class LoginFragment : Fragment() {
                 mAuth.signInWithEmailAndPassword(email, password).await()
                 val currentUserUid = mAuth.currentUser?.uid!!
                 val currentUsername = mAuth.currentUser?.displayName!!
+                Log.d(TAG, "CurrentUserUid : ${currentUserUid}, ${currentUsername}")
                 val currentUserDoc = mFirestore.collection(COLLECTION_PATH_STUDENT).document(currentUserUid)
                 val userDocument: DocumentSnapshot = currentUserDoc.get().await()
 

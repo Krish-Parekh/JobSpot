@@ -24,17 +24,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/icon_tint" />
 
-        <ImageView
-            android:id="@+id/ivDeleteJob"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/medium_margin"
-            android:contentDescription="@null"
-            android:paddingVertical="@dimen/small_padding"
-            android:src="@drawable/ic_delete"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/ivCompanyLogo"
             android:layout_width="120dp"
@@ -160,7 +149,7 @@
             android:layout_marginTop="@dimen/small_margin"
             android:layout_marginRight="@dimen/medium_margin"
             android:fontFamily="@font/dm_sans_regular"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="@+id/tvJobDescriptionHeader"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvJobDescriptionHeader"
@@ -189,7 +178,7 @@
             android:fontFamily="@font/dm_sans_bold"
             android:paddingVertical="@dimen/small_padding"
             android:textColor="@color/text_color"
-            android:textSize="20sp"
+            android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvSalaryHeader"
             tools:text="15K/Mo" />
@@ -215,7 +204,7 @@
             android:layout_marginTop="@dimen/small_margin"
             android:layout_marginRight="@dimen/medium_margin"
             android:fontFamily="@font/dm_sans_regular"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="@+id/tvJobDescriptionHeader"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvResponsibilityHeader"

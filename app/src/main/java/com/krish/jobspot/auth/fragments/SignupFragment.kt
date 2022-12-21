@@ -22,6 +22,7 @@ import com.krish.jobspot.R
 import com.krish.jobspot.databinding.FragmentSignupBinding
 import com.krish.jobspot.user_details.UserDetailActivity
 import com.krish.jobspot.util.*
+import com.krish.jobspot.util.Constants.Companion.COLLECTION_PATH_ROLE
 import com.krish.jobspot.util.Constants.Companion.ROLE_TYPE_STUDENT
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -90,7 +91,7 @@ class SignupFragment : Fragment() {
                 val currentUser = mAuth.currentUser!!
                 val profileUpdates = UserProfileChangeRequest.Builder().setDisplayName(username).build()
                 val currentUserRole = hashMapOf("role" to ROLE_TYPE_STUDENT)
-                mFirestore.collection("role").document(currentUser.uid).set(currentUserRole).await()
+                mFirestore.collection(COLLECTION_PATH_ROLE).document(currentUser.uid).set(currentUserRole).await()
                 currentUser.updateProfile(profileUpdates).await()
                 showToast(requireContext(), getString(R.string.auth_pass))
                 Log.d(TAG, "Navigate user to UserDetail Activity")
