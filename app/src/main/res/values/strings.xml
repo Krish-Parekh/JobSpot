@@ -64,6 +64,7 @@
     <string name="header_all_jobs">All Jobs</string>
     <string name="field_search">Search</string>
     <string name="field_apply">Apply</string>
+    <string name="field_job_applied">Job Applied</string>
 
     <string name="menu_field_home">Home</string>
     <string name="menu_field_alert">Alerts</string>
@@ -79,6 +80,7 @@
     <string name="field_error_state">Enter valid State</string>
     <string name="field_error_zip_code">Enter valid Zip Code</string>
     <string name="field_error_score">Enter valid Score</string>
+    <string name="field_error_job_applied">Job application failed</string>
 
     <string name="resume_meta_data">%1$s Mb · %2$s</string>
     <string name="resume_guideline">Upload files in PDF format up to 5 MB. Just upload it once and you can use it in your next application.</string>

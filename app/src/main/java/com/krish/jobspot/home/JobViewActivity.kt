@@ -5,6 +5,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import androidx.navigation.navArgs
 import coil.load
 import com.google.android.material.chip.Chip
@@ -25,15 +26,14 @@ class JobViewActivity : AppCompatActivity() {
     private val job by lazy { args.job }
     private val mFirebaseAuth : FirebaseAuth by lazy { FirebaseAuth.getInstance() }
     private val studentId : String by lazy { mFirebaseAuth.currentUser?.uid.toString() }
-
     private val studentJobViewModel : StudentJobViewModel by viewModels()
     private val loadingDialog : LoadingDialog by lazy { LoadingDialog(this) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityJobViewBinding.inflate(layoutInflater)
-
-        setupViews()
         setContentView(binding.root)
+        setupViews()
     }
 
     private fun setupViews() {
@@ -52,15 +52,18 @@ class JobViewActivity : AppCompatActivity() {
             tvSalary.text = createSalaryText(job.salary, this@JobViewActivity)
 
             job.skillSet.forEach { job ->
-                val chip = Chip(this@JobViewActivity)
-                chip.text = job
-                chip.chipBackgroundColor = ContextCompat.getColorStateList(this@JobViewActivity, R.color.chip_background_color)
-                chip.setTextColor(this@JobViewActivity.getColor(R.color.chip_text_color))
-                chip.chipCornerRadius = 8f
-                requiredSkillSetChipGroup.addView(chip)
+                createSkillSetChip(job)
             }
-
         }
+    }
+
+    private fun createSkillSetChip(job: String) {
+        val chip = Chip(this@JobViewActivity)
+        chip.text = job
+        chip.chipBackgroundColor = ContextCompat.getColorStateList(this@JobViewActivity, R.color.chip_background_color)
+        chip.setTextColor(this@JobViewActivity.getColor(R.color.chip_text_color))
+        chip.chipCornerRadius = 8f
+        binding.requiredSkillSetChipGroup.addView(chip)
     }
 
     private fun handJobStatusResponse() {
@@ -71,7 +74,7 @@ class JobViewActivity : AppCompatActivity() {
                 }
                 SUCCESS -> {
                     if (studentJobViewModel.isJobApplicationSubmitted){
-                        binding.btnApply.text = "Applied"
+                        binding.btnApply.text = getString(R.string.field_job_applied)
                         binding.btnApply.isEnabled = false
                     } else {
                         binding.btnApply.isEnabled = true
@@ -98,11 +101,12 @@ class JobViewActivity : AppCompatActivity() {
                     loadingDialog.show()
                 }
                 SUCCESS -> {
-                    showToast(this, "Job Applied")
+                    showToast(this, getString(R.string.field_job_applied))
                     loadingDialog.dismiss()
+                    finish()
                 }
                 FAILURE -> {
-                    showToast(this, "Job application failed")
+                    showToast(this, getString(R.string.field_error_job_applied))
                     loadingDialog.dismiss()
                 }
                 else -> Unit

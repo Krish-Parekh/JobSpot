@@ -1,6 +1,5 @@
 package com.krish.jobspot.home.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,33 +14,36 @@ import com.krish.jobspot.R
 import com.krish.jobspot.model.Job
 import com.krish.jobspot.util.createSalaryText
 
-private const val TAG = "JobListAdapterTAG"
-class JobListAdapter(private val onItemClick : (job : Job) -> Unit, private val activity: FragmentActivity) :
-    RecyclerView.Adapter<JobListAdapter.JobListAdapterViewHolder>() {
+class JobListAdapter(
+    private val onItemClick: (job: Job) -> Unit,
+    private val activity: FragmentActivity
+) : RecyclerView.Adapter<JobListAdapter.JobListAdapterViewHolder>() {
 
-    private var jobs : MutableList<Job> = mutableListOf()
+    private var jobs: MutableList<Job> = mutableListOf()
 
-    inner class JobListAdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        private val jobCard : MaterialCardView = itemView.findViewById(R.id.cvJob)
-        private val companyLogo : ImageView = itemView.findViewById(R.id.ivCompanyLogo)
-        private val jobRole : TextView = itemView.findViewById(R.id.tvJobRole)
-        private val companyNameLocation : TextView = itemView.findViewById(R.id.tvCompanyNameLocation)
-        private val salary : TextView = itemView.findViewById(R.id.tvSalary)
-        private val desgination : TextView = itemView.findViewById(R.id.chipDesignation)
-        private val workType : Chip = itemView.findViewById(R.id.chipWorkType)
-        private val btnApply : Chip = itemView.findViewById(R.id.btnApply)
+    inner class JobListAdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val jobCard: MaterialCardView = itemView.findViewById(R.id.cvJob)
+        private val companyLogo: ImageView = itemView.findViewById(R.id.ivCompanyLogo)
+        private val jobRole: TextView = itemView.findViewById(R.id.tvJobRole)
+        private val companyNameLocation: TextView =
+            itemView.findViewById(R.id.tvCompanyNameLocation)
+        private val salary: TextView = itemView.findViewById(R.id.tvSalary)
+        private val desgination: TextView = itemView.findViewById(R.id.chipDesignation)
+        private val workType: Chip = itemView.findViewById(R.id.chipWorkType)
+        private val btnApply: Chip = itemView.findViewById(R.id.btnApply)
 
-        fun bind(job : Job){
+        fun bind(job: Job) {
             companyLogo.load(job.imageUrl) {
                 error(R.drawable.ic_apple_logo)
                 placeholder(R.drawable.ic_jobs)
                 build()
             }
             jobRole.text = job.role
-            companyNameLocation.text = itemView.context.getString(R.string.field_company_and_location, job.name, job.city)
+            companyNameLocation.text =
+                itemView.context.getString(R.string.field_company_and_location, job.name, job.city)
             salary.text = createSalaryText(job.salary, requireActivity = activity)
             btnApply.setOnClickListener {
-                Log.d(TAG, "Navigate to job view fragment")
+                onItemClick(job)
             }
             jobCard.setOnClickListener {
                 onItemClick(job)
@@ -51,7 +53,8 @@ class JobListAdapter(private val onItemClick : (job : Job) -> Unit, private val 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobListAdapterViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.job_detail_card, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.job_detail_card, parent, false)
         return JobListAdapterViewHolder(view)
     }
 
@@ -62,7 +65,7 @@ class JobListAdapter(private val onItemClick : (job : Job) -> Unit, private val 
     override fun getItemCount(): Int = jobs.size
 
 
-    fun setJobListData(newJobs : List<Job>){
+    fun setJobListData(newJobs: List<Job>) {
         jobs.clear()
         jobs.addAll(newJobs)
         notifyDataSetChanged()
