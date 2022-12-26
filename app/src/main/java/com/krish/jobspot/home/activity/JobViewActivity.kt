@@ -1,11 +1,10 @@
-package com.krish.jobspot.home
+package com.krish.jobspot.home.activity
 
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import androidx.navigation.findNavController
 import androidx.navigation.navArgs
 import coil.load
 import com.google.android.material.chip.Chip

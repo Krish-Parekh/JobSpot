@@ -15,6 +15,8 @@
     <string name="resume_fragment_heading">Add Resume</string>
     <string name="bottom_sheet_heading">Remove File</string>
     <string name="bottom_sheet_sub_heading">Are you sure you want to delete this File?</string>
+    <string name="fragment_mock_test_sub_heading">Mock Tests</string>
+    <string name="field_test_conducted">Test Conducted</string>
 
     <string name="field_username">Username</string>
     <string name="field_email">Email</string>

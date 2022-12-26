@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color"
+    tools:context=".home.fragments.MockTestFragment">
+
+
+    <TextView
+        android:id="@+id/tvMockTestHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/medium_margin"
+        android:fontFamily="@font/dm_sans_bold"
+        android:paddingVertical="@dimen/small_padding"
+        android:text="@string/fragment_mock_test_sub_heading"
+        android:textColor="@color/text_color"
+        android:textSize="26sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/etSearchContainer"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/medium_margin"
+        android:hint="@string/field_search"
+        app:boxStrokeColor="@color/box_stroke_color"
+        app:errorEnabled="true"
+        app:hintTextColor="@color/text_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvMockTestHeading"
+        app:placeholderText="eg. Product Designer"
+        app:startIconDrawable="@drawable/ic_search">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/dm_sans_medium"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tvTestConductedHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/small_margin"
+        android:fontFamily="@font/dm_sans_bold"
+        android:paddingVertical="@dimen/small_padding"
+        android:text="@string/field_test_conducted"
+        android:textColor="@color/text_color"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="@id/etSearchContainer"
+        app:layout_constraintTop_toBottomOf="@+id/etSearchContainer" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvQuiz"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginVertical="@dimen/small_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTestConductedHeading"
+        tools:listitem="@layout/quiz_card_layout" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

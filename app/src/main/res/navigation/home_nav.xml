@@ -9,7 +9,7 @@
         android:id="@+id/homeFragment"
         android:name="com.krish.jobspot.home.fragments.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_jobViewActivity"
             app:destination="@id/jobViewActivity" />
@@ -18,18 +18,36 @@
         android:id="@+id/jobsFragment"
         android:name="com.krish.jobspot.home.fragments.JobsFragment"
         android:label="fragment_jobs"
-        tools:layout="@layout/fragment_jobs" >
+        tools:layout="@layout/fragment_jobs">
         <action
             android:id="@+id/action_jobsFragment_to_jobViewActivity"
             app:destination="@id/jobViewActivity" />
     </fragment>
     <activity
         android:id="@+id/jobViewActivity"
-        android:name="com.krish.jobspot.home.JobViewActivity"
+        android:name="com.krish.jobspot.home.activity.JobViewActivity"
         android:label="activity_job_view"
-        tools:layout="@layout/activity_job_view" >
+        tools:layout="@layout/activity_job_view">
         <argument
             android:name="job"
             app:argType="com.krish.jobspot.model.Job" />
+    </activity>
+    <fragment
+        android:id="@+id/mockTestFragment"
+        android:name="com.krish.jobspot.home.fragments.MockTestFragment"
+        android:label="fragment_mock_test"
+        tools:layout="@layout/fragment_mock_test">
+        <action
+            android:id="@+id/action_mockTestFragment_to_mockTestActivity"
+            app:destination="@id/mockTestActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/mockTestActivity"
+        android:name="com.krish.jobspot.home.activity.MockTestActivity"
+        android:label="activity_mock_test"
+        tools:layout="@layout/activity_mock_test" >
+        <argument
+            android:name="quizState"
+            app:argType="com.krish.jobspot.model.QuizState" />
     </activity>
 </navigation>

@@ -23,7 +23,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.krish.jobspot.R
 import com.krish.jobspot.databinding.FragmentLoginBinding
-import com.krish.jobspot.home.HomeActivity
+import com.krish.jobspot.home.activity.HomeActivity
 import com.krish.jobspot.user_details.UserDetailActivity
 import com.krish.jobspot.util.*
 import com.krish.jobspot.util.Constants.Companion.COLLECTION_PATH_ROLE

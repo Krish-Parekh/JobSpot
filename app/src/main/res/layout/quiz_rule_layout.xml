@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/large_padding"
+    tools:background="@color/bottom_sheet_background_color">
+
+    <View
+        android:layout_width="30dp"
+        android:layout_height="5dp"
+        android:layout_gravity="center"
+        android:background="@drawable/rounder_view_corner" />
+
+    <TextView
+        android:id="@+id/tvCompanyName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/large_margin"
+        android:fontFamily="@font/dm_sans_bold"
+        android:text="Tata Consultancy"
+        android:textColor="@color/bottom_sheet_text_color"
+        android:textSize="22sp" />
+
+
+    <LinearLayout
+        android:id="@+id/quizConstraints"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/small_margin"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/small_margin"
+                android:fontFamily="@font/dm_sans_bold"
+                android:text="10"
+                android:textColor="@color/orange"
+                android:textSize="22sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/small_margin"
+                android:fontFamily="@font/dm_sans_regular"
+                android:text="Question"
+                android:textColor="@color/bottom_sheet_sub_text"
+                android:textSize="14sp" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/small_margin"
+                android:fontFamily="@font/dm_sans_bold"
+                android:text="60m"
+                android:textColor="@color/orange"
+                android:textSize="22sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/small_margin"
+                android:fontFamily="@font/dm_sans_regular"
+                android:text="Duration"
+                android:textColor="@color/bottom_sheet_sub_text"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginTop="@dimen/medium_margin"
+        android:fontFamily="@font/dm_sans_bold"
+        android:text="Instruction"
+        android:textColor="@color/bottom_sheet_text_color"
+        android:textSize="22sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginTop="@dimen/medium_margin"
+        android:fontFamily="@font/dm_sans_regular"
+        android:paddingHorizontal="@dimen/medium_padding"
+        android:text="Test will be auto submitted when the time is up.
+The comprises of multiple choice questions (MCQ) with one correct answer.
+The clock in the top right corner will display the remaining time available for you to complete the test."
+        android:textColor="@color/bottom_sheet_text_color"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginTop="@dimen/medium_margin"
+        android:fontFamily="@font/dm_sans_bold"
+        android:text="Navigation"
+        android:textColor="@color/bottom_sheet_text_color"
+        android:textSize="22sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginTop="@dimen/medium_margin"
+        android:fontFamily="@font/dm_sans_regular"
+        android:paddingHorizontal="@dimen/medium_padding"
+        android:text="Select the option and the answer will be saved once you click on the submit button .
+Once you click on submit button you cannot change the answer and the solution will be displayed on the bottom.
+To go onto the next question slide towards left."
+        android:textColor="@color/bottom_sheet_text_color"
+        android:textSize="16sp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnStartTest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/large_margin"
+        android:backgroundTint="@color/bottom_sheet_view_color"
+        android:fontFamily="@font/dm_sans_medium"
+        android:padding="@dimen/button_padding"
+        android:text="Start Test"
+        android:textColor="@color/bottom_sheet_button_text_color"
+        android:textSize="16sp"
+        app:cornerRadius="6dp" />
+
+</LinearLayout>

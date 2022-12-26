@@ -11,7 +11,7 @@
         android:title="@string/menu_field_alert" />
 
     <item
-        android:id="@+id/mock_test"
+        android:id="@+id/mockTestFragment"
         android:icon="@drawable/ic_test"
         android:title="@string/menu_field_test" />
 

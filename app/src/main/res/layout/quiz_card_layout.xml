@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cvQuiz"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/medium_padding"
+    android:layout_marginVertical="@dimen/small_margin"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="6dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/card_background"
+        android:padding="@dimen/small_padding">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ivQuizLogo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="@dimen/small_margin"
+            android:src="@drawable/ic_mock"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvQuizName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/medium_margin"
+            android:layout_marginTop="@dimen/small_margin"
+            android:ellipsize="end"
+            android:fontFamily="@font/dm_sans_bold"
+            android:maxLines="1"
+            android:textColor="@color/text_color"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toRightOf="@+id/ivQuizLogo"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="Test 1" />
+
+        <TextView
+            android:id="@+id/tvQuizAttempted"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/medium_margin"
+            android:ellipsize="end"
+            android:fontFamily="@font/dm_sans_regular"
+            android:textColor="@color/subheading_color"
+            android:textSize="14sp"
+            app:layout_constraintLeft_toLeftOf="@+id/tvQuizName"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvQuizName"
+            android:text="Not Attempted" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
