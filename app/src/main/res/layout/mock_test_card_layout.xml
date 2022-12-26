@@ -2,7 +2,7 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cvQuiz"
+    android:id="@+id/cvMockTest"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/medium_padding"
@@ -17,7 +17,7 @@
         android:padding="@dimen/small_padding">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/ivQuizLogo"
+            android:id="@+id/ivMockTestLogo"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_margin="@dimen/small_margin"
@@ -27,7 +27,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tvQuizName"
+            android:id="@+id/tvMockTestName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/medium_margin"
@@ -37,13 +37,13 @@
             android:maxLines="1"
             android:textColor="@color/text_color"
             android:textSize="18sp"
-            app:layout_constraintLeft_toRightOf="@+id/ivQuizLogo"
+            app:layout_constraintLeft_toRightOf="@+id/ivMockTestLogo"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:text="Test 1" />
 
         <TextView
-            android:id="@+id/tvQuizAttempted"
+            android:id="@+id/tvMockTestAttemptStatus"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/medium_margin"
@@ -51,9 +51,9 @@
             android:fontFamily="@font/dm_sans_regular"
             android:textColor="@color/subheading_color"
             android:textSize="14sp"
-            app:layout_constraintLeft_toLeftOf="@+id/tvQuizName"
+            app:layout_constraintLeft_toLeftOf="@+id/tvMockTestName"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvQuizName"
+            app:layout_constraintTop_toBottomOf="@+id/tvMockTestName"
             android:text="Not Attempted" />
 
 

@@ -12,16 +12,16 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.krish.jobspot.databinding.FragmentMockTestBinding
-import com.krish.jobspot.home.adapter.QuizListAdapter
+import com.krish.jobspot.home.adapter.MockTestAdapter
 import com.krish.jobspot.home.viewmodel.MockTestViewModel
-import com.krish.jobspot.model.QuizState
+import com.krish.jobspot.model.MockTestState
 
 
 class MockTestFragment : Fragment() {
     private lateinit var binding: FragmentMockTestBinding
     private val mockTestViewModel: MockTestViewModel by viewModels()
-    private val quizListAdapter: QuizListAdapter by lazy { QuizListAdapter(this@MockTestFragment) }
-    private val quizStateList: MutableList<QuizState> = mutableListOf()
+    private val mockTestAdapter: MockTestAdapter by lazy { MockTestAdapter(this@MockTestFragment) }
+    private val mockTestStateList: MutableList<MockTestState> = mutableListOf()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,39 +36,39 @@ class MockTestFragment : Fragment() {
 
     private fun setupViews() {
         binding.apply {
-            mockTestViewModel.fetchQuiz()
+            mockTestViewModel.fetchMockTestStatus()
 
             etSearch.addTextChangedListener { text: Editable? ->
-                filterQuiz(text)
+                filterMockTest(text)
             }
 
 
-            rvQuiz.adapter = quizListAdapter
+            rvQuiz.adapter = mockTestAdapter
             rvQuiz.layoutManager = LinearLayoutManager(requireContext())
-            mockTestViewModel.quiz.observe(viewLifecycleOwner, Observer { quiz ->
-                quizListAdapter.setQuizData(quiz)
-                this@MockTestFragment.quizStateList.clear()
-                this@MockTestFragment.quizStateList.addAll(quiz)
+            mockTestViewModel.mockTestStatus.observe(viewLifecycleOwner, Observer { quiz ->
+                mockTestAdapter.setQuizData(quiz)
+                this@MockTestFragment.mockTestStateList.clear()
+                this@MockTestFragment.mockTestStateList.addAll(quiz)
             })
         }
     }
 
-    private fun filterQuiz(text: Editable?) {
+    private fun filterMockTest(text: Editable?) {
         if (!text.isNullOrEmpty()) {
-            val filteredQuizList = quizStateList.filter { quizState ->
+            val filteredQuizList = mockTestStateList.filter { quizState ->
                 val title = quizState.quizName.lowercase()
                 val inputText = text.toString().lowercase()
                 title.contains(inputText)
             }
-            quizListAdapter.setQuizData(newQuizDetail = filteredQuizList)
+            mockTestAdapter.setQuizData(newQuizDetail = filteredQuizList)
         } else {
-            quizListAdapter.setQuizData(newQuizDetail = quizStateList)
+            mockTestAdapter.setQuizData(newQuizDetail = mockTestStateList)
         }
     }
 
 
-    fun navigateToMockTestActivity(quizState: QuizState) {
-        val direction = MockTestFragmentDirections.actionMockTestFragmentToMockTestActivity(quizState)
+    fun navigateToMockTestActivity(mockTestState: MockTestState) {
+        val direction = MockTestFragmentDirections.actionMockTestFragmentToMockTestActivity(mockTestState)
         findNavController().navigate(direction)
     }
 }

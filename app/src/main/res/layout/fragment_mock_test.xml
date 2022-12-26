@@ -69,6 +69,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTestConductedHeading"
-        tools:listitem="@layout/quiz_card_layout" />
+        tools:listitem="@layout/mock_test_card_layout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

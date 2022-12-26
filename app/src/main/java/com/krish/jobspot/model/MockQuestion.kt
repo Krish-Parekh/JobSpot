@@ -1,6 +1,6 @@
 package com.krish.jobspot.model
 
-data class Question(
+data class MockQuestion(
     var question: String = "",
     var options: List<String> = emptyList(),
     var correctOption: String = "",

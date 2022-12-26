@@ -47,7 +47,7 @@
         android:label="activity_mock_test"
         tools:layout="@layout/activity_mock_test" >
         <argument
-            android:name="quizState"
-            app:argType="com.krish.jobspot.model.QuizState" />
+            android:name="mockTestState"
+            app:argType="com.krish.jobspot.model.MockTestState" />
     </activity>
 </navigation>

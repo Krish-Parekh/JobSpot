@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class QuizState(
+data class MockTestState(
     var quizUid: String = "",
     var hasAttempted: Boolean = false,
     var quizName: String = ""

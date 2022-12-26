@@ -8,9 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
-import com.krish.jobspot.model.Quiz
-import com.krish.jobspot.model.QuizState
-import com.krish.jobspot.util.Constants.Companion.COLLECTION_PATH_QUIZ
+import com.krish.jobspot.model.Mock
+import com.krish.jobspot.model.MockTestState
+import com.krish.jobspot.util.Constants.Companion.COLLECTION_PATH_MOCK
 import com.krish.jobspot.util.Constants.Companion.COLLECTION_PATH_STUDENT
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -23,31 +23,37 @@ class MockTestViewModel : ViewModel() {
     private val mRealtimeDb: DatabaseReference by lazy { FirebaseDatabase.getInstance().reference }
     private val mFirebaseAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
     private val studentId by lazy { mFirebaseAuth.currentUser?.uid.toString() }
-    private val _quiz: MutableLiveData<MutableList<QuizState>> = MutableLiveData(mutableListOf())
-    val quiz: LiveData<MutableList<QuizState>> = _quiz
 
-    fun fetchQuiz() {
+    private val _mockTestStatus: MutableLiveData<MutableList<MockTestState>> =
+        MutableLiveData(mutableListOf())
+    val mockTestStatus: LiveData<MutableList<MockTestState>> = _mockTestStatus
+
+    private val _mock: MutableLiveData<Mock> = MutableLiveData(Mock())
+    val mock: LiveData<Mock> = _mock
+
+
+    fun fetchMockTestStatus() {
         mRealtimeDb
             .child(COLLECTION_PATH_STUDENT)
             .child(studentId)
-            .child(COLLECTION_PATH_QUIZ)
+            .child(COLLECTION_PATH_MOCK)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val attemptedQuizIds =
                         snapshot.children.map { it.getValue(String::class.java) ?: "" }
 
-                    mFirestore.collection(COLLECTION_PATH_QUIZ)
+                    mFirestore.collection(COLLECTION_PATH_MOCK)
                         .addSnapshotListener { value, error ->
                             if (error != null) {
                                 return@addSnapshotListener
                             }
 
-                            val quizStates = value!!.documents
-                                .map { it.toObject(Quiz::class.java)!! }
+                            val mockStates = value!!.documents
+                                .map { it.toObject(Mock::class.java)!! }
                                 .map { createQuizState(it, attemptedQuizIds) }
                                 .toMutableList()
 
-                            _quiz.postValue(quizStates)
+                            _mockTestStatus.postValue(mockStates)
                         }
                 }
 
@@ -57,23 +63,30 @@ class MockTestViewModel : ViewModel() {
             })
     }
 
-    fun createQuizState(quiz: Quiz, attemptedQuizIds: List<String>): QuizState {
-        val hasAttempted = attemptedQuizIds.contains(quiz.uid)
-        return QuizState(quizUid = quiz.uid, hasAttempted = hasAttempted, quizName = quiz.title)
+    fun createQuizState(mock: Mock, attemptedQuizIds: List<String>): MockTestState {
+        val hasAttempted = attemptedQuizIds.contains(mock.uid)
+        return MockTestState(quizUid = mock.uid, hasAttempted = hasAttempted, quizName = mock.title)
     }
 
 
-    fun updateStudentTestStatus(mockId : String) {
+    fun updateStudentTestStatus(mockId: String) {
         viewModelScope.launch {
             mRealtimeDb
                 .child(COLLECTION_PATH_STUDENT)
                 .child(studentId)
-                .child(COLLECTION_PATH_QUIZ)
+                .child(COLLECTION_PATH_MOCK)
                 .child(mockId)
                 .setValue(mockId)
                 .await()
         }
     }
 
+    fun fetchMockTest(mockTestId: String) {
+        viewModelScope.launch {
+            val mockRef = mFirestore.collection(COLLECTION_PATH_MOCK).document(mockTestId).get().await()
+            val mockTest = mockRef.toObject(Mock::class.java)!!
+            _mock.postValue(mockTest)
+        }
+    }
 
 }

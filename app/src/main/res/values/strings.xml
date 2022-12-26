@@ -67,6 +67,12 @@
     <string name="field_search">Search</string>
     <string name="field_apply">Apply</string>
     <string name="field_job_applied">Job Applied</string>
+    <string name="field_question">Question</string>
+    <string name="field_duration">Duration</string>
+    <string name="field_instruction">Instruction</string>
+    <string name="field_navigation">Navigation</string>
+    <string name="field_start_test">Start Test</string>
+
 
     <string name="menu_field_home">Home</string>
     <string name="menu_field_alert">Alerts</string>
@@ -108,6 +114,9 @@
         <item>Female</item>
         <item>Other</item>
     </string-array>
+
+    <string name="mock_test_instructions">1. Test will be auto submitted when the time is up.\n\n2. The comprises of multiple choice questions (MCQ) with one correct answer.\n\n3. The clock in the top right corner will display the remaining time available for you to complete the test.</string>
+    <string name="mock_test_navigation">1. Select the option and the answer will be saved once you click on the submit button.\n\n2. Once you click on the submit button, you cannot change the answer and the solution will be displayed on the bottom.\n\n3. To go onto the next question, slide towards left.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

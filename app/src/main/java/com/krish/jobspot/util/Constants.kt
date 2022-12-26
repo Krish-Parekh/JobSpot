@@ -7,7 +7,7 @@ class Constants {
         const val COLLECTION_PATH_STUDENT = "students"
         const val COLLECTION_PATH_ROLE = "roles"
         const val COLLECTION_PATH_COMPANY = "companies"
-        const val COLLECTION_PATH_QUIZ = "quiz"
+        const val COLLECTION_PATH_MOCK = "mock_test"
 
         const val RESUME_PATH = "students/resume"
         const val PROFILE_IMAGE_PATH = "students/profileImage"
