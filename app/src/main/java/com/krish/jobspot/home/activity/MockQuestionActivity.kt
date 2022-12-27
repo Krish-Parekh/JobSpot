@@ -1,31 +1,45 @@
 package com.krish.jobspot.home.activity
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.navigation.navArgs
-import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.tabs.TabLayoutMediator
 import com.krish.jobspot.R
-import com.krish.jobspot.databinding.ActivityMockTestBinding
+import com.krish.jobspot.databinding.ActivityMockQuestionBinding
+import com.krish.jobspot.home.adapter.MockQuestionPageAdapter
 import com.krish.jobspot.home.viewmodel.MockTestViewModel
-import com.krish.jobspot.model.MockTestState
 
-class MockTestActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMockTestBinding
-    private val args by navArgs<MockTestActivityArgs>()
+class MockQuestionActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMockQuestionBinding
     private val mockTestViewModel: MockTestViewModel by viewModels()
-    private val mockTestState: MockTestState by lazy { args.mockTestState }
-
+    private val args by navArgs<MockQuestionActivityArgs>()
+    private val mock by lazy { args.mock }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMockTestBinding.inflate(layoutInflater)
+        binding = ActivityMockQuestionBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        mockTestViewModel.fetchMockTest(mockTestId = mockTestState.quizUid)
+        setupViews()
+    }
+
+    private fun setupViews() {
         showInstructionDialog()
+        binding.questionPager.adapter = MockQuestionPageAdapter(this, mock.mockQuestion.size, mock.mockQuestion)
+
+        TabLayoutMediator(binding.questionCountTabLayout, binding.questionPager) { tab, position ->
+            tab.text = "${position + 1}"
+        }.attach()
+
+        for (i in 0..mock.mockQuestion.size) {
+            val textView =
+                LayoutInflater.from(this).inflate(R.layout.tab_title, null, false) as TextView
+            binding.questionCountTabLayout.getTabAt(i)?.customView = textView
+        }
+
     }
 
     private fun showInstructionDialog() {
@@ -35,21 +49,15 @@ class MockTestActivity : AppCompatActivity() {
         val questionCount: TextView = bottomSheet.findViewById(R.id.tvMockTestQuestionCount)
         val testDuration: TextView = bottomSheet.findViewById(R.id.tvMockTestDuration)
         val startTest: MaterialButton = bottomSheet.findViewById(R.id.btnStartTest)
+        testName.text = mock.title
+        questionCount.text = mock.mockQuestion.size.toString()
+        testDuration.text = getString(R.string.field_mock_duration, mock.duration)
         dialog.setCancelable(false)
         startTest.setOnClickListener {
-            mockTestViewModel.updateStudentTestStatus(mockTestState.quizUid)
+            mockTestViewModel.updateStudentTestStatus(mock.uid)
             dialog.dismiss()
         }
         dialog.setContentView(bottomSheet)
         dialog.show()
-        mockTestViewModel.mock.observe(this, Observer { mock ->
-            if (mock.uid.isNotEmpty()) {
-                testName.text = mock.title
-                questionCount.text = mock.mockQuestion.size.toString()
-                testDuration.text = mock.duration + "m"
-            }
-        })
-
-
     }
 }

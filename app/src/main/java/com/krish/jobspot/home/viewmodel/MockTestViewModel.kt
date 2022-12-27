@@ -9,9 +9,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.krish.jobspot.model.Mock
+import com.krish.jobspot.model.MockDetail
 import com.krish.jobspot.model.MockTestState
 import com.krish.jobspot.util.Constants.Companion.COLLECTION_PATH_MOCK
 import com.krish.jobspot.util.Constants.Companion.COLLECTION_PATH_STUDENT
+import com.krish.jobspot.util.UiState
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -28,9 +32,10 @@ class MockTestViewModel : ViewModel() {
         MutableLiveData(mutableListOf())
     val mockTestStatus: LiveData<MutableList<MockTestState>> = _mockTestStatus
 
-    private val _mock: MutableLiveData<Mock> = MutableLiveData(Mock())
-    val mock: LiveData<Mock> = _mock
+    var mock: Mock = Mock()
 
+    private val eventChannel = Channel<UiState>()
+    val eventFlow = eventChannel.receiveAsFlow()
 
     fun fetchMockTestStatus() {
         mRealtimeDb
@@ -78,15 +83,22 @@ class MockTestViewModel : ViewModel() {
                 .child(mockId)
                 .setValue(mockId)
                 .await()
+
+            val mockDetailRef = mRealtimeDb.child(COLLECTION_PATH_MOCK).child(mockId).get().await()
+            val mockDetail = mockDetailRef.getValue(MockDetail::class.java)!!
+            mockDetail.studentIds.add(studentId)
+
+            mRealtimeDb.child(COLLECTION_PATH_MOCK).child(mockId).setValue(mockDetail).await()
         }
     }
 
     fun fetchMockTest(mockTestId: String) {
         viewModelScope.launch {
+            eventChannel.trySend(UiState.LOADING)
             val mockRef = mFirestore.collection(COLLECTION_PATH_MOCK).document(mockTestId).get().await()
             val mockTest = mockRef.toObject(Mock::class.java)!!
-            _mock.postValue(mockTest)
+            mock = mockTest
+            eventChannel.trySend(UiState.SUCCESS)
         }
     }
-
 }

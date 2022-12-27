@@ -38,16 +38,16 @@
         android:label="fragment_mock_test"
         tools:layout="@layout/fragment_mock_test">
         <action
-            android:id="@+id/action_mockTestFragment_to_mockTestActivity"
-            app:destination="@id/mockTestActivity" />
+            android:id="@+id/action_mockTestFragment_to_mockQuestionActivity"
+            app:destination="@id/mockQuestionActivity" />
     </fragment>
     <activity
-        android:id="@+id/mockTestActivity"
-        android:name="com.krish.jobspot.home.activity.MockTestActivity"
-        android:label="activity_mock_test"
-        tools:layout="@layout/activity_mock_test" >
+        android:id="@+id/mockQuestionActivity"
+        android:name="com.krish.jobspot.home.activity.MockQuestionActivity"
+        android:label="activity_mock_question"
+        tools:layout="@layout/activity_mock_question">
         <argument
-            android:name="mockTestState"
-            app:argType="com.krish.jobspot.model.MockTestState" />
+            android:name="mock"
+            app:argType="com.krish.jobspot.model.Mock" />
     </activity>
 </navigation>

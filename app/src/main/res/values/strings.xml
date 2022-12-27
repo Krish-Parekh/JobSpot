@@ -72,6 +72,7 @@
     <string name="field_instruction">Instruction</string>
     <string name="field_navigation">Navigation</string>
     <string name="field_start_test">Start Test</string>
+    <string name="field_mock_duration">%sm</string>
 
 
     <string name="menu_field_home">Home</string>

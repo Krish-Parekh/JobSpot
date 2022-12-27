@@ -62,8 +62,12 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
+    //ViewPager 2
+    implementation "androidx.viewpager2:viewpager2:$viewpager_version"
+
     //Circular ImageView
     implementation "de.hdodenhof:circleimageview:$circular_iv_version"
+
     //Image Picker
     implementation "com.github.dhaval2404:imagepicker:$image_picker_version"
     

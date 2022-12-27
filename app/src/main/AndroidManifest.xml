@@ -14,7 +14,7 @@
         android:theme="@style/Theme.JobSpot"
         tools:targetApi="31">
         <activity
-            android:name=".home.activity.MockTestActivity"
+            android:name=".home.activity.MockQuestionActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
