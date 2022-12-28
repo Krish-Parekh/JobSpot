@@ -9,20 +9,22 @@ import com.krish.jobspot.model.MockQuestion
 
 class MockQuestionPageAdapter(
     fragment: FragmentActivity,
-    private val questionCount: Int,
     private val questions: List<MockQuestion>
 ) : FragmentStateAdapter(fragment) {
+
     override fun getItemCount(): Int {
-        return questionCount
+        return questions.size
     }
 
     override fun createFragment(position: Int): Fragment {
         val bundle = Bundle()
         bundle.putParcelable("QUESTION", questions[position])
-        bundle.putString("QUESTION_ID", "${position + 1}")
+        bundle.putInt("QUESTION_ID", position)
         val questionViewFragment = QuestionViewFragment()
         questionViewFragment.arguments = bundle
         return questionViewFragment
     }
+
+
 
 }

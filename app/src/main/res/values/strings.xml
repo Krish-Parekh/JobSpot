@@ -73,6 +73,8 @@
     <string name="field_navigation">Navigation</string>
     <string name="field_start_test">Start Test</string>
     <string name="field_mock_duration">%sm</string>
+    <string name="field_duration_start">00:00</string>
+    <string name="field_tab_text">%d</string>
 
 
     <string name="menu_field_home">Home</string>

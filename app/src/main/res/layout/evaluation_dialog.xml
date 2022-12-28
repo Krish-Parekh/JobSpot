@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/card_background">
+
+    <ProgressBar
+        android:id="@+id/scoreProgressBar"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:indeterminateOnly="false"
+        android:progress="70"
+        android:progressDrawable="@drawable/circular_progress_bar_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/dm_sans_bold"
+        android:textColor="@color/text_color"
+        android:textSize="26sp"
+        app:layout_constraintBottom_toBottomOf="@+id/scoreProgressBar"
+        app:layout_constraintEnd_toEndOf="@+id/scoreProgressBar"
+        app:layout_constraintStart_toStartOf="@+id/scoreProgressBar"
+        app:layout_constraintTop_toTopOf="@+id/scoreProgressBar"
+        tools:text="7/10" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -37,6 +37,8 @@ class MockTestViewModel : ViewModel() {
     private val eventChannel = Channel<UiState>()
     val eventFlow = eventChannel.receiveAsFlow()
 
+    var mockAnswer: Array<String?> = arrayOfNulls(10)
+
     fun fetchMockTestStatus() {
         mRealtimeDb
             .child(COLLECTION_PATH_STUDENT)
@@ -73,7 +75,6 @@ class MockTestViewModel : ViewModel() {
         return MockTestState(quizUid = mock.uid, hasAttempted = hasAttempted, quizName = mock.title)
     }
 
-
     fun updateStudentTestStatus(mockId: String) {
         viewModelScope.launch {
             mRealtimeDb
@@ -95,10 +96,12 @@ class MockTestViewModel : ViewModel() {
     fun fetchMockTest(mockTestId: String) {
         viewModelScope.launch {
             eventChannel.trySend(UiState.LOADING)
-            val mockRef = mFirestore.collection(COLLECTION_PATH_MOCK).document(mockTestId).get().await()
+            val mockRef =
+                mFirestore.collection(COLLECTION_PATH_MOCK).document(mockTestId).get().await()
             val mockTest = mockRef.toObject(Mock::class.java)!!
             mock = mockTest
             eventChannel.trySend(UiState.SUCCESS)
         }
     }
+
 }

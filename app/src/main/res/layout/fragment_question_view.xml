@@ -43,6 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/medium_padding"
             android:layout_marginVertical="@dimen/small_margin"
+            app:cardBackgroundColor="@color/card_background"
             app:cardCornerRadius="8dp"
             app:cardElevation="6dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -62,12 +63,12 @@
                     android:layout_margin="@dimen/medium_margin"
                     android:fontFamily="@font/dm_sans_medium"
                     android:padding="@dimen/small_padding"
+                    android:text="A."
                     android:textColor="@color/text_color"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:text="A." />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tvOptionOneAnswer"
@@ -96,6 +97,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/medium_padding"
             android:layout_marginVertical="@dimen/small_margin"
+            app:cardBackgroundColor="@color/card_background"
             app:cardCornerRadius="8dp"
             app:cardElevation="6dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -115,12 +117,12 @@
                     android:layout_margin="@dimen/medium_margin"
                     android:fontFamily="@font/dm_sans_medium"
                     android:padding="@dimen/small_padding"
+                    android:text="B."
                     android:textColor="@color/text_color"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:text="B." />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tvOptionTwoAnswer"
@@ -149,6 +151,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/medium_padding"
             android:layout_marginVertical="@dimen/small_margin"
+            app:cardBackgroundColor="@color/card_background"
             app:cardCornerRadius="8dp"
             app:cardElevation="6dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -168,12 +171,12 @@
                     android:layout_margin="@dimen/medium_margin"
                     android:fontFamily="@font/dm_sans_medium"
                     android:padding="@dimen/small_padding"
+                    android:text="C."
                     android:textColor="@color/text_color"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:text="C." />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tvOptionThreeAnswer"
@@ -202,6 +205,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/medium_padding"
             android:layout_marginVertical="@dimen/small_margin"
+            app:cardBackgroundColor="@color/card_background"
             app:cardCornerRadius="8dp"
             app:cardElevation="6dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -221,12 +225,12 @@
                     android:layout_margin="@dimen/medium_margin"
                     android:fontFamily="@font/dm_sans_medium"
                     android:padding="@dimen/small_padding"
+                    android:text="D."
                     android:textColor="@color/text_color"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:text="D." />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tvOptionFourAnswer"
