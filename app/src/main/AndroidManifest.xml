@@ -14,13 +14,19 @@
         android:theme="@style/Theme.JobSpot"
         tools:targetApi="31">
         <activity
+            android:name=".home.activity.MockResultActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".home.activity.MockQuestionActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".home.activity.JobViewActivity"
             android:exported="false">

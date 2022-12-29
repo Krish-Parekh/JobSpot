@@ -1,5 +1,6 @@
 package com.krish.jobspot.home.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.krish.jobspot.databinding.FragmentMockTestBinding
+import com.krish.jobspot.home.activity.MockResultActivity
 import com.krish.jobspot.home.adapter.MockTestAdapter
 import com.krish.jobspot.home.viewmodel.MockTestViewModel
 import com.krish.jobspot.model.MockTestState
@@ -81,14 +83,19 @@ class MockTestFragment : Fragment() {
                     LOADING -> Unit
                     SUCCESS -> {
                         val mock = mockTestViewModel.mock
-                        val direction =
-                            MockTestFragmentDirections.actionMockTestFragmentToMockQuestionActivity(mock)
+                        val direction = MockTestFragmentDirections.actionMockTestFragmentToMockQuestionActivity(mock)
                         findNavController().navigate(direction)
                     }
                     FAILURE -> Unit
                 }
             }
         }
+    }
+
+    fun navigateToMockResultActivity(mockTestState: MockTestState){
+        val intent = Intent(requireContext(), MockResultActivity::class.java)
+        intent.putExtra("MOCK_ID", mockTestState.quizUid)
+        startActivity(intent)
     }
 
     override fun onDestroyView() {

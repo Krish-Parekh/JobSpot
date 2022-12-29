@@ -1,15 +1,17 @@
 package com.krish.jobspot.home.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
 import android.view.LayoutInflater
-
+import android.view.View
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navArgs
-
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayoutMediator
@@ -17,21 +19,29 @@ import com.krish.jobspot.R
 import com.krish.jobspot.databinding.ActivityMockQuestionBinding
 import com.krish.jobspot.home.adapter.MockQuestionPageAdapter
 import com.krish.jobspot.home.viewmodel.MockTestViewModel
+import com.krish.jobspot.home.viewmodel.QuestionPageViewModel
+import com.krish.jobspot.util.UiState
+import com.krish.jobspot.util.UiState.*
+import kotlinx.coroutines.flow.collectLatest
+
 import java.util.concurrent.TimeUnit
+
 
 private const val TAG = "MockQuestionActivityTAG"
 
 class MockQuestionActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMockQuestionBinding
     private val mockTestViewModel: MockTestViewModel by viewModels()
+    private val questionPageViewModel: QuestionPageViewModel by viewModels()
     private val args by navArgs<MockQuestionActivityArgs>()
     private val mock by lazy { args.mock }
     private var timer: CountDownTimer? = null
     private var timeRemaining: Long = 0
     private var ruleDisplayed: Boolean = false
     private var timerStarted: Boolean = false
-    private var tabLayoutMediator : TabLayoutMediator? = null
-    private var mockQuestionAdapter : MockQuestionPageAdapter? = null
+    private var tabLayoutMediator: TabLayoutMediator? = null
+    private var mockQuestionAdapter: MockQuestionPageAdapter? = null
+    private var listener: ViewPager2.OnPageChangeCallback? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMockQuestionBinding.inflate(layoutInflater)
@@ -62,24 +72,58 @@ class MockQuestionActivity : AppCompatActivity() {
 
             questionPager.adapter = mockQuestionAdapter
             questionPager.offscreenPageLimit = mock.mockQuestion.size
-            tabLayoutMediator = TabLayoutMediator(questionCountTabLayout, questionPager) { tab, position ->
-                tab.text = getString(R.string.field_tab_text, position + 1)
-            }
+            tabLayoutMediator =
+                TabLayoutMediator(questionCountTabLayout, questionPager) { tab, position ->
+                    tab.text = getString(R.string.field_tab_text, position + 1)
+                }
             tabLayoutMediator?.attach()
 
             for (i in 0..mock.mockQuestion.size) {
-                val tabTitle = LayoutInflater.from(this@MockQuestionActivity)
-                    .inflate(R.layout.tab_title, null, false) as TextView
+                val tabTitle = LayoutInflater.from(this@MockQuestionActivity).inflate(R.layout.tab_title, null, false) as TextView
                 questionCountTabLayout.getTabAt(i)?.customView = tabTitle
             }
 
+            listener = object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    if (position == mock.mockQuestion.size - 1) {
+                        binding.btnSubmitQuiz.visibility = View.VISIBLE
+                    } else {
+                        binding.btnSubmitQuiz.visibility = View.GONE
+                    }
+                }
+            }
+
+            binding.questionPager.registerOnPageChangeCallback(listener!!)
+
             btnSubmitQuiz.setOnClickListener {
-                Log.d(TAG, "Mock Answer Size : ${mockTestViewModel.mockAnswer.size}")
-                mockTestViewModel.mockAnswer.forEachIndexed { index, value ->
-                    Log.d(TAG, "$index : $value")
+                questionPageViewModel.submitQuiz(mock = mock, timeRemaining)
+            }
+
+            lifecycleScope.launchWhenCreated {
+                questionPageViewModel.uiEventFlow.collectLatest { value: UiState ->
+                    when (value) {
+                        LOADING -> {
+                            Log.d(TAG, "Loading...")
+                        }
+                        SUCCESS -> {
+                            navigateToResultActivity()
+                        }
+                        FAILURE -> {
+                            Log.d(TAG, "Failure...")
+                        }
+                    }
+
                 }
             }
         }
+    }
+
+    private fun navigateToResultActivity() {
+        val intent = Intent(this, MockResultActivity::class.java)
+        intent.putExtra("MOCK_ID", mock.uid)
+        startActivity(intent)
+        finish()
     }
 
     private fun showInstructionDialog() {
@@ -124,11 +168,6 @@ class MockQuestionActivity : AppCompatActivity() {
         timer?.start()
     }
 
-    fun handleAnswerCallback(questionId: Int, answer: String) {
-        mockTestViewModel.mockAnswer[questionId] = answer
-        Log.d(TAG, "MockAnswer : ${mockTestViewModel.mockAnswer}")
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putLong("TIME_REMAINING", timeRemaining)
@@ -137,11 +176,14 @@ class MockQuestionActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+        if (listener != null) {
+            binding.questionPager.unregisterOnPageChangeCallback(listener!!)
+            listener = null
+        }
         timer?.cancel()
         tabLayoutMediator?.detach()
         tabLayoutMediator = null
         mockQuestionAdapter = null
-        binding.questionPager.offscreenPageLimit = 1
         binding.questionPager.adapter = null
         super.onDestroy()
     }

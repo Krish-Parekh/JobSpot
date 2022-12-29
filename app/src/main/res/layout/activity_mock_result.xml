@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color"
+    app:layoutDescription="@xml/activity_mock_result_scene"
+    tools:context=".home.activity.MockResultActivity">
+
+    <TextView
+        android:id="@+id/tvReportHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/medium_margin"
+        android:fontFamily="@font/dm_sans_bold"
+        android:text="@string/field_report_header"
+        android:textColor="@color/text_color"
+        android:textSize="32sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvReport"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/medium_margin"
+        android:layout_marginTop="@dimen/large_margin"
+        app:cardBackgroundColor="@color/card_background"
+        app:cardCornerRadius="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvReportHeading">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="@dimen/large_padding">
+
+            <ProgressBar
+                android:id="@+id/scoreProgressBar"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:indeterminateOnly="false"
+                android:progressDrawable="@drawable/circular_progress_bar_background"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvScore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/dm_sans_bold"
+                android:textColor="@color/text_color"
+                android:textSize="26sp"
+                app:layout_constraintBottom_toBottomOf="@+id/scoreProgressBar"
+                app:layout_constraintEnd_toEndOf="@+id/scoreProgressBar"
+                app:layout_constraintStart_toStartOf="@+id/scoreProgressBar"
+                app:layout_constraintTop_toTopOf="@+id/scoreProgressBar"
+                tools:text="7/10" />
+
+            <LinearLayout
+                android:id="@+id/llIncorrectContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/small_margin"
+                android:orientation="horizontal"
+                android:padding="@dimen/small_padding"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/scoreProgressBar">
+
+                <ImageView
+                    android:id="@+id/ivIncorrect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="@dimen/small_padding"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_correct" />
+
+                <TextView
+                    android:id="@+id/tvIncorrect"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/dm_sans_regular"
+                    android:text="@string/field_in_correct"
+                    android:textColor="@color/text_color"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tvIncorrectScore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/dm_sans_bold"
+                    android:textColor="@color/text_color"
+                    android:textSize="18sp"
+                    tools:text="2/10" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llUnAttemptedContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/small_margin"
+                android:orientation="horizontal"
+                android:padding="@dimen/small_padding"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/llIncorrectContainer">
+
+                <ImageView
+                    android:id="@+id/ivUnAttempted"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="@dimen/small_padding"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_un_attempted" />
+
+                <TextView
+                    android:id="@+id/tvUnAttempted"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/dm_sans_regular"
+                    android:text="@string/field_un_attempted"
+                    android:textColor="@color/text_color"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tvUnAttemptedScore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/dm_sans_bold"
+                    android:textColor="@color/text_color"
+                    android:textSize="18sp"
+                    tools:text="5/10" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llTimeTakeContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/small_margin"
+                android:orientation="horizontal"
+                android:padding="@dimen/small_padding"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/llUnAttemptedContainer">
+
+                <ImageView
+                    android:id="@+id/ivTimeTaken"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="@dimen/small_padding"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_time" />
+
+                <TextView
+                    android:id="@+id/tvTimeTaken"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/dm_sans_regular"
+                    android:text="@string/field_time_taken"
+                    android:textColor="@color/text_color"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tvTimeTakenScore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/dm_sans_bold"
+                    android:textColor="@color/text_color"
+                    android:textSize="18sp"
+                    tools:text="50m" />
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <TextView
+        android:id="@+id/tvSolutionHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/medium_margin"
+        android:fontFamily="@font/dm_sans_bold"
+        android:text="@string/field_solution"
+        android:textColor="@color/text_color"
+        android:textSize="32sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cvReport" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvSolution"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/small_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvSolutionHeading"
+        tools:listitem="@layout/mock_solution_card_layout" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

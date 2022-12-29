@@ -82,3 +82,12 @@ fun convertToShortString(value: Long): String {
 }
 
 
+fun checkTimeUnit(milliSeconds: Long): String {
+    val seconds = milliSeconds / 1000
+    val minutes = seconds / 60
+    return if (minutes >= 1) {
+        "${minutes}m"
+    } else {
+        "${seconds}s"
+    }
+}
