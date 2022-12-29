@@ -31,7 +31,9 @@ import kotlinx.coroutines.tasks.await
 private const val TAG = "SignupFragment"
 
 class SignupFragment : Fragment() {
-    private lateinit var binding: FragmentSignupBinding
+    private var _binding: FragmentSignupBinding? = null
+    private val binding get() = _binding!!
+
     private val mAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
     private val mFirestore : FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
     private val loadingDialog : LoadingDialog by lazy { LoadingDialog(requireContext()) }
@@ -40,7 +42,7 @@ class SignupFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentSignupBinding.inflate(inflater, container, false)
+        _binding = FragmentSignupBinding.inflate(inflater, container, false)
 
         setupView()
 
@@ -143,5 +145,9 @@ class SignupFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
+    }
 
 }

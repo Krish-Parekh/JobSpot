@@ -16,29 +16,28 @@ import com.krish.jobspot.model.MockQuestion
 private const val TAG = "QuestionViewFragment"
 
 class QuestionViewFragment : Fragment() {
-    private lateinit var binding: FragmentQuestionViewBinding
-    private var mockQuestion: MockQuestion = MockQuestion()
+    private var _binding: FragmentQuestionViewBinding? = null
+    private val binding get() = _binding!!
     private var questionId: Int = 0
-    private var selectedOption : Int = -1
+    private var selectedOption: Int = -1
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentQuestionViewBinding.inflate(inflater, container, false)
-
-        mockQuestion = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        _binding = FragmentQuestionViewBinding.inflate(inflater, container, false)
+        val mockQuestion = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             arguments?.getParcelable("QUESTION", MockQuestion::class.java)!!
         } else {
             arguments?.getParcelable<MockQuestion>("QUESTION") as MockQuestion
         }
         questionId = arguments?.getInt("QUESTION_ID")!!
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             val selectCardBackgroundColor = resources.getColor(R.color.orange)
             selectedOption = savedInstanceState.getInt("SELECTED_OPTION")
             binding.apply {
-                when(selectedOption){
+                when (selectedOption) {
                     1 -> applyCardBackgroundColor(cvOptionOne, selectCardBackgroundColor)
                     2 -> applyCardBackgroundColor(cvOptionTwo, selectCardBackgroundColor)
                     3 -> applyCardBackgroundColor(cvOptionThree, selectCardBackgroundColor)
@@ -48,12 +47,12 @@ class QuestionViewFragment : Fragment() {
 
         }
 
-        setupViews()
+        setupViews(mockQuestion)
 
         return binding.root
     }
 
-    private fun setupViews() {
+    private fun setupViews(mockQuestion : MockQuestion) {
         binding.apply {
             tvQuestionHeader.text = "Question ${questionId + 1}"
             tvQuestion.text = mockQuestion.question
@@ -99,12 +98,17 @@ class QuestionViewFragment : Fragment() {
         applyCardBackgroundColor(materialCardView, selectCardBackgroundColor)
     }
 
-    private fun applyCardBackgroundColor(cardView: MaterialCardView, color : Int){
+    private fun applyCardBackgroundColor(cardView: MaterialCardView, color: Int) {
         cardView.setCardBackgroundColor(color)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putInt("SELECTED_OPTION", selectedOption)
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 }

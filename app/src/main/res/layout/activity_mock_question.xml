@@ -50,11 +50,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/background_color"
+        android:contentDescription="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mockHeader"
         app:tabGravity="start"
-        android:contentDescription="@null"
         app:tabIndicatorHeight="0dp"
         app:tabMode="scrollable"
         app:tabRippleColor="@null" />
@@ -63,7 +63,7 @@
         android:id="@+id/questionPager"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnSubmitQuiz"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/question_count_tab_layout" />

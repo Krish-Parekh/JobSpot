@@ -18,18 +18,21 @@ import com.krish.jobspot.model.Job
 
 
 class JobsFragment : Fragment() {
-    private lateinit var binding : FragmentJobsBinding
+    private var _binding : FragmentJobsBinding? = null
+    private val binding get() = _binding!!
+
     private val homeViewModel : HomeViewModel by viewModels()
     private val jobs: MutableList<Job> by lazy { mutableListOf() }
 
-    private val jobListAdapter: JobListAdapter by lazy { JobListAdapter(::onItemClick, requireActivity()) }
+    private var _jobListAdapter: JobListAdapter? = null
+    private val jobListAdapter get() = _jobListAdapter!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentJobsBinding.inflate(inflater, container, false)
-
+        _binding = FragmentJobsBinding.inflate(inflater, container, false)
+        _jobListAdapter = JobListAdapter(::onItemClick, requireActivity())
         setupViews()
 
         return binding.root
@@ -45,10 +48,10 @@ class JobsFragment : Fragment() {
             rvJobs.adapter = jobListAdapter
             rvJobs.layoutManager = LinearLayoutManager(requireContext())
 
-            homeViewModel.jobs.observe(viewLifecycleOwner, Observer { jobs ->
+            homeViewModel.jobs.observe(viewLifecycleOwner, Observer { jobList ->
+                jobs.clear()
+                jobs.addAll(jobList)
                 jobListAdapter.setJobListData(newJobs = jobs)
-                this@JobsFragment.jobs.clear()
-                this@JobsFragment.jobs.addAll(jobs)
             })
         }
     }
@@ -69,5 +72,12 @@ class JobsFragment : Fragment() {
     private fun onItemClick(job: Job) {
         val direction = JobsFragmentDirections.actionJobsFragmentToJobViewActivity(job = job)
         findNavController().navigate(direction)
+    }
+
+    override fun onDestroyView() {
+        jobs.clear()
+        _jobListAdapter = null
+        _binding = null
+        super.onDestroyView()
     }
 }

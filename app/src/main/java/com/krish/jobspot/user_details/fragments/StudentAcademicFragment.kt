@@ -19,13 +19,14 @@ import com.krish.jobspot.util.getInputValue
 
 private const val TAG = "StudentAcademicFragment"
 class StudentAcademicFragment : Fragment() {
-    private lateinit var binding: FragmentStudentAcademicBinding
+    private var _binding: FragmentStudentAcademicBinding? = null
+    private val binding get() = _binding!!
     private val args by navArgs<StudentAcademicFragmentArgs>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentStudentAcademicBinding.inflate(inflater, container, false)
+        _binding = FragmentStudentAcademicBinding.inflate(inflater, container, false)
 
         setupView()
 
@@ -98,6 +99,10 @@ class StudentAcademicFragment : Fragment() {
                 true
             }
         }
+    }
 
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 }

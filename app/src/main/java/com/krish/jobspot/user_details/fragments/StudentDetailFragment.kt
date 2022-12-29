@@ -30,13 +30,14 @@ private const val TAG = "StudentDetailFragment"
 
 class StudentDetailFragment : Fragment() {
 
-    private lateinit var binding: FragmentStudentDetailBinding
+    private var _binding: FragmentStudentDetailBinding? = null
+    private val binding get() = _binding!!
     private val startForProfileImageResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             handleCapturedImage(result)
         }
     private val mAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
-    private val userDetailViewModel : UserDetailViewModel by viewModels()
+    private val userDetailViewModel: UserDetailViewModel by viewModels()
     private var username: String = ""
     private var email: String = ""
     private var gender: String = ""
@@ -45,7 +46,7 @@ class StudentDetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentStudentDetailBinding.inflate(inflater, container, false)
+        _binding = FragmentStudentDetailBinding.inflate(inflater, container, false)
 
         val userData: Bundle? = requireActivity().intent.extras
         if (
@@ -103,7 +104,7 @@ class StudentDetailFragment : Fragment() {
                         dob = dob,
                         gender = gender
                     )
-                    val student = Student( uid = uid,details = detail)
+                    val student = Student(uid = uid, details = detail)
                     Log.d(TAG, "Student : $student")
                     navigateToAddress(student)
                 }
@@ -163,16 +164,13 @@ class StudentDetailFragment : Fragment() {
             if (imageUri == null) {
                 showToast(requireContext(), getString(R.string.field_error_image))
                 return false
-            }
-            else if (!InputValidation.sapIdValidation(sapId)) {
+            } else if (!InputValidation.sapIdValidation(sapId)) {
                 etSapIdContainer.error = getString(R.string.field_error_sap_id)
                 return false
-            }
-            else if (!InputValidation.mobileValidation(mobile)) {
+            } else if (!InputValidation.mobileValidation(mobile)) {
                 etMobileContainer.error = getString(R.string.field_error_mobile)
                 return false
-            }
-            else if (!InputValidation.dobValidation(dob)) {
+            } else if (!InputValidation.dobValidation(dob)) {
                 etDateContainer.apply {
                     error = getString(R.string.field_error_dob)
                     setErrorIconOnClickListener {
@@ -180,12 +178,10 @@ class StudentDetailFragment : Fragment() {
                     }
                 }
                 return false
-            }
-            else if (!InputValidation.genderValidation(gender)) {
+            } else if (!InputValidation.genderValidation(gender)) {
                 genderSpinner.error = ""
                 return false
-            }
-            else {
+            } else {
                 return true
             }
         }
@@ -193,7 +189,15 @@ class StudentDetailFragment : Fragment() {
     }
 
     private fun navigateToAddress(student: Student) {
-        val direction = StudentDetailFragmentDirections.actionStudentDetailFragmentToStudentAddressFragment(student = student)
+        val direction =
+            StudentDetailFragmentDirections.actionStudentDetailFragmentToStudentAddressFragment(
+                student = student
+            )
         findNavController().navigate(direction)
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 }

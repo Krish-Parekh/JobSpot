@@ -17,16 +17,18 @@ import com.krish.jobspot.util.counterAnimation
 
 
 class HomeFragment : Fragment() {
-    private lateinit var binding: FragmentHomeBinding
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
 
-    private val jobListAdapter: JobListAdapter by lazy { JobListAdapter(::onItemClick, requireActivity()) }
+    private var _jobListAdapter: JobListAdapter? = null
+    private val jobListAdapter get() = _jobListAdapter!!
     private val homeViewModel: HomeViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentHomeBinding.inflate(inflater, container, false)
-
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _jobListAdapter = JobListAdapter(::onItemClick, requireActivity())
         setupView()
 
         return binding.root
@@ -51,5 +53,11 @@ class HomeFragment : Fragment() {
     private fun onItemClick(job: Job) {
         val direction = HomeFragmentDirections.actionHomeFragmentToJobViewActivity(job = job)
         findNavController().navigate(direction)
+    }
+
+    override fun onDestroyView() {
+        _jobListAdapter = null
+        _binding = null
+        super.onDestroyView()
     }
 }

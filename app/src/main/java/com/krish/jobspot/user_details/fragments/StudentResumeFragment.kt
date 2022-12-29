@@ -36,7 +36,8 @@ private const val TAG = "StudentResumeFragment"
 
 class StudentResumeFragment : Fragment() {
 
-    private lateinit var binding: FragmentStudentResumeBinding
+    private var _binding: FragmentStudentResumeBinding? = null
+    private val binding get() = _binding!!
     private val args by navArgs<StudentResumeFragmentArgs>()
     private val userDetailViewModel : UserDetailViewModel by  viewModels()
     private val pdfLauncher =
@@ -49,7 +50,7 @@ class StudentResumeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentStudentResumeBinding.inflate(inflater, container, false)
+        _binding = FragmentStudentResumeBinding.inflate(inflater, container, false)
 
         setupView()
 
@@ -202,5 +203,10 @@ class StudentResumeFragment : Fragment() {
     private fun hidePdfUploadedView() {
         binding.layoutUploadedPdf.root.visibility = View.GONE
         binding.layoutUploadPdf.root.visibility = View.VISIBLE
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 }

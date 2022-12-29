@@ -19,13 +19,14 @@ import com.krish.jobspot.databinding.FragmentEmailBinding
 
 class EmailFragment : Fragment() {
 
-    private lateinit var binding: FragmentEmailBinding
+    private var _binding: FragmentEmailBinding? = null
+    private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentEmailBinding.inflate(inflater, container, false)
+        _binding = FragmentEmailBinding.inflate(inflater, container, false)
 
         setupView()
 
@@ -53,5 +54,9 @@ class EmailFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
+    }
 
 }

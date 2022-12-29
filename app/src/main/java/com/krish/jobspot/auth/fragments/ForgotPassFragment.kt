@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.krish.jobspot.R
 import com.krish.jobspot.databinding.FragmentForgotPassBinding
@@ -15,14 +17,15 @@ import com.krish.jobspot.util.*
 private const val TAG = "FORGOT_PASSWORD"
 class ForgotPassFragment : Fragment() {
     private val mAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
-    private lateinit var binding: FragmentForgotPassBinding
+    private var _binding: FragmentForgotPassBinding? = null
+    private val binding get() = _binding!!
     private val loadingDialog : LoadingDialog by lazy { LoadingDialog(requireContext()) }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentForgotPassBinding.inflate(inflater, container, false)
+        _binding = FragmentForgotPassBinding.inflate(inflater, container, false)
 
         setupView()
 
@@ -62,5 +65,10 @@ class ForgotPassFragment : Fragment() {
     }
     private fun clearField() {
         binding.etEmail.clearText()
+    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
     }
 }

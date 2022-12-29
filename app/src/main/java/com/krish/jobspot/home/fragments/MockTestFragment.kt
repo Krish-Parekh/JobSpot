@@ -2,7 +2,6 @@ package com.krish.jobspot.home.fragments
 
 import android.os.Bundle
 import android.text.Editable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,15 +16,16 @@ import com.krish.jobspot.databinding.FragmentMockTestBinding
 import com.krish.jobspot.home.adapter.MockTestAdapter
 import com.krish.jobspot.home.viewmodel.MockTestViewModel
 import com.krish.jobspot.model.MockTestState
-import com.krish.jobspot.util.UiState
 import com.krish.jobspot.util.UiState.*
-import kotlinx.coroutines.awaitAll
 
 private const val TAG = "MockTestFragmentTAG"
+
 class MockTestFragment : Fragment() {
-    private lateinit var binding: FragmentMockTestBinding
+    private var _binding: FragmentMockTestBinding? = null
+    private val binding get() = _binding!!
+    private var _mockTestAdapter: MockTestAdapter? = null
+    private val mockTestAdapter get() = _mockTestAdapter!!
     private val mockTestViewModel: MockTestViewModel by viewModels()
-    private val mockTestAdapter: MockTestAdapter by lazy { MockTestAdapter(this@MockTestFragment) }
     private val mockTestStateList: MutableList<MockTestState> = mutableListOf()
 
     override fun onCreateView(
@@ -33,8 +33,8 @@ class MockTestFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentMockTestBinding.inflate(inflater, container, false)
-
+        _binding = FragmentMockTestBinding.inflate(inflater, container, false)
+        _mockTestAdapter = MockTestAdapter(this@MockTestFragment)
         setupViews()
 
         return binding.root
@@ -51,10 +51,10 @@ class MockTestFragment : Fragment() {
 
             rvQuiz.adapter = mockTestAdapter
             rvQuiz.layoutManager = LinearLayoutManager(requireContext())
-            mockTestViewModel.mockTestStatus.observe(viewLifecycleOwner, Observer { quiz ->
-                mockTestAdapter.setQuizData(quiz)
-                this@MockTestFragment.mockTestStateList.clear()
-                this@MockTestFragment.mockTestStateList.addAll(quiz)
+            mockTestViewModel.mockTestStatus.observe(viewLifecycleOwner, Observer { mockList ->
+                mockTestStateList.clear()
+                mockTestStateList.addAll(mockList)
+                mockTestAdapter.setQuizData(mockTestStateList)
             })
         }
     }
@@ -76,17 +76,25 @@ class MockTestFragment : Fragment() {
     fun navigateToMockTestActivity(mockTestState: MockTestState) {
         mockTestViewModel.fetchMockTest(mockTestId = mockTestState.quizUid)
         lifecycleScope.launchWhenStarted {
-            mockTestViewModel.eventFlow.collect{ uiState ->
-                when(uiState){
+            mockTestViewModel.eventFlow.collect { uiState ->
+                when (uiState) {
                     LOADING -> Unit
                     SUCCESS -> {
                         val mock = mockTestViewModel.mock
-                        val direction = MockTestFragmentDirections.actionMockTestFragmentToMockQuestionActivity(mock)
+                        val direction =
+                            MockTestFragmentDirections.actionMockTestFragmentToMockQuestionActivity(mock)
                         findNavController().navigate(direction)
                     }
                     FAILURE -> Unit
                 }
             }
         }
+    }
+
+    override fun onDestroyView() {
+        mockTestStateList.clear()
+        _mockTestAdapter = null
+        _binding = null
+        super.onDestroyView()
     }
 }

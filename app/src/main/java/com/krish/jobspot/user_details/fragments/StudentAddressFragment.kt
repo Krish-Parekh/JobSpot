@@ -19,13 +19,14 @@ import com.krish.jobspot.util.getInputValue
 private const val TAG = "StudentAddressFragment"
 class StudentAddressFragment : Fragment() {
 
-    private lateinit var binding: FragmentStudentAddressBinding
+    private var _binding: FragmentStudentAddressBinding? = null
+    private val binding get() = _binding!!
     private val args by navArgs<StudentAddressFragmentArgs>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentStudentAddressBinding.inflate(inflater, container, false)
+        _binding = FragmentStudentAddressBinding.inflate(inflater, container, false)
         setupView()
         return binding.root
     }
@@ -93,6 +94,11 @@ class StudentAddressFragment : Fragment() {
     private fun navigateToAcademic(student: Student) {
         val direction = StudentAddressFragmentDirections.actionStudentAddressFragmentToStudentAcademicFragment(student = student)
         findNavController().navigate(direction)
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 
 }
