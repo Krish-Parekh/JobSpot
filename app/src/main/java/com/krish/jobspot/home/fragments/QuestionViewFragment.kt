@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.google.android.material.card.MaterialCardView
 import com.krish.jobspot.R
 import com.krish.jobspot.databinding.FragmentQuestionViewBinding
 import com.krish.jobspot.home.activity.MockQuestionActivity
+import com.krish.jobspot.home.viewmodel.MockPagesViewModel
 import com.krish.jobspot.model.MockQuestion
 
 
@@ -20,7 +22,7 @@ class QuestionViewFragment : Fragment() {
     private val binding get() = _binding!!
     private var questionId: Int = 0
     private var selectedOption: Int = -1
-
+    private val mockPagesViewModel : MockPagesViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -85,8 +87,6 @@ class QuestionViewFragment : Fragment() {
     private fun handleAnswerClick(questionId: Int, answer: String, cardView: View) {
         val cardBackgroundColor = resources.getColor(R.color.card_background)
         val selectCardBackgroundColor = resources.getColor(R.color.orange)
-        val mockQuestionActivity = (requireActivity() as MockQuestionActivity)
-        mockQuestionActivity.handleAnswerCallback(questionId, answer)
 
         binding.apply {
             applyCardBackgroundColor(cvOptionOne, cardBackgroundColor)
@@ -94,6 +94,8 @@ class QuestionViewFragment : Fragment() {
             applyCardBackgroundColor(cvOptionThree, cardBackgroundColor)
             applyCardBackgroundColor(cvOptionFour, cardBackgroundColor)
         }
+
+        mockPagesViewModel.setMockAnswers(questionId, answer)
         val materialCardView = cardView as MaterialCardView
         applyCardBackgroundColor(materialCardView, selectCardBackgroundColor)
     }

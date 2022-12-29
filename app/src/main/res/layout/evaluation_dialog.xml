@@ -28,7 +28,147 @@
         app:layout_constraintEnd_toEndOf="@+id/scoreProgressBar"
         app:layout_constraintStart_toStartOf="@+id/scoreProgressBar"
         app:layout_constraintTop_toTopOf="@+id/scoreProgressBar"
-        tools:text="7/10" />
+        android:text="7/10" />
 
+    <LinearLayout
+        android:id="@+id/llIncorrectContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/small_margin"
+        android:orientation="horizontal"
+        android:padding="@dimen/small_padding"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scoreProgressBar">
+
+        <ImageView
+            android:id="@+id/ivIncorrect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="@dimen/small_padding"
+            android:src="@drawable/ic_correct" />
+
+        <TextView
+            android:id="@+id/tvIncorrect"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:fontFamily="@font/dm_sans_regular"
+            android:text="Incorrect"
+            android:textColor="@color/text_color"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tvIncorrectScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/dm_sans_bold"
+            android:textColor="@color/text_color"
+            android:textSize="18sp"
+            android:text="2/10" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llUnAttemptedContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/small_margin"
+        android:orientation="horizontal"
+        android:padding="@dimen/small_padding"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/llIncorrectContainer">
+
+        <ImageView
+            android:id="@+id/ivUnAttempted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="@dimen/small_padding"
+            android:src="@drawable/ic_un_attempted" />
+
+        <TextView
+            android:id="@+id/tvUnAttempted"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:fontFamily="@font/dm_sans_regular"
+            android:text="Unattempted"
+            android:textColor="@color/text_color"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tvUnAttemptedScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/dm_sans_bold"
+            android:textColor="@color/text_color"
+            android:textSize="18sp"
+            android:text="5/10" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llTimeTakeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/small_margin"
+        android:orientation="horizontal"
+        android:padding="@dimen/small_padding"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/llUnAttemptedContainer">
+
+        <ImageView
+            android:id="@+id/ivTimeTaken"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="@dimen/small_padding"
+            android:src="@drawable/ic_time" />
+
+        <TextView
+            android:id="@+id/tvTimeTaken"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:fontFamily="@font/dm_sans_regular"
+            android:text="Time Taken"
+            android:textColor="@color/text_color"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tvTimeTakenScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/dm_sans_bold"
+            android:textColor="@color/text_color"
+            android:textSize="18sp"
+            android:text="50m" />
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnShowSolution"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/medium_margin"
+        android:layout_marginTop="@dimen/medium_margin"
+        android:backgroundTint="@color/button_color"
+        android:fontFamily="@font/dm_sans_medium"
+        android:padding="@dimen/button_padding"
+        android:text="Show Solution"
+        android:textAllCaps="false"
+        android:textColor="@color/button_text_color"
+        android:textSize="16sp"
+        app:cornerRadius="6dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/llTimeTakeContainer" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

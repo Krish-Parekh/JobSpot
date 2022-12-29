@@ -48,7 +48,6 @@ class MockTestFragment : Fragment() {
                 filterMockTest(text)
             }
 
-
             rvQuiz.adapter = mockTestAdapter
             rvQuiz.layoutManager = LinearLayoutManager(requireContext())
             mockTestViewModel.mockTestStatus.observe(viewLifecycleOwner, Observer { mockList ->
