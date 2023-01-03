@@ -1,5 +1,6 @@
 package com.krish.jobspot.home.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.krish.jobspot.databinding.FragmentHomeBinding
+import com.krish.jobspot.home.activity.UserActivity
 import com.krish.jobspot.home.adapter.JobListAdapter
 import com.krish.jobspot.home.viewmodel.HomeViewModel
 import com.krish.jobspot.model.Job
@@ -41,6 +43,10 @@ class HomeFragment : Fragment() {
             counterAnimation(0,50, tvCompaniesCount)
             counterAnimation(0,50, tvJobAppliedCount)
 
+            ivProfileImage.setOnClickListener {
+                navigateToUserActivity()
+            }
+
             rvRecentJobs.adapter = jobListAdapter
             rvRecentJobs.layoutManager = LinearLayoutManager(requireContext())
 
@@ -48,6 +54,11 @@ class HomeFragment : Fragment() {
                 jobListAdapter.setJobListData(newJobs = jobs)
             })
         }
+    }
+
+    private fun navigateToUserActivity() {
+        val intent = Intent(requireContext(), UserActivity::class.java)
+        startActivity(intent)
     }
 
     private fun onItemClick(job: Job) {

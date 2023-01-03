@@ -48,9 +48,9 @@ class LoginFragment : Fragment() {
 
         setupViews()
 
-        if (mAuth.currentUser != null){
-            navigateToHomeActivity()
-        }
+//        if (mAuth.currentUser != null){
+//            navigateToHomeActivity()
+//        }
 
         return binding.root
     }

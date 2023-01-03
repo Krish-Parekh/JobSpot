@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/user_nav"
+    app:startDestination="@id/userFragment">
+
+    <fragment
+        android:id="@+id/userFragment"
+        android:name="com.krish.jobspot.home.fragments.userFragment.UserFragment"
+        android:label="fragment_user"
+        tools:layout="@layout/fragment_user" >
+        <action
+            android:id="@+id/action_userFragment_to_userEditFragment"
+            app:destination="@id/userEditFragment" />
+        <action
+            android:id="@+id/action_userFragment_to_userResumeEditFragment"
+            app:destination="@id/userResumeEditFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userEditFragment"
+        android:name="com.krish.jobspot.home.fragments.userFragment.UserEditFragment"
+        android:label="fragment_user_edit"
+        tools:layout="@layout/fragment_user_edit" >
+        <argument
+            android:name="student"
+            app:argType="com.krish.jobspot.model.Student" />
+    </fragment>
+    <fragment
+        android:id="@+id/userResumeEditFragment"
+        android:name="com.krish.jobspot.home.fragments.userFragment.UserResumeEditFragment"
+        android:label="fragment_user_resume_edit"
+        tools:layout="@layout/fragment_user_resume_edit" />
+</navigation>

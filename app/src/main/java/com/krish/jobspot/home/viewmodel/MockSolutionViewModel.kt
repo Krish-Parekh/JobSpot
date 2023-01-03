@@ -46,7 +46,6 @@ class MockSolutionViewModel : ViewModel() {
                         Log.d(TAG, "Error: ${error.message}")
                     }
                 }
-
                 mRealtimeDb.child("mock_result").child(mockId).child(studentId)
                     .addListenerForSingleValueEvent(listener!!)
 

@@ -36,8 +36,10 @@
             android:textSize="18sp" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/llOptionOneContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            >
 
             <TextView
                 android:id="@+id/tvOptionOneHeader"
@@ -72,6 +74,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/llOptionTwoContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -110,6 +113,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/llOptionThreeContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -148,6 +152,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/llOptionFourContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

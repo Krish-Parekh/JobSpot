@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color"
+    android:fillViewport="true"
+    tools:context=".home.fragments.userFragment.UserEditFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/ivPopOut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/medium_margin"
+            android:contentDescription="@null"
+            android:paddingVertical="@dimen/small_padding"
+            android:src="@drawable/ic_arrow_left"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/icon_tint" />
+
+        <TextView
+            android:id="@+id/tvDetailHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/dm_sans_bold"
+            android:text="Manage Account"
+            android:textColor="@color/text_color"
+            android:textSize="26sp"
+            app:layout_constraintLeft_toLeftOf="@+id/ivPopOut"
+            app:layout_constraintTop_toBottomOf="@+id/ivPopOut" />
+
+
+        <ImageView
+            android:id="@+id/ivDeleteStudent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/medium_margin"
+            android:contentDescription="@null"
+            android:paddingVertical="@dimen/small_padding"
+            android:src="@drawable/ic_delete"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/orange" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/large_margin"
+            android:orientation="vertical"
+            android:padding="@dimen/medium_margin"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvDetailHeading">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profileImage"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_image_picker" />
+
+            <TextView
+                android:id="@+id/tvImagePicker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginVertical="@dimen/small_margin"
+                android:fontFamily="@font/dm_sans_medium"
+                android:text="@string/upload_image"
+                android:textAlignment="center"
+                android:textColor="@color/text_color"
+                android:textSize="18sp" />
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etUsernameContainer"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/field_username"
+                app:boxStrokeColor="@color/box_stroke_color"
+                app:errorEnabled="true"
+                app:hintTextColor="@color/text_color"
+                app:placeholderText="eg. Brandone Louis"
+                app:startIconDrawable="@drawable/ic_person">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etUsername"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/dm_sans_medium"
+                    android:inputType="text" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etEmailContainer"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/field_email"
+                app:boxStrokeColor="@color/box_stroke_color"
+                app:errorEnabled="true"
+                app:hintTextColor="@color/text_color"
+                app:placeholderText="Brandonelouis@gmail.com"
+                app:startIconDrawable="@drawable/ic_email">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/dm_sans_medium"
+                    android:inputType="textEmailAddress" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etSapIdContainer"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/field_sap_id"
+                app:boxStrokeColor="@color/box_stroke_color"
+                app:errorEnabled="true"
+                app:hintTextColor="@color/text_color"
+                app:placeholderText="eg. 53003205035"
+                app:startIconDrawable="@drawable/ic_remember_me">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etSapId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/dm_sans_medium"
+                    android:inputType="text" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etMobileContainer"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/field_mobile"
+                app:boxStrokeColor="@color/box_stroke_color"
+                app:errorEnabled="true"
+                app:hintTextColor="@color/text_color"
+                app:placeholderText="8356056213"
+                app:prefixText="+91"
+                app:startIconDrawable="@drawable/ic_phone">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etMobile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/dm_sans_medium"
+                    android:inputType="phone" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSaveChange"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/medium_margin"
+                android:layout_marginVertical="@dimen/medium_margin"
+                android:backgroundTint="@color/button_color"
+                android:fontFamily="@font/dm_sans_medium"
+                android:padding="@dimen/button_padding"
+                android:text="Save"
+                android:textColor="@color/button_text_color"
+                android:textSize="16sp"
+                app:cornerRadius="6dp" />
+
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</ScrollView>

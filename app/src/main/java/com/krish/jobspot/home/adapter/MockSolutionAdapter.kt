@@ -1,39 +1,51 @@
 package com.krish.jobspot.home.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.krish.jobspot.R
+import com.krish.jobspot.databinding.MockSolutionCardLayoutBinding
 import com.krish.jobspot.model.MockQuestion
 
 class MockSolutionAdapter : RecyclerView.Adapter<MockSolutionAdapter.MockSolutionViewHolder>() {
 
-    private val mockQuestion : MutableList<MockQuestion> = mutableListOf()
+    private val mockQuestion: MutableList<MockQuestion> = mutableListOf()
 
-    inner class MockSolutionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        private val tvQuestionCount : TextView = itemView.findViewById(R.id.tvQuestionCount)
-        private val tvQuestion : TextView = itemView.findViewById(R.id.tvQuestion)
-        private val tvOptionOne : TextView = itemView.findViewById(R.id.tvOptionOneAnswer)
-        private val tvOptionTwo : TextView = itemView.findViewById(R.id.tvOptionTwoAnswer)
-        private val tvOptionThree : TextView = itemView.findViewById(R.id.tvOptionThreeAnswer)
-        private val tvOptionFour : TextView = itemView.findViewById(R.id.tvOptionFourAnswer)
-        private val tvSolution : TextView = itemView.findViewById(R.id.tvSolution)
-
-        fun bind(mockQuestion: MockQuestion, position: Int){
-            tvQuestionCount.text = "Question ${position + 1}"
-            tvQuestion.text = mockQuestion.question
-            tvOptionOne.text = mockQuestion.options[0]
-            tvOptionTwo.text = mockQuestion.options[1]
-            tvOptionThree.text = mockQuestion.options[2]
-            tvOptionFour.text = mockQuestion.options[3]
-            tvSolution.text = mockQuestion.feedback
+    inner class MockSolutionViewHolder(private val binding: MockSolutionCardLayoutBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(mockQuestion: MockQuestion, position: Int) {
+            binding.apply {
+                tvQuestionCount.text = "Question ${position + 1}"
+                tvQuestion.text = mockQuestion.question
+                tvOptionOneAnswer.text = mockQuestion.options[0]
+                tvOptionTwoAnswer.text = mockQuestion.options[1]
+                tvOptionThreeAnswer.text = mockQuestion.options[2]
+                tvOptionFourAnswer.text = mockQuestion.options[3]
+                when (getCorrectOption(mockQuestion.correctOption)) {
+                    0 -> {
+                        llOptionOneContainer.setBackgroundResource(R.drawable.correct_ans_border)
+                    }
+                    1 -> {
+                        llOptionTwoContainer.setBackgroundResource(R.drawable.correct_ans_border)
+                    }
+                    2 -> {
+                        llOptionThreeContainer.setBackgroundResource(R.drawable.correct_ans_border)
+                    }
+                    3 -> {
+                        llOptionFourContainer.setBackgroundResource(R.drawable.correct_ans_border)
+                    }
+                }
+                tvSolution.text = mockQuestion.feedback
+            }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MockSolutionViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.mock_solution_card_layout, parent, false)
+        val view = MockSolutionCardLayoutBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
         return MockSolutionViewHolder(view)
     }
 
@@ -43,7 +55,18 @@ class MockSolutionAdapter : RecyclerView.Adapter<MockSolutionAdapter.MockSolutio
 
     override fun getItemCount(): Int = mockQuestion.size
 
-    fun setMockQuestions(newMockQuestion : List<MockQuestion>){
+
+    fun getCorrectOption(correctOption: String): Int {
+        return when (correctOption) {
+            "A" -> 0
+            "B" -> 1
+            "C" -> 2
+            "D" -> 3
+            else -> -1
+        }
+    }
+
+    fun setMockQuestions(newMockQuestion: List<MockQuestion>) {
         mockQuestion.clear()
         mockQuestion.addAll(newMockQuestion)
         notifyDataSetChanged()

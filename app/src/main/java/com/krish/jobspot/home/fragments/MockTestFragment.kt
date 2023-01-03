@@ -100,6 +100,7 @@ class MockTestFragment : Fragment() {
 
     override fun onDestroyView() {
         mockTestStateList.clear()
+        binding.rvQuiz.adapter = null
         _mockTestAdapter = null
         _binding = null
         super.onDestroyView()

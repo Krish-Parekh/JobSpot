@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color"
+    tools:context=".home.fragments.userFragment.UserResumeEditFragment">
+
+
+    <ImageView
+        android:id="@+id/ivPopOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/medium_margin"
+        android:contentDescription="@null"
+        android:paddingVertical="@dimen/small_padding"
+        android:src="@drawable/ic_arrow_left"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/icon_tint" />
+
+    <TextView
+        android:id="@+id/tvResumeHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/medium_margin"
+        android:fontFamily="@font/dm_sans_bold"
+        android:paddingVertical="@dimen/small_padding"
+        android:text="Update Resume"
+        android:textColor="@color/text_color"
+        android:textSize="26sp"
+        app:layout_constraintLeft_toLeftOf="@id/ivPopOut"
+        app:layout_constraintTop_toBottomOf="@+id/ivPopOut" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/fileContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/medium_margin"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvResumeHeading">
+
+        <include
+            android:id="@+id/layoutUploadedPdf"
+            layout="@layout/uploaded_pdf_view"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/medium_margin"
+        android:paddingVertical="@dimen/small_padding"
+        android:text="@string/resume_guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fileContainer" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSubmit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/medium_margin"
+        android:layout_marginVertical="@dimen/medium_margin"
+        android:backgroundTint="@color/button_color"
+        android:fontFamily="@font/dm_sans_medium"
+        android:padding="@dimen/button_padding"
+        android:text="@string/button_submit_text"
+        android:textColor="@color/button_text_color"
+        android:textSize="16sp"
+        app:cornerRadius="6dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

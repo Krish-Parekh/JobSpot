@@ -173,6 +173,8 @@ class StudentResumeFragment : Fragment() {
     }
 
     private fun setupFileView(fileName: String?, sizeInFormat: String, formattedDtm: String) {
+        userDetailViewModel.resumeFileName = fileName
+        userDetailViewModel.fileMetaData = getString(R.string.resume_meta_data, sizeInFormat, formattedDtm)
         binding.layoutUploadedPdf.tvFileName.text = fileName
         binding.layoutUploadedPdf.tvFileMetaData.text =
             getString(R.string.resume_meta_data, sizeInFormat, formattedDtm)

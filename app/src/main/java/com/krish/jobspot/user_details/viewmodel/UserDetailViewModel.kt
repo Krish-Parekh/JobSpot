@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageMetadata
 import com.krish.jobspot.model.Student
 import com.krish.jobspot.util.Constants.Companion.COLLECTION_PATH_STUDENT
 import com.krish.jobspot.util.Constants.Companion.PROFILE_IMAGE_PATH
@@ -23,6 +24,8 @@ private const val TAG = "UserDetailViewModel"
 class UserDetailViewModel : ViewModel() {
     private var imageUri: Uri? = null
     private var pdfUri: Uri? = null
+    var resumeFileName: String? = null
+    var fileMetaData: String? = null
     private val mFireStorage: FirebaseStorage by lazy { FirebaseStorage.getInstance() }
     private val mFireStore: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
 
@@ -52,12 +55,16 @@ class UserDetailViewModel : ViewModel() {
         try {
             _uploadDataStatus.postValue(UiState.LOADING)
             viewModelScope.launch(Dispatchers.IO) {
+                val metaData = StorageMetadata.Builder()
+                    .setCustomMetadata("fileName", resumeFileName)
+                    .setCustomMetadata("fileMetaData", fileMetaData)
+                    .build()
                 val resumeDownloadUrl =
-                    uploadData(path = "$RESUME_PATH/$fileName", fileUri = pdfUri)
+                    uploadData(path = "$RESUME_PATH/$fileName", fileUri = pdfUri, metadata = metaData)
                 student.academic?.resumeUrl = resumeDownloadUrl
 
                 val imageDownloadUrl =
-                    uploadData(path = "$PROFILE_IMAGE_PATH/$fileName", fileUri = imageUri)
+                    uploadData(path = "$PROFILE_IMAGE_PATH/$fileName", fileUri = imageUri, metadata = null)
                 student.details?.imageUrl = imageDownloadUrl
 
                 Log.d(TAG, "Final user: $student")
@@ -72,9 +79,12 @@ class UserDetailViewModel : ViewModel() {
         }
     }
 
-    private suspend fun uploadData(path: String, fileUri: Uri): String {
+    private suspend fun uploadData(path: String, fileUri: Uri, metadata: StorageMetadata?): String {
         val storageReference = mFireStorage.reference.child(path)
         storageReference.putFile(fileUri).await()
+        if (metadata != null){
+            storageReference.updateMetadata(metadata).await()
+        }
         val downloadUrl = storageReference.downloadUrl.await().toString()
         return downloadUrl
     }

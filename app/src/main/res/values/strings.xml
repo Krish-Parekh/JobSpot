@@ -125,4 +125,6 @@
 
     <string name="mock_test_instructions">1. Test will be auto submitted when the time is up.\n\n2. The comprises of multiple choice questions (MCQ) with one correct answer.\n\n3. The clock in the top right corner will display the remaining time available for you to complete the test.</string>
     <string name="mock_test_navigation">1. Select the option and the answer will be saved once you click on the submit button.\n\n2. Once you click on the submit button, you cannot change the answer and the solution will be displayed on the bottom.\n\n3. To go onto the next question, slide towards left.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

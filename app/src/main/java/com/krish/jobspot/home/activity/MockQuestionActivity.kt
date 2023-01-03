@@ -68,7 +68,7 @@ class MockQuestionActivity : AppCompatActivity() {
             if (timerStarted) {
                 startTimer()
             }
-            mockQuestionAdapter = MockQuestionPageAdapter(this@MockQuestionActivity, mock.mockQuestion)
+            mockQuestionAdapter = MockQuestionPageAdapter(supportFragmentManager, mock.mockQuestion, lifecycle)
 
             questionPager.adapter = mockQuestionAdapter
             questionPager.offscreenPageLimit = mock.mockQuestion.size
@@ -113,7 +113,6 @@ class MockQuestionActivity : AppCompatActivity() {
                             Log.d(TAG, "Failure...")
                         }
                     }
-
                 }
             }
         }

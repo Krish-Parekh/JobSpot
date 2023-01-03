@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color"
+    tools:context=".home.fragments.userFragment.UserFragment">
+
+    <ImageView
+        android:id="@+id/ivPopOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/medium_margin"
+        android:contentDescription="@null"
+        android:paddingVertical="@dimen/small_padding"
+        android:src="@drawable/ic_arrow_left"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/icon_tint" />
+
+    <LinearLayout
+        android:id="@+id/llUserContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/ivPopOut">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profileImage"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/ic_image_picker" />
+
+        <TextView
+            android:id="@+id/tvUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/medium_margin"
+            android:fontFamily="@font/dm_sans_bold"
+            android:paddingVertical="@dimen/small_padding"
+            android:textAlignment="center"
+            android:textColor="@color/text_color"
+            android:textSize="22sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Krish Parekh" />
+
+        <TextView
+            android:id="@+id/tvUserEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/dm_sans_regular"
+            android:textAlignment="center"
+            android:textColor="@color/text_color"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="krish@gmail.com" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llOperationContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/llUserContainer">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvManageAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/medium_margin"
+            android:layout_marginTop="@dimen/medium_margin"
+            app:cardBackgroundColor="@color/card_background"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvCompanyLocation">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/medium_padding">
+
+
+                <ImageView
+                    android:id="@+id/ivManageAccountLogo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_manage_account"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvManageAccountHeading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/medium_margin"
+                    android:fontFamily="@font/dm_sans_bold"
+                    android:text="Manage Account"
+                    android:textColor="@color/text_color"
+                    android:textSize="18sp"
+                    app:layout_constraintLeft_toRightOf="@+id/ivManageAccountLogo"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvManageAccountSubHeading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/small_margin"
+                    android:fontFamily="@font/dm_sans_regular"
+                    android:text="Edit or delete your account"
+                    android:textColor="@color/text_color"
+                    android:textSize="14sp"
+                    app:layout_constraintLeft_toLeftOf="@+id/tvManageAccountHeading"
+                    app:layout_constraintTop_toBottomOf="@+id/tvManageAccountHeading" />
+
+
+                <ImageView
+                    android:id="@+id/ivManageAccount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_right_arrow"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvUpdateResume"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/medium_margin"
+            android:layout_marginVertical="@dimen/small_margin"
+            app:cardBackgroundColor="@color/card_background"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvCompanyLocation">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/medium_padding">
+
+
+                <ImageView
+                    android:id="@+id/ivUpdateResumeLogo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_update_resume"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvUpdateResumeHeading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/medium_margin"
+                    android:fontFamily="@font/dm_sans_bold"
+                    android:text="Update Resume"
+                    android:textColor="@color/text_color"
+                    android:textSize="18sp"
+                    app:layout_constraintLeft_toRightOf="@+id/ivUpdateResumeLogo"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvUpdateResumeSubHeading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/small_margin"
+                    android:fontFamily="@font/dm_sans_regular"
+                    android:text="Update your Resume here"
+                    android:textColor="@color/text_color"
+                    android:textSize="14sp"
+                    app:layout_constraintLeft_toLeftOf="@+id/tvUpdateResumeHeading"
+                    app:layout_constraintTop_toBottomOf="@+id/tvUpdateResumeHeading" />
+
+
+                <ImageView
+                    android:id="@+id/ivUpdateResume"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_right_arrow"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvContactTpo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/medium_margin"
+            android:layout_marginBottom="@dimen/small_margin"
+            app:cardBackgroundColor="@color/card_background"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvCompanyLocation">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/medium_padding">
+
+
+                <ImageView
+                    android:id="@+id/ivContactTpoLogo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_contact_tpo"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvContactTpoHeading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/medium_margin"
+                    android:fontFamily="@font/dm_sans_bold"
+                    android:text="Contact TPO"
+                    android:textColor="@color/text_color"
+                    android:textSize="18sp"
+                    app:layout_constraintLeft_toRightOf="@+id/ivContactTpoLogo"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvContactTpoSubHeading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/small_margin"
+                    android:fontFamily="@font/dm_sans_regular"
+                    android:text="Contact details of TPO are given"
+                    android:textColor="@color/text_color"
+                    android:textSize="14sp"
+                    app:layout_constraintLeft_toLeftOf="@+id/tvContactTpoHeading"
+                    app:layout_constraintTop_toBottomOf="@+id/tvContactTpoHeading" />
+
+
+                <ImageView
+                    android:id="@+id/ivContactTpo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_right_arrow"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

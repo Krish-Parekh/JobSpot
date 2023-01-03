@@ -17,11 +17,12 @@ import com.krish.jobspot.util.checkTimeUnit
 
 
 private const val TAG = "MockResultActivity"
+
 class MockResultActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMockResultBinding
     private var _mockSolutionAdapter: MockSolutionAdapter? = null
     private val mockSolutionAdapter get() = _mockSolutionAdapter!!
-    private val mockSolutionViewModel : MockSolutionViewModel by  viewModels()
+    private val mockSolutionViewModel: MockSolutionViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,27 +40,47 @@ class MockResultActivity : AppCompatActivity() {
             rvSolution.adapter = mockSolutionAdapter
             rvSolution.layoutManager = LinearLayoutManager(this@MockResultActivity)
 
-            mockSolutionViewModel.mockScore.observe(this@MockResultActivity, Observer { mockResult ->
-                if (mockResult != null){
-                    scoreProgressBar.progress = mockResult.correctAns.toInt() * 10
-                    tvScore.text = getString(R.string.field_score, mockResult.correctAns,mockResult.totalQuestion)
-                    tvIncorrectScore.text = getString(R.string.field_score, mockResult.incorrectAns, mockResult.totalQuestion)
-                    tvUnAttemptedScore.text = getString(R.string.field_score, mockResult.unAttempted, mockResult.totalQuestion)
-                    tvTimeTakenScore.text = checkTimeUnit(mockResult.timeTaken)
-                }
-            })
+            mockSolutionViewModel.mockScore.observe(
+                this@MockResultActivity,
+                Observer { mockResult ->
+                    if (mockResult != null) {
+                        val totalQuestion = mockResult.totalQuestion.toFloat()
+                        val correctAns = mockResult.correctAns.toInt()
+                        val progress = (correctAns / totalQuestion) * 100
+                        scoreProgressBar.progress = progress.toInt()
+                        tvScore.text = getString(
+                            R.string.field_score,
+                            mockResult.correctAns,
+                            mockResult.totalQuestion
+                        )
+                        tvIncorrectScore.text = getString(
+                            R.string.field_score,
+                            mockResult.incorrectAns,
+                            mockResult.totalQuestion
+                        )
+                        tvUnAttemptedScore.text = getString(
+                            R.string.field_score,
+                            mockResult.unAttempted,
+                            mockResult.totalQuestion
+                        )
+                        tvTimeTakenScore.text = checkTimeUnit(mockResult.timeTaken)
+                    }
+                })
 
-            mockSolutionViewModel.mockSolution.observe(this@MockResultActivity, Observer { mockQuestions ->
-                if (mockQuestions.isNotEmpty()){
-                    mockSolutionAdapter.setMockQuestions(newMockQuestion = mockQuestions)
-                }
-            })
+            mockSolutionViewModel.mockSolution.observe(
+                this@MockResultActivity,
+                Observer { mockQuestions ->
+                    if (mockQuestions.isNotEmpty()) {
+                        mockSolutionAdapter.setMockQuestions(newMockQuestion = mockQuestions)
+                    }
+                })
 
         }
     }
 
     override fun onDestroy() {
         _mockSolutionAdapter = null
+        binding.rvSolution.adapter = null
         super.onDestroy()
     }
 }
