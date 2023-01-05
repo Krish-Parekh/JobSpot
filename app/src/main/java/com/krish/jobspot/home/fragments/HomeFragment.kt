@@ -43,6 +43,7 @@ class HomeFragment : Fragment() {
 
     private fun setupView() {
         homeViewModel.fetchJobs()
+        homeViewModel.fetchCurrentUser()
         binding.apply {
 
             lifecycleScope.launchWhenCreated {

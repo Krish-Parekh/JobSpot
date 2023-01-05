@@ -1,10 +1,17 @@
 package com.krish.jobspot.home.fragments.userFragment
 
+import android.content.ContentResolver.MimeTypeInfo
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.MimeTypeMap
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.MimeTypeFilter
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.krish.jobspot.R
@@ -28,12 +35,21 @@ class UserResumeEditFragment : Fragment() {
 
     private fun setupViews() {
         userEditViewModel.fetchStudentResume()
-        userEditViewModel.fileData.observe(viewLifecycleOwner, Observer { metadata ->
-            if (metadata != null){
-                binding.layoutUploadedPdf.tvFileName.text = metadata.first
-                binding.layoutUploadedPdf.tvFileMetaData.text = metadata.second
+        userEditViewModel.fileData.observe(viewLifecycleOwner, Observer { pdfMetaData ->
+            if (pdfMetaData != null){
+                binding.layoutUploadedPdf.tvFileName.text = pdfMetaData.first
+                binding.layoutUploadedPdf.tvFileMetaData.text = pdfMetaData.second
+                binding.layoutUploadedPdf.root.setOnClickListener {
+                    setPdfIntent(pdfMetaData.third)
+                }
             }
         })
+    }
+
+    private fun setPdfIntent(pdfUri: Uri) {
+        val pdfIntent = Intent(Intent.ACTION_VIEW)
+        pdfIntent.setDataAndType(pdfUri, "application/pdf")
+        startActivity(pdfIntent)
     }
 
     override fun onDestroyView() {

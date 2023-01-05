@@ -40,8 +40,8 @@ class UserEditViewModel : ViewModel() {
     private val _student: MutableLiveData<Student> = MutableLiveData()
     val student: LiveData<Student> = _student
 
-    private val _fileData: MutableLiveData<Pair<String, String>> = MutableLiveData()
-    val fileData: LiveData<Pair<String, String>> = _fileData
+    private val _fileData: MutableLiveData<Triple<String, String, Uri>> = MutableLiveData()
+    val fileData: LiveData<Triple<String, String, Uri>> = _fileData
 
     fun fetchStudent() {
         viewModelScope.launch {
@@ -55,10 +55,11 @@ class UserEditViewModel : ViewModel() {
     fun fetchStudentResume() {
         viewModelScope.launch {
             val resumeRef = mFirebaseStorage.reference.child(RESUME_PATH).child(studentId)
+            val resumeUri = resumeRef.downloadUrl.await()
             val metaData = resumeRef.metadata.await()
             val fileName = metaData.getCustomMetadata("fileName") ?: ""
             val fileMetaData = metaData.getCustomMetadata("fileMetaData") ?: ""
-            _fileData.postValue(Pair(fileName, fileMetaData))
+            _fileData.postValue(Triple(fileName, fileMetaData, resumeUri))
         }
     }
 

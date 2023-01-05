@@ -58,7 +58,7 @@ fun createSalaryText(salary: String, requireActivity: Activity): SpannableString
 
 fun counterAnimation(start: Int, end: Int, textView: TextView) {
     val animator = ValueAnimator.ofInt(start, end)
-    animator.duration = 5000
+    animator.duration = 500
     animator.interpolator = AccelerateDecelerateInterpolator()
     animator.addUpdateListener {
         val counter = it.animatedValue as Int

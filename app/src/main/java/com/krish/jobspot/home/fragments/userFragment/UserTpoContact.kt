@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.krish.jobspot.R
 import com.krish.jobspot.databinding.FragmentUserTpoContactBinding
 
 class UserTpoContact : Fragment() {

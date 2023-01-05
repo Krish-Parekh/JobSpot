@@ -27,11 +27,8 @@ class HomeViewModel : ViewModel() {
     private val _countUpdater : MutableStateFlow<Pair<Int,Int>> = MutableStateFlow(Pair(0, 0))
     val countUpdater : StateFlow<Pair<Int, Int>> = _countUpdater
 
-    init {
-        fetchCurrentUser()
-    }
 
-    private fun fetchCurrentUser(){
+    fun fetchCurrentUser(){
         viewModelScope.launch {
             val companiesCount = mFireStore.collection(COLLECTION_PATH_COMPANY).get().await().count()
             val jobsAppliedCount = mRealtimeDb

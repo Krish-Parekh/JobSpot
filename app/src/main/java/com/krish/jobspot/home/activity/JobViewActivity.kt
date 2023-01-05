@@ -5,6 +5,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navArgs
 import coil.load
 import com.google.android.material.chip.Chip
@@ -37,6 +38,7 @@ class JobViewActivity : AppCompatActivity() {
 
     private fun setupViews() {
         studentJobViewModel.checkJobStatus(jobId = job.uid, studentId = studentId)
+        studentJobViewModel.fetchStudentAppliedCount(jobId = job.uid)
         handJobStatusResponse()
         binding.apply {
             ivPopOut.setOnClickListener {
@@ -52,6 +54,12 @@ class JobViewActivity : AppCompatActivity() {
 
             job.skillSet.forEach { job ->
                 createSkillSetChip(job)
+            }
+
+            lifecycleScope.launchWhenCreated {
+                studentJobViewModel.studentAppliedCount.collect{ count ->
+                    tvStudentCount.text = count
+                }
             }
         }
     }

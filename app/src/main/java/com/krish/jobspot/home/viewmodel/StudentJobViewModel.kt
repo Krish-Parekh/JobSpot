@@ -10,6 +10,8 @@ import com.krish.jobspot.model.JobApplication
 import com.krish.jobspot.util.Constants.Companion.COLLECTION_PATH_COMPANY
 import com.krish.jobspot.util.Constants.Companion.COLLECTION_PATH_STUDENT
 import com.krish.jobspot.util.UiState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -26,6 +28,16 @@ class StudentJobViewModel : ViewModel() {
     val checkJobStatus: LiveData<UiState> = _checkJobStatus
 
     var isJobApplicationSubmitted: Boolean = false
+
+    private val _studentAppliedCount : MutableStateFlow<String> = MutableStateFlow("0")
+    val studentAppliedCount : StateFlow<String> = _studentAppliedCount
+
+    fun fetchStudentAppliedCount(jobId : String){
+        viewModelScope.launch {
+            val studentCount = mRealtimeDb.child(COLLECTION_PATH_COMPANY).child(jobId).get().await().childrenCount
+            _studentAppliedCount.emit(studentCount.toString())
+        }
+    }
 
     fun applyJob(jobApplication: JobApplication) {
         viewModelScope.launch {

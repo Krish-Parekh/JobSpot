@@ -57,6 +57,10 @@ class UserFragment : Fragment() {
                 findNavController().navigate(R.id.action_userFragment_to_userResumeEditFragment)
             }
         }
+
+        binding.cvContactTpo.setOnClickListener {
+            findNavController().navigate(R.id.action_userFragment_to_userTpoContact)
+        }
     }
 
     override fun onDestroyView() {

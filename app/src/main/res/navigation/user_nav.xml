@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_userFragment_to_userResumeEditFragment"
             app:destination="@id/userResumeEditFragment" />
+        <action
+            android:id="@+id/action_userFragment_to_userTpoContact"
+            app:destination="@id/userTpoContact" />
     </fragment>
     <fragment
         android:id="@+id/userEditFragment"
@@ -31,4 +34,9 @@
         android:name="com.krish.jobspot.home.fragments.userFragment.UserResumeEditFragment"
         android:label="fragment_user_resume_edit"
         tools:layout="@layout/fragment_user_resume_edit" />
+    <fragment
+        android:id="@+id/userTpoContact"
+        android:name="com.krish.jobspot.home.fragments.userFragment.UserTpoContact"
+        android:label="fragment_user_tpo_contact"
+        tools:layout="@layout/fragment_user_tpo_contact" />
 </navigation>
