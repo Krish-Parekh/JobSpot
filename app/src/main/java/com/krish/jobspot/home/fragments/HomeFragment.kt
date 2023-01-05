@@ -8,8 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import coil.load
+import com.google.firebase.auth.FirebaseAuth
+import com.krish.jobspot.R
 import com.krish.jobspot.databinding.FragmentHomeBinding
 import com.krish.jobspot.home.activity.UserActivity
 import com.krish.jobspot.home.adapter.JobListAdapter
@@ -25,6 +29,7 @@ class HomeFragment : Fragment() {
     private var _jobListAdapter: JobListAdapter? = null
     private val jobListAdapter get() = _jobListAdapter!!
     private val homeViewModel: HomeViewModel by viewModels()
+    private val mAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,8 +45,14 @@ class HomeFragment : Fragment() {
         homeViewModel.fetchJobs()
         binding.apply {
 
-            counterAnimation(0,50, tvCompaniesCount)
-            counterAnimation(0,50, tvJobAppliedCount)
+            lifecycleScope.launchWhenCreated {
+                homeViewModel.countUpdater.collect { counterValue ->
+                    counterAnimation(0, counterValue.first, tvCompaniesCount)
+                    counterAnimation(0, counterValue.second, tvJobAppliedCount)
+                }
+            }
+            binding.tvWelcomeHeading.text = getString(R.string.field_welcome_text, mAuth.currentUser?.displayName)
+            ivProfileImage.load(mAuth.currentUser?.photoUrl)
 
             ivProfileImage.setOnClickListener {
                 navigateToUserActivity()

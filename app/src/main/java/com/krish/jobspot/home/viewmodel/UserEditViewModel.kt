@@ -11,7 +11,9 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.krish.jobspot.model.Student
+import com.krish.jobspot.model.Tpo
 import com.krish.jobspot.util.Constants.Companion.COLLECTION_PATH_STUDENT
+import com.krish.jobspot.util.Constants.Companion.COLLECTION_PATH_TPO
 import com.krish.jobspot.util.Constants.Companion.PROFILE_IMAGE_PATH
 import com.krish.jobspot.util.Constants.Companion.RESUME_PATH
 import kotlinx.coroutines.launch
@@ -57,6 +59,23 @@ class UserEditViewModel : ViewModel() {
             val fileName = metaData.getCustomMetadata("fileName") ?: ""
             val fileMetaData = metaData.getCustomMetadata("fileMetaData") ?: ""
             _fileData.postValue(Pair(fileName, fileMetaData))
+        }
+    }
+
+    fun fetchTpo(){
+        val tempTpoList = mutableListOf<Tpo>()
+        viewModelScope.launch {
+            mFirestore.collection(COLLECTION_PATH_TPO).addSnapshotListener { value, error ->
+                if (error != null){
+                    return@addSnapshotListener
+                }
+                val documents = value?.documents!!
+                val tpoList = documents.map {
+                    it.toObject(Tpo::class.java)!!
+                }
+                tempTpoList.clear()
+                tempTpoList.addAll(tpoList.toMutableList())
+            }
         }
     }
 

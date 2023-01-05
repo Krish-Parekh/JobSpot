@@ -93,10 +93,10 @@ class SignupFragment : Fragment() {
                 val currentUser = mAuth.currentUser!!
                 val profileUpdates = UserProfileChangeRequest.Builder().setDisplayName(username).build()
                 val currentUserRole = hashMapOf("role" to ROLE_TYPE_STUDENT)
+
                 mFirestore.collection(COLLECTION_PATH_ROLE).document(currentUser.uid).set(currentUserRole).await()
                 currentUser.updateProfile(profileUpdates).await()
                 showToast(requireContext(), getString(R.string.auth_pass))
-                Log.d(TAG, "Navigate user to UserDetail Activity")
                 navigateToUserDetail(username, email)
             }catch (error : FirebaseAuthUserCollisionException){
                 showToast(requireContext(), "Email already exists")

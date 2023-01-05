@@ -28,8 +28,10 @@ import com.krish.jobspot.util.showToast
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import androidx.lifecycle.Observer
+import com.krish.jobspot.home.activity.HomeActivity
 import com.krish.jobspot.util.LoadingDialog
 import com.krish.jobspot.util.UiState
+import java.io.File
 import java.util.*
 
 private const val TAG = "StudentResumeFragment"
@@ -103,8 +105,10 @@ class StudentResumeFragment : Fragment() {
                     hidePdfUploadedView()
                     userDetailViewModel.setPdfUri(null)
                     loadingDialog.dismiss()
+                    navigateToHomeActivity()
                 }
                 UiState.FAILURE -> {
+                    showToast(requireContext(), "Error while uploading data, Retry!!")
                     loadingDialog.dismiss()
                 }
                 else -> Unit
@@ -112,6 +116,11 @@ class StudentResumeFragment : Fragment() {
         })
     }
 
+    private fun navigateToHomeActivity() {
+        val homeActivity = Intent(requireContext(), HomeActivity::class.java)
+        startActivity(homeActivity)
+        requireActivity().finish()
+    }
 
     private fun handleCapturedPdf(result: ActivityResult) {
         val resultCode = result.resultCode
@@ -131,6 +140,7 @@ class StudentResumeFragment : Fragment() {
     @SuppressLint("Range")
     private fun getFileInfo(pdfUri: Uri) {
         try {
+            val res = File(pdfUri.path!!)
             if (pdfUri.scheme.equals("content")) {
                 val pdfCursor: Cursor? =
                     requireActivity().contentResolver.query(pdfUri, null, null, null, null)

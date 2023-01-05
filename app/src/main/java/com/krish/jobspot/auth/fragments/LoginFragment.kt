@@ -106,14 +106,13 @@ class LoginFragment : Fragment() {
                 mAuth.signInWithEmailAndPassword(email, password).await()
                 val currentUserUid = mAuth.currentUser?.uid!!
                 val currentUsername = mAuth.currentUser?.displayName!!
-                Log.d(TAG, "CurrentUserUid : ${currentUserUid}, ${currentUsername}")
+
                 val currentUserDoc = mFirestore.collection(COLLECTION_PATH_STUDENT).document(currentUserUid)
                 val userDocument: DocumentSnapshot = currentUserDoc.get().await()
 
                 val currentUserRole = mFirestore.collection(COLLECTION_PATH_ROLE).document(currentUserUid)
                 val roleDocument: DocumentSnapshot = currentUserRole.get().await()
                 val roleType: String = roleDocument.get("role") as String
-                Log.d(TAG, "RoleType = $roleType and $currentUserUid")
                 // to check if current user is student because RBA
                 if(roleType == ROLE_TYPE_STUDENT){
                     // to check if student have entered all his detail
@@ -143,8 +142,8 @@ class LoginFragment : Fragment() {
     }
 
     private fun navigateToHomeActivity() {
-        val homeIntent = Intent(requireContext(), HomeActivity::class.java)
-        startActivity(homeIntent)
+        val homeActivity = Intent(requireContext(), HomeActivity::class.java)
+        startActivity(homeActivity)
         requireActivity().finish()
     }
 

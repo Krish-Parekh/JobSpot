@@ -5,6 +5,7 @@ class Constants {
         const val ROLE_TYPE_STUDENT = "student"
 
         const val COLLECTION_PATH_STUDENT = "students"
+        const val COLLECTION_PATH_TPO = "tpo"
         const val COLLECTION_PATH_ROLE = "roles"
         const val COLLECTION_PATH_COMPANY = "companies"
         const val COLLECTION_PATH_MOCK = "mock_test"

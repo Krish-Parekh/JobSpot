@@ -30,6 +30,11 @@ class UserFragment : Fragment() {
     }
 
     private fun setupViews() {
+
+        binding.ivPopOut.setOnClickListener {
+            requireActivity().finish()
+        }
+
         userEditViewModel.fetchStudent()
         userEditViewModel.student.observe(viewLifecycleOwner, Observer { student ->
             if (student != null){
