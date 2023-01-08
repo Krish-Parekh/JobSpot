@@ -27,8 +27,8 @@ class HomeViewModel : ViewModel() {
     private val _jobs: MutableLiveData<List<Job>> = MutableLiveData(emptyList())
     val jobs: LiveData<List<Job>> = _jobs
 
-    private val _countUpdater : MutableStateFlow<Pair<Int,Int>> = MutableStateFlow(Pair(0, 0))
-    val countUpdater : StateFlow<Pair<Int, Int>> = _countUpdater
+    private val _countUpdater : MutableLiveData<Pair<Int,Int>> = MutableLiveData()
+    val countUpdater : MutableLiveData<Pair<Int, Int>> = _countUpdater
 
 
     fun fetchCurrentUser(){
@@ -39,7 +39,7 @@ class HomeViewModel : ViewModel() {
                 .child(currentUserId)
                 .child(COLLECTION_PATH_COMPANY)
                 .get().await().childrenCount
-            _countUpdater.emit(Pair(companiesCount, jobsAppliedCount.toInt()))
+            _countUpdater.postValue(Pair(companiesCount, jobsAppliedCount.toInt()))
         }
     }
 

@@ -38,6 +38,7 @@
 
     <color name="chip_text_color">@color/off_white</color>
     <color name="chip_background_color">@color/blue</color>
+    <color name="job_chip_background_color">@color/dark_blue</color>
 
     <color name="correct_ans_border">@color/off_white</color>
 </resources>

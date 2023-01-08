@@ -56,7 +56,8 @@ class AlertViewModel : ViewModel() {
             }
             val hostSpecificNotifications = hostSpecificNotificationsDeferred.await()
             val combinedNotification = broadcastNotifications + hostSpecificNotifications
-            _notifications.postValue(combinedNotification)
+            val latestNotification = combinedNotification.sortedByDescending { it.timestamp }
+            _notifications.postValue(latestNotification)
         }
     }
 }

@@ -66,5 +66,7 @@
 
     <color name="chip_text_color">@color/dark_purple</color>
     <color name="chip_background_color">@color/baby_blue</color>
+    <color name="job_chip_background_color">@color/baby_blue</color>
+
     <color name="correct_ans_border">@color/blue</color>
 </resources>

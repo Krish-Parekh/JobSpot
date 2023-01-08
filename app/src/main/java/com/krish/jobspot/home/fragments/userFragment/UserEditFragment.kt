@@ -10,6 +10,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.load
 import com.github.dhaval2404.imagepicker.ImagePicker
@@ -46,6 +47,10 @@ class UserEditFragment : Fragment() {
             etEmail.setText(args.student.details?.email)
             etSapId.setText(args.student.details?.sapId)
             etMobile.setText(args.student.details?.mobile)
+
+            ivPopOut.setOnClickListener {
+                findNavController().popBackStack()
+            }
 
             if (userEditViewModel.getImageUri() != null) {
                 profileImage.setImageURI(userEditViewModel.getImageUri())

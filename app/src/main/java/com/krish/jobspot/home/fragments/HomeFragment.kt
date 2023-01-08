@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
@@ -20,7 +19,6 @@ import com.krish.jobspot.home.adapter.JobListAdapter
 import com.krish.jobspot.home.viewmodel.HomeViewModel
 import com.krish.jobspot.model.Job
 import com.krish.jobspot.util.counterAnimation
-import kotlinx.coroutines.isActive
 
 
 class HomeFragment : Fragment() {
@@ -47,15 +45,15 @@ class HomeFragment : Fragment() {
         homeViewModel.fetchCurrentUser()
         binding.apply {
 
-            lifecycleScope.launchWhenCreated {
-                if (isActive){
-                    homeViewModel.countUpdater.collect { counterValue ->
-                        counterAnimation(0, counterValue.first, tvCompaniesCount)
-                        counterAnimation(0, counterValue.second, tvJobAppliedCount)
-                    }
+            homeViewModel.countUpdater.observe(viewLifecycleOwner) { counterValue ->
+                if (counterValue != null){
+                    counterAnimation(0, counterValue.first, tvCompaniesCount)
+                    counterAnimation(0, counterValue.second, tvJobAppliedCount)
                 }
             }
-            binding.tvWelcomeHeading.text = getString(R.string.field_welcome_text, mAuth.currentUser?.displayName)
+
+            binding.tvWelcomeHeading.text =
+                getString(R.string.field_welcome_text, mAuth.currentUser?.displayName)
             ivProfileImage.load(mAuth.currentUser?.photoUrl)
 
             ivProfileImage.setOnClickListener {

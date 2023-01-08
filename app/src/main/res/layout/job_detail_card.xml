@@ -81,6 +81,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/small_margin"
+                app:chipBackgroundColor="@color/job_chip_background_color"
+                android:textColor="@color/chip_text_color"
                 android:layout_weight="2"
                 android:text="Intern"
                 android:textAlignment="center"
@@ -92,6 +94,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/small_margin"
                 android:layout_weight="1"
+                app:chipBackgroundColor="@color/job_chip_background_color"
+                android:textColor="@color/chip_text_color"
                 android:textAlignment="center"
                 app:chipCornerRadius="8dp"
                 tools:text="Full time" />
