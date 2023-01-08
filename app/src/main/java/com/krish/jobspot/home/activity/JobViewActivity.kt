@@ -18,10 +18,12 @@ import com.krish.jobspot.util.LoadingDialog
 import com.krish.jobspot.util.UiState.*
 import com.krish.jobspot.util.createSalaryText
 import com.krish.jobspot.util.showToast
+import kotlinx.coroutines.isActive
 
 private const val TAG = "JobViewActivity"
 class JobViewActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityJobViewBinding
+    private var _binding: ActivityJobViewBinding? = null
+    private val binding get() = _binding!!
     private val args by navArgs<JobViewActivityArgs>()
     private val job by lazy { args.job }
     private val mFirebaseAuth : FirebaseAuth by lazy { FirebaseAuth.getInstance() }
@@ -31,7 +33,7 @@ class JobViewActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityJobViewBinding.inflate(layoutInflater)
+        _binding = ActivityJobViewBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupViews()
     }
@@ -56,9 +58,11 @@ class JobViewActivity : AppCompatActivity() {
                 createSkillSetChip(job)
             }
 
-            lifecycleScope.launchWhenCreated {
-                studentJobViewModel.studentAppliedCount.collect{ count ->
-                    tvStudentCount.text = count
+            lifecycleScope.launchWhenStarted {
+                if (isActive){
+                    studentJobViewModel.studentAppliedCount.collect{ count ->
+                        tvStudentCount.text = count
+                    }
                 }
             }
         }

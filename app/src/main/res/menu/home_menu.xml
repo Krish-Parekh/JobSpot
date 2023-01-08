@@ -6,8 +6,8 @@
         android:title="@string/menu_field_home" />
 
     <item
-        android:id="@+id/notification"
-        android:icon="@drawable/ic_notification"
+        android:id="@+id/alertFragment"
+        android:icon="@drawable/ic_alert"
         android:title="@string/menu_field_alert" />
 
     <item

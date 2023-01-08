@@ -50,4 +50,9 @@
             android:name="mock"
             app:argType="com.krish.jobspot.model.Mock" />
     </activity>
+    <fragment
+        android:id="@+id/alertFragment"
+        android:name="com.krish.jobspot.home.fragments.AlertFragment"
+        android:label="fragment_alert"
+        tools:layout="@layout/fragment_alert" />
 </navigation>

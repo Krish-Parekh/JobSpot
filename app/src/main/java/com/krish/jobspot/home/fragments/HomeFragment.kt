@@ -20,6 +20,7 @@ import com.krish.jobspot.home.adapter.JobListAdapter
 import com.krish.jobspot.home.viewmodel.HomeViewModel
 import com.krish.jobspot.model.Job
 import com.krish.jobspot.util.counterAnimation
+import kotlinx.coroutines.isActive
 
 
 class HomeFragment : Fragment() {
@@ -47,9 +48,11 @@ class HomeFragment : Fragment() {
         binding.apply {
 
             lifecycleScope.launchWhenCreated {
-                homeViewModel.countUpdater.collect { counterValue ->
-                    counterAnimation(0, counterValue.first, tvCompaniesCount)
-                    counterAnimation(0, counterValue.second, tvJobAppliedCount)
+                if (isActive){
+                    homeViewModel.countUpdater.collect { counterValue ->
+                        counterAnimation(0, counterValue.first, tvCompaniesCount)
+                        counterAnimation(0, counterValue.second, tvJobAppliedCount)
+                    }
                 }
             }
             binding.tvWelcomeHeading.text = getString(R.string.field_welcome_text, mAuth.currentUser?.displayName)

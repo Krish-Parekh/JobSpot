@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.krish.jobspot.R
+import java.util.*
 
 fun TextInputLayout.addTextWatcher() {
     editText?.addTextChangedListener(object : TextWatcher {
@@ -90,4 +91,32 @@ fun checkTimeUnit(milliSeconds: Long): String {
     } else {
         "${seconds}s"
     }
+}
+
+fun convertTimeStamp(timestamp: Date): String {
+    val timestampDate = timestamp
+    val currentDate = Date()
+
+    val elapsedTime = currentDate.time - timestampDate.time
+
+    val elapsedDays = (elapsedTime / (1000 * 60 * 60 * 24)).toInt()
+
+    val elapsedHours = ((elapsedTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toInt()
+
+    val elapsedMinutes = ((elapsedTime % (1000 * 60 * 60)) / (1000 * 60)).toInt()
+
+    val elapsedSeconds = ((elapsedTime % (1000 * 60)) / 1000).toInt()
+
+    var elapsedTimeString = ""
+
+    if (elapsedDays > 0) {
+        elapsedTimeString = "$elapsedDays days ago"
+    } else if (elapsedHours > 0) {
+        elapsedTimeString = "$elapsedHours hours ago"
+    } else if (elapsedMinutes > 0) {
+        elapsedTimeString = "$elapsedMinutes minutes ago"
+    } else if (elapsedSeconds > 0) {
+        elapsedTimeString = "$elapsedSeconds seconds ago"
+    }
+    return elapsedTimeString
 }

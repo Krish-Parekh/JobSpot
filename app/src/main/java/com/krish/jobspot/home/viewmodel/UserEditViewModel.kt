@@ -6,8 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.krish.jobspot.model.Student
@@ -23,7 +21,6 @@ class UserEditViewModel : ViewModel() {
 
     private val firebaseAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
     private val studentId: String by lazy { firebaseAuth.currentUser?.uid.toString() }
-    private val mRealtimeDb: DatabaseReference by lazy { FirebaseDatabase.getInstance().reference }
     private val mFirebaseStorage: FirebaseStorage by lazy { FirebaseStorage.getInstance() }
     private val mFirestore: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
 
@@ -43,10 +40,11 @@ class UserEditViewModel : ViewModel() {
     private val _fileData: MutableLiveData<Triple<String, String, Uri>> = MutableLiveData()
     val fileData: LiveData<Triple<String, String, Uri>> = _fileData
 
+    private val _tpoList: MutableLiveData<List<Tpo>> = MutableLiveData(emptyList())
+    val tpoList: LiveData<List<Tpo>> = _tpoList
     fun fetchStudent() {
         viewModelScope.launch {
-            val studentRef =
-                mFirestore.collection(COLLECTION_PATH_STUDENT).document(studentId).get().await()
+            val studentRef = mFirestore.collection(COLLECTION_PATH_STUDENT).document(studentId).get().await()
             val student = studentRef.toObject(Student::class.java)!!
             _student.postValue(student)
         }
@@ -63,33 +61,34 @@ class UserEditViewModel : ViewModel() {
         }
     }
 
-    fun fetchTpo(){
-        val tempTpoList = mutableListOf<Tpo>()
+    fun fetchTpo() {
         viewModelScope.launch {
-            mFirestore.collection(COLLECTION_PATH_TPO).addSnapshotListener { value, error ->
-                if (error != null){
-                    return@addSnapshotListener
+            mFirestore.collection(COLLECTION_PATH_TPO)
+                .addSnapshotListener { value, error ->
+                    if (error != null) {
+                        return@addSnapshotListener
+                    }
+                    val documents = value?.documents!!
+                    val tpoList = documents.map {
+                        it.toObject(Tpo::class.java)!!
+                    }
+                    _tpoList.postValue(tpoList)
                 }
-                val documents = value?.documents!!
-                val tpoList = documents.map {
-                    it.toObject(Tpo::class.java)!!
-                }
-                tempTpoList.clear()
-                tempTpoList.addAll(tpoList.toMutableList())
-            }
         }
     }
 
-    fun uploadStudentData(student : Student){
+    fun uploadStudentData(student: Student) {
         viewModelScope.launch {
             val studentDetail = student.details!!
-            if (!studentDetail.imageUrl.startsWith("https://firebasestorage.googleapis.com/")){
-                val editStudentRef = mFirebaseStorage.getReference(PROFILE_IMAGE_PATH).child(student.uid.toString())
+            if (!studentDetail.imageUrl.startsWith("https://firebasestorage.googleapis.com/")) {
+                val editStudentRef =
+                    mFirebaseStorage.getReference(PROFILE_IMAGE_PATH).child(student.uid.toString())
                 editStudentRef.putFile(Uri.parse(studentDetail.imageUrl)).await()
                 student.details?.imageUrl = editStudentRef.downloadUrl.await().toString()
             }
 
-            val editStudentRef = mFirestore.collection(COLLECTION_PATH_STUDENT).document(student.uid.toString())
+            val editStudentRef =
+                mFirestore.collection(COLLECTION_PATH_STUDENT).document(student.uid.toString())
             editStudentRef.set(student).await()
         }
     }

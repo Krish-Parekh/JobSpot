@@ -50,7 +50,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
+//    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
 
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:${lifecycle_version}"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${viewmodel_version}"
