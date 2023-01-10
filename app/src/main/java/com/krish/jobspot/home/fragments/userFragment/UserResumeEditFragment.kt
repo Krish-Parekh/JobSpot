@@ -14,6 +14,7 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.MimeTypeFilter
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.krish.jobspot.R
 import com.krish.jobspot.databinding.FragmentUserResumeEditBinding
 import com.krish.jobspot.home.viewmodel.UserEditViewModel
@@ -34,6 +35,13 @@ class UserResumeEditFragment : Fragment() {
     }
 
     private fun setupViews() {
+
+        binding.ivPopOut.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
+        binding.layoutUploadedPdf.llFileRemoveContainer.visibility = View.GONE
+
         userEditViewModel.fetchStudentResume()
         userEditViewModel.fileData.observe(viewLifecycleOwner, Observer { pdfMetaData ->
             if (pdfMetaData != null){

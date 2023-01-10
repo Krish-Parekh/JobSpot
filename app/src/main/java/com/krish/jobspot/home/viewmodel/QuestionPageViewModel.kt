@@ -21,28 +21,36 @@ class QuestionPageViewModel : ViewModel() {
     private val mFirebaseAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
     private val mRealtimeDb: DatabaseReference by lazy { FirebaseDatabase.getInstance().reference }
     private val studentId: String by lazy { mFirebaseAuth.currentUser?.uid.toString() }
-    private val mockAnswers = arrayOfNulls<String>(10)
+    private val selectedAnswers = MutableList(10){ _ -> ""}
+
     private val uiEventChannel = Channel<UiState>()
     val uiEventFlow = uiEventChannel.receiveAsFlow()
 
-    fun setMockAnswers(questionIdx: Int, answer: String) {
-        mockAnswers[questionIdx] = answer
+    fun setSelectedAnswer(questionIdx: Int, answer: String) {
+        selectedAnswers[questionIdx] = answer
     }
 
     fun submitQuiz(mock: Mock, timeRemaining: Long) {
         viewModelScope.launch {
             try {
                 uiEventChannel.trySend(UiState.LOADING)
-                val correctOptions = mock.mockQuestion.map { mockQuestion ->
+                val correctAnswers = mock.mockQuestion.map { mockQuestion ->
                     val correctIndex = getCurrentIndex(mockQuestion.correctOption)
                     mockQuestion.options[correctIndex]
                 }
-                val correct =
-                    correctOptions.zip(mockAnswers).count { it.first == it.second }.toString()
-                val incorrect =
-                    correctOptions.zip(mockAnswers).count { it.first != it.second }.toString()
-                val unAttempted =
-                    correctOptions.zip(mockAnswers).count { it.second == null }.toString()
+
+                val answerCounts = correctAnswers.mapIndexed { index, correctAnswer ->
+                    val userAnswer = selectedAnswers[index]
+                    if (userAnswer.isNotEmpty()){
+                        if (userAnswer == correctAnswer) "correct" else "incorrect"
+                    } else {
+                        "unattempted"
+                    }
+                }.groupBy { it }
+
+                val correctAnswerCount = answerCounts["correct"]?.size ?: 0
+                val incorrectAnswerCount = answerCounts["incorrect"]?.size ?: 0
+                val unAttemptedCount = answerCounts["unattempted"]?.size ?: 0
 
                 val totalTime = TimeUnit.MINUTES.toMillis(mock.duration.toLong())
                 val timeTaken = totalTime - timeRemaining
@@ -50,9 +58,9 @@ class QuestionPageViewModel : ViewModel() {
                 val mockResult = MockResult(
                     mockId = mock.uid,
                     studentId = studentId,
-                    correctAns = correct,
-                    incorrectAns = incorrect,
-                    unAttempted = unAttempted,
+                    correctAns = correctAnswerCount.toString(),
+                    incorrectAns = incorrectAnswerCount.toString(),
+                    unAttempted = unAttemptedCount.toString(),
                     timeTaken = timeTaken,
                     totalQuestion = mock.mockQuestion.size.toString()
                 )

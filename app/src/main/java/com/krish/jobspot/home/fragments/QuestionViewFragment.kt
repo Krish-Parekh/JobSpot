@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.card.MaterialCardView
@@ -36,7 +37,7 @@ class QuestionViewFragment : Fragment() {
         }
         questionId = arguments?.getInt("QUESTION_ID")!!
         if (savedInstanceState != null) {
-            val selectCardBackgroundColor = resources.getColor(R.color.orange)
+            val selectCardBackgroundColor = ContextCompat.getColor(requireContext() ,R.color.orange)
             selectedOption = savedInstanceState.getInt("SELECTED_OPTION")
             binding.apply {
                 when (selectedOption) {
@@ -85,9 +86,9 @@ class QuestionViewFragment : Fragment() {
     }
 
     private fun handleAnswerClick(questionId: Int, answer: String, cardView: View) {
-        questionPageViewModel.setMockAnswers(questionId, answer)
-        val cardBackgroundColor = resources.getColor(R.color.card_background)
-        val selectCardBackgroundColor = resources.getColor(R.color.orange)
+        questionPageViewModel.setSelectedAnswer(questionId, answer)
+        val cardBackgroundColor = ContextCompat.getColor(requireContext() ,R.color.card_background)
+        val selectCardBackgroundColor = ContextCompat.getColor(requireContext(), R.color.orange)
 
         binding.apply {
             applyCardBackgroundColor(cvOptionOne, cardBackgroundColor)
