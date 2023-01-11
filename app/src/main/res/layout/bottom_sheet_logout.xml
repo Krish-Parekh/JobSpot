@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="@dimen/large_padding"
-    tools:background="@color/bottom_sheet_background_color">
+    android:background="@color/bottom_sheet_background_color">
 
     <View
         android:layout_width="30dp"

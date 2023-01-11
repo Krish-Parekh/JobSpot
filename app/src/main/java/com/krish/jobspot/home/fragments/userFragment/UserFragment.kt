@@ -77,7 +77,7 @@ class UserFragment : Fragment() {
         super.onDestroyView()
     }
 
-    fun logoutBottomSheet(){
+    private fun logoutBottomSheet(){
         val dialog = BottomSheetDialog(requireContext())
         val bottomSheet = layoutInflater.inflate(R.layout.bottom_sheet_logout, null)
         val btnNot: MaterialButton = bottomSheet.findViewById(R.id.btnNo)
