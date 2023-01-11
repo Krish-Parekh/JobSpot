@@ -1,27 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
-    app:cardCornerRadius="6dp"
     android:layout_marginHorizontal="@dimen/medium_margin"
     android:layout_marginVertical="@dimen/small_margin"
-    app:cardBackgroundColor="@color/card_background">
+    app:cardBackgroundColor="@color/card_background"
+    app:cardCornerRadius="6dp">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="@dimen/medium_padding">
+        android:padding="@dimen/extra_small_padding">
 
 
         <ImageView
             android:id="@+id/ivNotification"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="@dimen/small_margin"
-            android:layout_marginTop="@dimen/extra_small_margin"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_margin="@dimen/small_margin"
             android:contentDescription="@null"
             android:src="@drawable/ic_notification"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -32,43 +31,43 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/medium_margin"
-            android:layout_marginTop="@dimen/extra_small_margin"
+            android:layout_marginTop="@dimen/small_margin"
             android:fontFamily="@font/dm_sans_bold"
-            tools:text="New Job added !"
             android:textColor="@color/text_color"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:layout_constraintLeft_toRightOf="@+id/ivNotification"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="New Job added !" />
 
         <TextView
             android:id="@+id/tvMessage"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/small_margin"
-            android:layout_marginEnd="@dimen/small_margin"
+            android:layout_marginEnd="@dimen/medium_margin"
             android:fontFamily="@font/dm_sans_regular"
-            tools:text="A new job has been made uploaded, and those who wish to apply may begin the application process."
             android:textColor="@color/text_color"
-            android:textSize="14sp"
+            android:textSize="12sp"
             app:layout_constraintLeft_toLeftOf="@+id/tvNotificationTitle"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvNotificationTitle" />
+            app:layout_constraintTop_toBottomOf="@+id/tvNotificationTitle"
+            tools:text="A new job has been made uploaded, and those who wish to apply may begin the application process." />
 
 
         <TextView
             android:id="@+id/tvTimestamp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/medium_margin"
-            android:layout_marginEnd="@dimen/small_margin"
+            android:layout_marginVertical="@dimen/medium_margin"
             android:alpha="0.5"
             android:fontFamily="@font/dm_sans_regular"
-            tools:text="25 minutes ago"
             android:textColor="@color/text_color"
-            android:textSize="14sp"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="@+id/tvMessage"
-            app:layout_constraintTop_toBottomOf="@+id/tvMessage" />
+            app:layout_constraintTop_toBottomOf="@+id/tvMessage"
+            tools:text="25 minutes ago" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

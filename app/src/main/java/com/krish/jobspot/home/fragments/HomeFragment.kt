@@ -42,7 +42,7 @@ class HomeFragment : Fragment() {
 
     private fun setupView() {
         homeViewModel.fetchJobs()
-        homeViewModel.fetchCurrentUser()
+        homeViewModel.fetchMetricForCurrentUser()
         binding.apply {
 
             homeViewModel.countUpdater.observe(viewLifecycleOwner) { counterValue ->
@@ -64,7 +64,7 @@ class HomeFragment : Fragment() {
             rvRecentJobs.layoutManager = LinearLayoutManager(requireContext())
 
             homeViewModel.jobs.observe(viewLifecycleOwner, Observer { jobs ->
-                jobListAdapter.setJobListData(newJobs = jobs)
+                jobListAdapter.setJobListData(newJobs = jobs.take(3))
             })
         }
     }

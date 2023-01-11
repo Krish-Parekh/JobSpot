@@ -27,7 +27,7 @@
         android:layout_marginTop="@dimen/medium_margin"
         android:fontFamily="@font/dm_sans_bold"
         android:paddingVertical="@dimen/small_padding"
-        android:text="Show Resume"
+        android:text="Resume"
         android:textColor="@color/text_color"
         android:textSize="26sp"
         app:layout_constraintLeft_toLeftOf="@id/ivPopOut"
@@ -53,7 +53,6 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

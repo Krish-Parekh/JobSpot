@@ -14,6 +14,7 @@ import androidx.navigation.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
 import com.krish.jobspot.R
 import com.krish.jobspot.databinding.ActivityMockQuestionBinding
@@ -22,8 +23,8 @@ import com.krish.jobspot.home.viewmodel.MockTestViewModel
 import com.krish.jobspot.home.viewmodel.QuestionPageViewModel
 import com.krish.jobspot.util.UiState
 import com.krish.jobspot.util.UiState.*
+import com.krish.jobspot.util.showToast
 import kotlinx.coroutines.flow.collectLatest
-
 import java.util.concurrent.TimeUnit
 
 
@@ -59,7 +60,7 @@ class MockQuestionActivity : AppCompatActivity() {
     private fun setupViews() {
         binding.apply {
             ivPopOut.setOnClickListener {
-                finish()
+                submitQuizDialog("Quit Mock", "Are you sure you want to quit?")
             }
             if (!ruleDisplayed) {
                 showInstructionDialog()
@@ -68,7 +69,8 @@ class MockQuestionActivity : AppCompatActivity() {
             if (timerStarted) {
                 startTimer()
             }
-            mockQuestionAdapter = MockQuestionPageAdapter(supportFragmentManager, mock.mockQuestion, lifecycle)
+            mockQuestionAdapter =
+                MockQuestionPageAdapter(supportFragmentManager, mock.mockQuestion, lifecycle)
 
             questionPager.adapter = mockQuestionAdapter
             questionPager.offscreenPageLimit = mock.mockQuestion.size
@@ -79,7 +81,8 @@ class MockQuestionActivity : AppCompatActivity() {
             tabLayoutMediator?.attach()
 
             for (i in 0..mock.mockQuestion.size) {
-                val tabTitle = LayoutInflater.from(this@MockQuestionActivity).inflate(R.layout.tab_title, null, false) as TextView
+                val tabTitle = LayoutInflater.from(this@MockQuestionActivity)
+                    .inflate(R.layout.tab_title, null, false) as TextView
                 questionCountTabLayout.getTabAt(i)?.customView = tabTitle
             }
 
@@ -97,7 +100,7 @@ class MockQuestionActivity : AppCompatActivity() {
             binding.questionPager.registerOnPageChangeCallback(listener!!)
 
             btnSubmitQuiz.setOnClickListener {
-                questionPageViewModel.submitQuiz(mock = mock, timeRemaining)
+                submitQuizDialog("Submit Mock", "Are you sure you want to submit this mock?")
             }
 
             lifecycleScope.launchWhenCreated {
@@ -160,11 +163,24 @@ class MockQuestionActivity : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                // Write Code to submit the test
-                // Remember to cancel the time on destroy
+                showToast(this@MockQuestionActivity, "Time up.")
+                questionPageViewModel.submitQuiz(mock = mock, timeRemaining)
             }
         }
         timer?.start()
+    }
+
+    private fun submitQuizDialog(title: String, message: String) {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("Yes") { dialog, which ->
+                questionPageViewModel.submitQuiz(mock = mock, timeRemaining)
+            }
+            .setNegativeButton("No"){ dialog, which ->
+                dialog.dismiss()
+            }
+            .show()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

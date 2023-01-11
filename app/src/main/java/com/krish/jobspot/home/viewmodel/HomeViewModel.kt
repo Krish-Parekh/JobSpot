@@ -12,11 +12,8 @@ import com.google.firebase.firestore.Query
 import com.krish.jobspot.model.Job
 import com.krish.jobspot.util.Constants.Companion.COLLECTION_PATH_COMPANY
 import com.krish.jobspot.util.Constants.Companion.COLLECTION_PATH_STUDENT
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import java.util.*
 
 class HomeViewModel : ViewModel() {
     private val mFireStore : FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
@@ -31,7 +28,7 @@ class HomeViewModel : ViewModel() {
     val countUpdater : MutableLiveData<Pair<Int, Int>> = _countUpdater
 
 
-    fun fetchCurrentUser(){
+    fun fetchMetricForCurrentUser(){
         viewModelScope.launch {
             val companiesCount = mFireStore.collection(COLLECTION_PATH_COMPANY).get().await().count()
             val jobsAppliedCount = mRealtimeDb
@@ -47,7 +44,6 @@ class HomeViewModel : ViewModel() {
         viewModelScope.launch {
             mFireStore
                 .collection(COLLECTION_PATH_COMPANY)
-                .limit(3)
                 .orderBy("uid", Query.Direction.DESCENDING)
                 .addSnapshotListener { value, error ->
                     if (error != null) {
