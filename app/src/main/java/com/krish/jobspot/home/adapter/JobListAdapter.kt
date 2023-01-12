@@ -39,6 +39,7 @@ class JobListAdapter(
                 build()
             }
             jobRole.text = job.role
+            desgination.text = job.designation
             companyNameLocation.text =
                 itemView.context.getString(R.string.field_company_and_location, job.name, job.city)
             salary.text = createSalaryText(job.salary, requireActivity = activity)

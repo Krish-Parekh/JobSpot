@@ -12,6 +12,7 @@ data class Job(
     var city: String = "",
     var salary: String = "",
     var workType : String = "",
+    var designation :  String = "",
     var description: String = "",
     var responsibility: String = "",
     var skillSet: List<String> = emptyList(),

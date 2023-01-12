@@ -7,8 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.krish.jobspot.R
 import com.krish.jobspot.databinding.FragmentForgotPassBinding
@@ -43,7 +41,8 @@ class ForgotPassFragment : Fragment() {
 
             btnResetPassword.setOnClickListener {
                 val email = etEmail.getInputValue()
-                if(InputValidation.emailValidation(email)){
+                val (isEmailValid, emailError) = InputValidation.isEmailValid(email)
+                if(isEmailValid.not()){
                     loadingDialog.show()
                     mAuth.sendPasswordResetEmail(email)
                         .addOnSuccessListener {
@@ -58,7 +57,7 @@ class ForgotPassFragment : Fragment() {
                         }
                     clearField()
                 }else{
-                    etEmailContainer.error = getString(R.string.field_error_email)
+                    etEmailContainer.error = emailError
                 }
             }
         }

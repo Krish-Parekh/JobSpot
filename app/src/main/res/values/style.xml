@@ -7,4 +7,16 @@
         <item name="windowSplashScreenAnimationDuration">5000</item>
         <item name="postSplashScreenTheme">@style/Theme.JobSpot</item>
     </style>
+
+    <style name="AlertDialogTheme" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
+        <item name="android:background">@color/card_background</item>
+        <item name="buttonBarPositiveButtonStyle">@style/AlertButtonPositive</item>
+        <item name="buttonBarNegativeButtonStyle">@style/AlertButtonNegative</item>
+    </style>
+    <style name="AlertButtonPositive" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/text_color</item>
+    </style>
+    <style name="AlertButtonNegative" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/orange</item>
+    </style>
 </resources>

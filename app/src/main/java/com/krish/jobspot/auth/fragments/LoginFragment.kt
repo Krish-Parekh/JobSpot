@@ -161,15 +161,18 @@ class LoginFragment : Fragment() {
         password: String
     ): Boolean {
         binding.apply {
-            if (!InputValidation.emailValidation(email)) {
-                etEmailContainer.error = getString(R.string.field_error_email)
-                return false
-            } else if (!InputValidation.passwordValidation(password)) {
-                etPasswordContainer.error = getString(R.string.field_error_password)
-                return false
-            } else {
-                return true
+            val (isEmailValid, emailError) = InputValidation.isEmailValid(email)
+            if (isEmailValid.not()){
+                etEmailContainer.error = emailError
+                return isEmailValid
             }
+
+            val (isPasswordValid, passwordError) = InputValidation.isPasswordValid(password)
+            if (isPasswordValid.not()){
+                etPasswordContainer.error = passwordError
+                return isPasswordValid
+            }
+            return true
         }
     }
 

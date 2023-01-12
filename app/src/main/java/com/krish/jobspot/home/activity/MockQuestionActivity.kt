@@ -3,10 +3,11 @@ package com.krish.jobspot.home.activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -21,6 +22,7 @@ import com.krish.jobspot.databinding.ActivityMockQuestionBinding
 import com.krish.jobspot.home.adapter.MockQuestionPageAdapter
 import com.krish.jobspot.home.viewmodel.MockTestViewModel
 import com.krish.jobspot.home.viewmodel.QuestionPageViewModel
+import com.krish.jobspot.util.LoadingDialog
 import com.krish.jobspot.util.UiState
 import com.krish.jobspot.util.UiState.*
 import com.krish.jobspot.util.showToast
@@ -43,6 +45,8 @@ class MockQuestionActivity : AppCompatActivity() {
     private var tabLayoutMediator: TabLayoutMediator? = null
     private var mockQuestionAdapter: MockQuestionPageAdapter? = null
     private var listener: ViewPager2.OnPageChangeCallback? = null
+    private val loadingDialog: LoadingDialog by lazy { LoadingDialog(this) }
+    private var backPressCallBack: OnBackPressedCallback? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMockQuestionBinding.inflate(layoutInflater)
@@ -59,6 +63,12 @@ class MockQuestionActivity : AppCompatActivity() {
 
     private fun setupViews() {
         binding.apply {
+
+            // remove the callback
+            backPressCallBack =
+                this@MockQuestionActivity.onBackPressedDispatcher.addCallback(this@MockQuestionActivity) {
+                    submitQuizDialog("Quit Mock", "Are you sure you want to quit?")
+                }
             ivPopOut.setOnClickListener {
                 submitQuizDialog("Quit Mock", "Are you sure you want to quit?")
             }
@@ -107,13 +117,14 @@ class MockQuestionActivity : AppCompatActivity() {
                 questionPageViewModel.uiEventFlow.collectLatest { value: UiState ->
                     when (value) {
                         LOADING -> {
-                            Log.d(TAG, "Loading...")
+                            loadingDialog.show()
                         }
                         SUCCESS -> {
                             navigateToResultActivity()
+                            loadingDialog.dismiss()
                         }
                         FAILURE -> {
-                            Log.d(TAG, "Failure...")
+                            loadingDialog.dismiss()
                         }
                     }
                 }
@@ -163,6 +174,7 @@ class MockQuestionActivity : AppCompatActivity() {
             }
 
             override fun onFinish() {
+                timeRemaining = 0
                 showToast(this@MockQuestionActivity, "Time up.")
                 questionPageViewModel.submitQuiz(mock = mock, timeRemaining)
             }
@@ -171,13 +183,13 @@ class MockQuestionActivity : AppCompatActivity() {
     }
 
     private fun submitQuizDialog(title: String, message: String) {
-        MaterialAlertDialogBuilder(this)
+        MaterialAlertDialogBuilder(this, R.style.AlertDialogTheme)
             .setTitle(title)
             .setMessage(message)
-            .setPositiveButton("Yes") { dialog, which ->
+            .setPositiveButton("Yes") { _, _ ->
                 questionPageViewModel.submitQuiz(mock = mock, timeRemaining)
             }
-            .setNegativeButton("No"){ dialog, which ->
+            .setNegativeButton("No") { dialog, _ ->
                 dialog.dismiss()
             }
             .show()
@@ -200,6 +212,7 @@ class MockQuestionActivity : AppCompatActivity() {
         tabLayoutMediator = null
         mockQuestionAdapter = null
         binding.questionPager.adapter = null
+        backPressCallBack?.remove()
         super.onDestroy()
     }
 }

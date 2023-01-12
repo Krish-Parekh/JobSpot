@@ -25,6 +25,8 @@ import com.krish.jobspot.util.InputValidation
 import com.krish.jobspot.util.addTextWatcher
 import com.krish.jobspot.util.getInputValue
 import com.krish.jobspot.util.showToast
+import java.text.SimpleDateFormat
+import java.util.*
 
 private const val TAG = "StudentDetailFragment"
 
@@ -92,6 +94,7 @@ class StudentDetailFragment : Fragment() {
                 val sapId = etSapId.getInputValue()
                 val mobile = etMobile.getInputValue()
                 val dob = etDate.getInputValue()
+
                 val imageUri = userDetailViewModel.getImageUri()
                 val uid = mAuth.currentUser?.uid
                 if (detailVerification(sapId, mobile, dob, gender, imageUri)) {
@@ -148,7 +151,10 @@ class StudentDetailFragment : Fragment() {
             .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
             .build()
         datePicker.addOnPositiveButtonClickListener {
-            binding.etDate.setText(datePicker.headerText)
+            val date = Date(it)
+            val formatter = SimpleDateFormat("yyyy-MM-dd")
+            val dateString = formatter.format(date)
+            binding.etDate.setText(dateString)
         }
         datePicker.show(childFragmentManager, "Material DatePicker")
     }
@@ -164,28 +170,36 @@ class StudentDetailFragment : Fragment() {
             if (imageUri == null) {
                 showToast(requireContext(), getString(R.string.field_error_image))
                 return false
-            } else if (!InputValidation.sapIdValidation(sapId)) {
-                etSapIdContainer.error = getString(R.string.field_error_sap_id)
-                return false
-            } else if (!InputValidation.mobileValidation(mobile)) {
-                etMobileContainer.error = getString(R.string.field_error_mobile)
-                return false
-            } else if (!InputValidation.dobValidation(dob)) {
+            }
+
+            val (isSapIdValid, sapIdError) = InputValidation.isSapIdValid(sapId)
+            if (isSapIdValid.not()){
+                etSapIdContainer.error = sapIdError
+                return isSapIdValid
+            }
+
+            val (isMobileNumberValid, mobileNumberError) = InputValidation.isMobileNumberValid(mobile)
+            if (isMobileNumberValid.not()){
+                etMobileContainer.error = mobileNumberError
+                return isMobileNumberValid
+            }
+
+            val (isDOBValid, dobError) = InputValidation.isDOBValid(dob)
+            if (isDOBValid.not()){
                 etDateContainer.apply {
-                    error = getString(R.string.field_error_dob)
+                    error = dobError
                     setErrorIconOnClickListener {
                         error = null
                     }
                 }
-                return false
-            } else if (!InputValidation.genderValidation(gender)) {
+                return isDOBValid
+            }
+            if (!InputValidation.genderValidation(gender)) {
                 genderSpinner.error = ""
                 return false
-            } else {
-                return true
             }
+            return true
         }
-
     }
 
     private fun navigateToAddress(student: Student) {

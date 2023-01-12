@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -80,24 +79,36 @@ class StudentAcademicFragment : Fragment() {
         avgScore: String
     ) : Boolean{
         binding.apply {
-            return if(!InputValidation.scoreValidation(sem1)){
-                etSemOneContainer.error = getString(R.string.field_error_score)
-                false
-            }else if(!InputValidation.scoreValidation(sem2)){
-                etSemTwoContainer.error = getString(R.string.field_error_score)
-                false
-            }else if(!InputValidation.scoreValidation(sem3)){
-                etSemThreeContainer.error = getString(R.string.field_error_score)
-                false
-            }else if(!InputValidation.scoreValidation(sem4)){
-                etSemFourContainer.error = getString(R.string.field_error_score)
-                false
-            }else if(!InputValidation.scoreValidation(avgScore)){
-                etAvgScoreContainer.error = getString(R.string.field_error_score)
-                false
-            }else{
-                true
+            val (isSemOneValid, semOneError) = InputValidation.isScoreValid(sem1)
+            if (isSemOneValid.not()){
+                etSemOneContainer.error = semOneError
+                return isSemOneValid
             }
+
+            val (isSemTwoValid, semTwoError) = InputValidation.isScoreValid(sem2)
+            if (isSemTwoValid.not()){
+                etSemOneContainer.error = semTwoError
+                return isSemTwoValid
+            }
+
+            val (isSemThreeValid, semThreeError) = InputValidation.isScoreValid(sem3)
+            if (isSemThreeValid.not()){
+                etSemOneContainer.error = semThreeError
+                return isSemThreeValid
+            }
+
+            val (isSemFourValid, semFourError) = InputValidation.isScoreValid(sem4)
+            if (isSemFourValid.not()){
+                etSemOneContainer.error = semFourError
+                return isSemFourValid
+            }
+
+            val (isAvgScoreValid, avgScoreError) = InputValidation.isScoreValid(avgScore)
+            if (isAvgScoreValid.not()){
+                etSemOneContainer.error = avgScoreError
+                return isAvgScoreValid
+            }
+            return true
         }
     }
 

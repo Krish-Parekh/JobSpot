@@ -1,6 +1,7 @@
 package com.krish.jobspot.user_details.fragments
 
 import android.os.Bundle
+import android.renderscript.ScriptGroup.Input
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -73,21 +74,31 @@ class StudentAddressFragment : Fragment() {
         zipCode: String
     ) : Boolean {
         binding.apply {
-            return if(!InputValidation.addressValidation(address)){
-                etAddressOneContainer.error = getString(R.string.field_error_address)
-                false
-            }else if(!InputValidation.cityValidation(city)){
-                etCityContainer.error = getString(R.string.field_error_city)
-                false
-            }else if(!InputValidation.stateValidation(state)){
-                etStateContainer.error = getString(R.string.field_error_state)
-                false
-            }else if(!InputValidation.zipCodeValidation(zipCode)){
-                etZipCodeContainer.error = getString(R.string.field_error_zip_code)
-                false
-            }else{
-                true
+            val (isAddressValid, addressError) = InputValidation.isAddressValid(address)
+            if (isAddressValid.not()){
+                etAddressOneContainer.error = addressError
+                return isAddressValid
             }
+
+            val (isCityValid, cityError) = InputValidation.isCityValid(city)
+            if (isCityValid.not()){
+                etCityContainer.error = cityError
+                return isCityValid
+            }
+
+            val (isStateValid, stateError) = InputValidation.isStateValid(state)
+            if (isStateValid.not()){
+                etStateContainer.error = stateError
+                return isStateValid
+            }
+
+            val (isZipCodeValid, zipError) = InputValidation.isZipCodeValid(zipCode)
+            if (isZipCodeValid.not()){
+                etZipCodeContainer.error = zipError
+                return isZipCodeValid
+            }
+
+            return true
         }
     }
 
