@@ -35,6 +35,7 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    namespace 'com.krish.jobspot'
 }
 
 dependencies {
@@ -43,48 +44,32 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.0'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'com.google.firebase:firebase-auth-ktx:21.1.0'
-    implementation 'com.google.firebase:firebase-firestore-ktx:24.4.1'
-    implementation 'com.google.firebase:firebase-storage-ktx:20.1.0'
-    implementation 'com.google.firebase:firebase-database-ktx:20.1.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     testImplementation "com.google.truth:truth:1.1.3"
-//    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
 
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:${lifecycle_version}"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${viewmodel_version}"
+    // Firebase Dependency
+    implementation 'com.google.firebase:firebase-auth-ktx:21.1.0'
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.4.1'
+    implementation 'com.google.firebase:firebase-storage-ktx:20.1.0'
+    implementation 'com.google.firebase:firebase-database-ktx:20.1.0'
 
+    // Lifecycle Dependency
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$viewmodel_version"
 
-    // SplashScreen API
-    implementation "androidx.core:core-splashscreen:$splash_screen_version"
-
-    // Navigation Component
+    // Navigation Dependency
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
-    //ViewPager 2
+    // UI Dependency
+    implementation "androidx.core:core-splashscreen:$splash_screen_version"
     implementation "androidx.viewpager2:viewpager2:$viewpager_version"
-
-    //Circular ImageView
     implementation "de.hdodenhof:circleimageview:$circular_iv_version"
-
-    //Image Picker
     implementation "com.github.dhaval2404:imagepicker:$image_picker_version"
-    
-    //PowerSpinner
     implementation "com.github.skydoves:powerspinner:$power_spinner_version"
-
-    //Lottie Library
     implementation "com.airbnb.android:lottie:$lottie_version"
-
-    // SmoothBottomBar
     implementation "com.github.ibrahimsn98:SmoothBottomBar:$smooth_bottom_bar_version"
-
-    //Coil Image
     implementation "io.coil-kt:coil:$coil_version"
-
-    //Browser
-    implementation "com.github.mhiew:android-pdf-viewer:3.2.0-beta.1"
 }
