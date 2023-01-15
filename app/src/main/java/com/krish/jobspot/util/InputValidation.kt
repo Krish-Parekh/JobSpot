@@ -16,9 +16,10 @@ class InputValidation {
          * 2. Password should contain at least one letter
          * 3. Password should contain at least one digit
          * 4. Password should contain at least one special character from the specified set of characters
+         * Pattern.compile("^.*(?=.{4,})(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!&\$%&?#_@ ]).*\$") // new pattern
          */
         private val PASSWORD_PATTERN =
-            Pattern.compile("^.*(?=.{4,})(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!&\$%&? \"]).*\$")
+            Pattern.compile("^.*(?=.{4,})(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!&\$%&?#_@ ]).*\$")
 
         fun checkNullity(input: String): Boolean {
             return input.isNotEmpty();

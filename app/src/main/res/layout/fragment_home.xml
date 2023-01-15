@@ -73,13 +73,14 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivHomeBanner" />
 
-        <LinearLayout
+        <GridLayout
             android:id="@+id/llStatusContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/medium_margin"
-            android:layout_marginVertical="@dimen/medium_margin"
-            android:orientation="horizontal"
+            android:layout_marginHorizontal="@dimen/small_margin"
+            android:layout_marginVertical="@dimen/small_margin"
+            android:columnCount="2"
+            android:rowCount="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvStatusHeading">
@@ -87,11 +88,15 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/small_margin"
-                android:layout_marginEnd="@dimen/medium_margin"
-                android:layout_weight="1"
+                android:layout_row="0"
+                android:layout_rowWeight="1"
+                android:layout_column="0"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:layout_margin="@dimen/extra_small_margin"
                 app:cardBackgroundColor="@color/company_card_background"
-                app:cardCornerRadius="6dp">
+                app:cardCornerRadius="6dp"
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:id="@+id/llCompanyCard"
@@ -100,7 +105,7 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:padding="@dimen/medium_padding">
+                    android:paddingVertical="@dimen/medium_padding">
 
                     <ImageView
                         android:id="@+id/ivCompanies"
@@ -139,10 +144,15 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/small_margin"
-                android:layout_weight="1"
+                android:layout_row="0"
+                android:layout_rowWeight="1"
+                android:layout_column="1"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:layout_margin="@dimen/extra_small_margin"
                 app:cardBackgroundColor="@color/job_applied_card_background"
-                app:cardCornerRadius="6dp">
+                app:cardCornerRadius="6dp"
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:id="@+id/llJobCard"
@@ -151,7 +161,7 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:padding="@dimen/medium_padding">
+                    android:paddingVertical="@dimen/medium_padding">
 
                     <ImageView
                         android:id="@+id/ivJobApplied"
@@ -184,8 +194,11 @@
                         android:textSize="16sp" />
 
                 </LinearLayout>
+
+
             </com.google.android.material.card.MaterialCardView>
-        </LinearLayout>
+
+        </GridLayout>
 
         <TextView
             android:id="@+id/tvRecentJobList"
@@ -204,6 +217,7 @@
             android:id="@+id/rvRecentJobs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/small_margin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
