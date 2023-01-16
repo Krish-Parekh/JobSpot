@@ -45,6 +45,9 @@ class InputValidation {
             if (email.isEmpty()) {
                 return Pair(false, "Email cannot be empty.")
             }
+            if (email[0].isDigit()) {
+                return Pair(false, "Email cannot start with a number.")
+            }
             if (EMAIL_ADDRESS_PATTERN.matcher(email).matches().not()) {
                 return Pair(false, "Email is not valid.")
             }
@@ -120,6 +123,9 @@ class InputValidation {
             }
             if (address.length > 200) {
                 return Pair(false, "Address cannot be more than 200 characters.")
+            }
+            if (address.matches("^[a-zA-Z0-9,-/ ]+$".toRegex()).not()) {
+                return Pair(false, "Address is not valid.")
             }
             return Pair(true, "")
         }

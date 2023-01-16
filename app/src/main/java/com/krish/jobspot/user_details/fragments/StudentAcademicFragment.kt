@@ -15,6 +15,7 @@ import com.krish.jobspot.model.Student
 import com.krish.jobspot.util.InputValidation
 import com.krish.jobspot.util.addTextWatcher
 import com.krish.jobspot.util.getInputValue
+import java.text.DecimalFormat
 
 private const val TAG = "StudentAcademicFragment"
 class StudentAcademicFragment : Fragment() {
@@ -44,12 +45,18 @@ class StudentAcademicFragment : Fragment() {
             etAvgScoreContainer.addTextWatcher()
 
             btnNext.setOnClickListener {
-                val sem1 = etSemOne.getInputValue()
-                val sem2 = etSemTwo.getInputValue()
-                val sem3 = etSemThree.getInputValue()
-                val sem4 = etSemFour.getInputValue()
-                val avgScore = etAvgScore.getInputValue()
+                var sem1 = etSemOne.getInputValue()
+                var sem2 = etSemTwo.getInputValue()
+                var sem3 = etSemThree.getInputValue()
+                var sem4 = etSemFour.getInputValue()
+                var avgScore = etAvgScore.getInputValue()
                 if(detailVerification(sem1, sem2, sem3, sem4, avgScore)){
+                    val df = DecimalFormat("#.##")
+                    sem1 = df.format(sem1.toDouble())
+                    sem2 = df.format(sem2.toDouble())
+                    sem3 = df.format(sem3.toDouble())
+                    sem4 = df.format(sem4.toDouble())
+                    avgScore = df.format(avgScore.toDouble())
                     val academic = Academic(
                         sem1 = sem1,
                         sem2 = sem2,
@@ -87,25 +94,25 @@ class StudentAcademicFragment : Fragment() {
 
             val (isSemTwoValid, semTwoError) = InputValidation.isScoreValid(sem2)
             if (isSemTwoValid.not()){
-                etSemOneContainer.error = semTwoError
+                etSemTwoContainer.error = semTwoError
                 return isSemTwoValid
             }
 
             val (isSemThreeValid, semThreeError) = InputValidation.isScoreValid(sem3)
             if (isSemThreeValid.not()){
-                etSemOneContainer.error = semThreeError
+                etSemThreeContainer.error = semThreeError
                 return isSemThreeValid
             }
 
             val (isSemFourValid, semFourError) = InputValidation.isScoreValid(sem4)
             if (isSemFourValid.not()){
-                etSemOneContainer.error = semFourError
+                etSemFourContainer.error = semFourError
                 return isSemFourValid
             }
 
             val (isAvgScoreValid, avgScoreError) = InputValidation.isScoreValid(avgScore)
             if (isAvgScoreValid.not()){
-                etSemOneContainer.error = avgScoreError
+                etAvgScoreContainer.error = avgScoreError
                 return isAvgScoreValid
             }
             return true
