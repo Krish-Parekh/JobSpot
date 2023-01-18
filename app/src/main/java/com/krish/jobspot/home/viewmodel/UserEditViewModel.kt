@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.krish.jobspot.model.Student
@@ -86,7 +87,9 @@ class UserEditViewModel : ViewModel() {
                 editStudentRef.putFile(Uri.parse(studentDetail.imageUrl)).await()
                 student.details?.imageUrl = editStudentRef.downloadUrl.await().toString()
             }
-
+            val profileUpdates = UserProfileChangeRequest.Builder().setDisplayName(studentDetail.username).build()
+            val currentUser = firebaseAuth.currentUser!!
+            currentUser.updateProfile(profileUpdates).await()
             val editStudentRef =
                 mFirestore.collection(COLLECTION_PATH_STUDENT).document(student.uid.toString())
             editStudentRef.set(student).await()

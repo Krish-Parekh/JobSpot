@@ -28,7 +28,7 @@ class JobListAdapter(
         private val companyNameLocation: TextView =
             itemView.findViewById(R.id.tvCompanyNameLocation)
         private val salary: TextView = itemView.findViewById(R.id.tvSalary)
-        private val desgination: TextView = itemView.findViewById(R.id.chipDesignation)
+        private val designation: TextView = itemView.findViewById(R.id.chipDesignation)
         private val workType: Chip = itemView.findViewById(R.id.chipWorkType)
         private val btnApply: Chip = itemView.findViewById(R.id.btnApply)
 
@@ -39,7 +39,7 @@ class JobListAdapter(
                 build()
             }
             jobRole.text = job.role
-            desgination.text = job.designation
+            designation.text = job.designation
             companyNameLocation.text =
                 itemView.context.getString(R.string.field_company_and_location, job.name, job.city)
             salary.text = createSalaryText(job.salary, requireActivity = activity)

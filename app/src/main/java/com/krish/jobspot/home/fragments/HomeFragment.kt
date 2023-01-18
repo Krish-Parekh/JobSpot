@@ -7,7 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
@@ -19,6 +22,8 @@ import com.krish.jobspot.home.adapter.JobListAdapter
 import com.krish.jobspot.home.viewmodel.HomeViewModel
 import com.krish.jobspot.model.Job
 import com.krish.jobspot.util.counterAnimation
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class HomeFragment : Fragment() {
@@ -52,9 +57,13 @@ class HomeFragment : Fragment() {
                 }
             }
 
-            binding.tvWelcomeHeading.text =
-                getString(R.string.field_welcome_text, mAuth.currentUser?.displayName)
-            ivProfileImage.load(mAuth.currentUser?.photoUrl)
+            lifecycleScope.launch(Dispatchers.Main) {
+                repeatOnLifecycle(Lifecycle.State.STARTED){
+                    binding.tvWelcomeHeading.text = getString(R.string.field_welcome_text, mAuth.currentUser?.displayName)
+                    ivProfileImage.load(mAuth.currentUser?.photoUrl)
+                }
+            }
+
 
             ivProfileImage.setOnClickListener {
                 navigateToUserActivity()
