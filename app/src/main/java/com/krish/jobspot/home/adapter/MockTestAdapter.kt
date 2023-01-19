@@ -27,11 +27,13 @@ class MockTestAdapter(private val listener : MockTestFragment) : RecyclerView.Ad
                 tvQuizAttempted.text = "Not Attempted"
             }
             cvQuiz.setOnClickListener {
+                cvQuiz.isEnabled = false
                 if (mockTestState.hasAttempted){
                     listener.navigateToMockResultActivity(mockTestState)
                 } else {
                     listener.navigateToMockTestActivity(mockTestState)
                 }
+                cvQuiz.isEnabled = true
             }
         }
     }

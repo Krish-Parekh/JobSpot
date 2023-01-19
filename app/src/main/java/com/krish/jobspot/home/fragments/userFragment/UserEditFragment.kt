@@ -1,6 +1,7 @@
 package com.krish.jobspot.home.fragments.userFragment
 
 import android.app.Activity
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,11 +15,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.load
 import com.github.dhaval2404.imagepicker.ImagePicker
+import com.krish.jobspot.R
 import com.krish.jobspot.databinding.FragmentUserEditBinding
 import com.krish.jobspot.home.viewmodel.UserEditViewModel
-import com.krish.jobspot.util.addTextWatcher
-import com.krish.jobspot.util.getInputValue
-import com.krish.jobspot.util.showToast
+import com.krish.jobspot.util.*
+import com.krish.jobspot.util.UiState.*
 
 class UserEditFragment : Fragment() {
     private var _binding: FragmentUserEditBinding? = null
@@ -28,7 +29,8 @@ class UserEditFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             handleCapturedImage(result)
         }
-    private val userEditViewModel : UserEditViewModel by viewModels()
+    private val userEditViewModel: UserEditViewModel by viewModels()
+    private val loadingDialog: LoadingDialog by lazy { LoadingDialog(requireContext()) }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -66,21 +68,47 @@ class UserEditFragment : Fragment() {
             etMobileContainer.addTextWatcher()
 
             btnSaveChange.setOnClickListener {
+                btnSaveChange.isEnabled = false
                 val username = etUsername.getInputValue()
                 val email = etEmail.getInputValue()
                 val sapId = etSapId.getInputValue()
                 val mobile = etMobile.getInputValue()
-                val imageUrl = userEditViewModel.getImageUri() ?: args.student.details?.imageUrl
+                val imageUrl: Uri =
+                    userEditViewModel.getImageUri() ?: Uri.parse(args.student.details?.imageUrl)
 
-                args.student.details?.username = username
-                args.student.details?.email = email
-                args.student.details?.sapId = sapId
-                args.student.details?.mobile = mobile
-                args.student.details?.imageUrl = imageUrl.toString()
+                if (detailVerification(imageUrl, username, email, sapId, mobile)) {
+                    args.student.details?.username = username
+                    args.student.details?.email = email
+                    args.student.details?.sapId = sapId
+                    args.student.details?.mobile = mobile
+                    args.student.details?.imageUrl = imageUrl.toString()
 
-                userEditViewModel.uploadStudentData(student = args.student)
+                    userEditViewModel.uploadStudentData(student = args.student)
+                    handleUploadResponse()
+                }
+
+                btnSaveChange.isEnabled = true
             }
 
+        }
+    }
+
+    private fun handleUploadResponse() {
+        userEditViewModel.operationStatus.observe(viewLifecycleOwner) { uiState ->
+            when (uiState) {
+                LOADING -> {
+                    loadingDialog.show()
+                }
+                SUCCESS -> {
+                    showToast(requireContext(), "Update Success")
+                    loadingDialog.dismiss()
+                }
+                FAILURE -> {
+                    loadingDialog.dismiss()
+                }
+
+                else -> Unit
+            }
         }
     }
 
@@ -111,6 +139,49 @@ class UserEditFragment : Fragment() {
             else -> {
                 showToast(requireContext(), "Task Cancelled")
             }
+        }
+    }
+
+    private fun detailVerification(
+        imageUrl: Uri?,
+        username: String,
+        email: String,
+        sapId: String,
+        mobile: String
+    ): Boolean {
+        binding.apply {
+            if (imageUrl == null) {
+                showToast(requireContext(), getString(R.string.field_error_image))
+                return false
+            }
+
+            val (isUsernameValid, usernameError) = InputValidation.isUsernameValid(username)
+            if (isUsernameValid.not()) {
+                etUsernameContainer.error = usernameError
+                return isUsernameValid
+            }
+
+            val (isEmailValid, emailError) = InputValidation.isEmailValid(email)
+            if (isEmailValid.not()) {
+                etEmailContainer.error = emailError
+                return isEmailValid
+            }
+
+            val (isSapIdValid, sapIdError) = InputValidation.isSapIdValid(sapId)
+            if (isSapIdValid.not()) {
+                etSapIdContainer.error = sapIdError
+                return isSapIdValid
+            }
+
+            val (isMobileNumberValid, mobileNumberError) = InputValidation.isMobileNumberValid(
+                mobile
+            )
+            if (isMobileNumberValid.not()) {
+                etMobileContainer.error = mobileNumberError
+                return isMobileNumberValid
+            }
+
+            return true
         }
     }
 

@@ -35,7 +35,7 @@ class InputValidation {
             if (username[0].isDigit()) {
                 return Pair(false, "Username cannot start with a number.")
             }
-            if (username.matches("^[a-zA-Z0-9]+$".toRegex()).not()) {
+            if (username.matches("^[a-zA-Z0-9 ]+$".toRegex()).not()) {
                 return Pair(false, "Username can only contain alphabets and numbers.")
             }
             return Pair(true, "")

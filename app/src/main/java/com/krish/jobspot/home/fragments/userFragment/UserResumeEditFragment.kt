@@ -18,11 +18,15 @@ import androidx.navigation.fragment.findNavController
 import com.krish.jobspot.R
 import com.krish.jobspot.databinding.FragmentUserResumeEditBinding
 import com.krish.jobspot.home.viewmodel.UserEditViewModel
+import com.krish.jobspot.util.LoadingDialog
+import com.krish.jobspot.util.UiState
+import com.krish.jobspot.util.UiState.*
 
 class UserResumeEditFragment : Fragment() {
     private var _binding : FragmentUserResumeEditBinding? = null
     private val binding get() = _binding!!
     private val userEditViewModel : UserEditViewModel by viewModels()
+    private val loadingDialog : LoadingDialog by lazy { LoadingDialog(requireContext()) }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,6 +47,7 @@ class UserResumeEditFragment : Fragment() {
         binding.layoutUploadedPdf.llFileRemoveContainer.visibility = View.GONE
 
         userEditViewModel.fetchStudentResume()
+        setupObserver()
         userEditViewModel.fileData.observe(viewLifecycleOwner, Observer { pdfMetaData ->
             if (pdfMetaData != null){
                 binding.layoutUploadedPdf.tvFileName.text = pdfMetaData.first
@@ -52,6 +57,24 @@ class UserResumeEditFragment : Fragment() {
                 }
             }
         })
+    }
+
+    private fun setupObserver() {
+        userEditViewModel.resumeStatus.observe(viewLifecycleOwner){ uiState ->
+            when(uiState){
+                LOADING -> {
+                    loadingDialog.show()
+                }
+                SUCCESS -> {
+                    loadingDialog.dismiss()
+                }
+                FAILURE -> {
+                    loadingDialog.dismiss()
+                }
+                else -> Unit
+            }
+
+        }
     }
 
     private fun setPdfIntent(pdfUri: Uri) {
