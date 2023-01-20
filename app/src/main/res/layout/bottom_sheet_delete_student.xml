@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/large_padding"
+    android:background="@color/bottom_sheet_background_color">
+
+    <View
+        android:layout_width="30dp"
+        android:layout_height="5dp"
+        android:layout_gravity="center"
+        android:background="@drawable/rounder_view_corner" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/large_margin"
+        android:fontFamily="@font/dm_sans_bold"
+        android:text="Delete Account"
+        android:textColor="@color/bottom_sheet_text_color"
+        android:textSize="22sp" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/small_margin"
+        android:fontFamily="@font/dm_sans_regular"
+        android:text="Are you sure you want to delete account?"
+        android:textColor="@color/bottom_sheet_sub_text"
+        android:textSize="14sp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnNo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/medium_margin"
+        android:layout_marginTop="@dimen/medium_margin"
+        android:backgroundTint="@color/bottom_sheet_view_color"
+        android:fontFamily="@font/dm_sans_medium"
+        android:padding="@dimen/button_padding"
+        android:text="@string/bottom_sheet_button_text"
+        android:textColor="@color/bottom_sheet_button_text_color"
+        android:textSize="16sp"
+        app:cornerRadius="6dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnDeleteAccount"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/medium_margin"
+        android:fontFamily="@font/dm_sans_medium"
+        android:padding="@dimen/button_padding"
+        android:text="Delete"
+        android:textColor="@color/bottom_sheet_text_color"
+        android:textSize="16sp"
+        app:cornerRadius="6dp"
+        app:strokeColor="@color/bottom_sheet_view_color"
+        app:strokeWidth="1.3dp" />
+
+</LinearLayout>

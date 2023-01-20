@@ -1,6 +1,7 @@
 package com.krish.jobspot.home.fragments.userFragment
 
 import android.app.Activity
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,7 +16,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.load
 import com.github.dhaval2404.imagepicker.ImagePicker
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.button.MaterialButton
+import com.google.firebase.auth.FirebaseAuth
 import com.krish.jobspot.R
+import com.krish.jobspot.auth.AuthActivity
 import com.krish.jobspot.databinding.FragmentUserEditBinding
 import com.krish.jobspot.home.viewmodel.UserEditViewModel
 import com.krish.jobspot.util.*
@@ -62,6 +67,11 @@ class UserEditFragment : Fragment() {
                 startCrop()
             }
 
+
+            ivDeleteStudent.setOnClickListener {
+                deleteBottomSheet()
+            }
+
             etUsernameContainer.addTextWatcher()
             etEmailContainer.addTextWatcher()
             etSapIdContainer.addTextWatcher()
@@ -91,6 +101,41 @@ class UserEditFragment : Fragment() {
             }
 
         }
+    }
+
+    private fun deleteBottomSheet() {
+        val dialog = BottomSheetDialog(requireContext())
+        val bottomSheet = layoutInflater.inflate(R.layout.bottom_sheet_delete_student, null)
+        val btnNot: MaterialButton = bottomSheet.findViewById(R.id.btnNo)
+        val btnDeleteAccount: MaterialButton = bottomSheet.findViewById(R.id.btnDeleteAccount)
+        btnNot.setOnClickListener {
+            dialog.dismiss()
+        }
+        btnDeleteAccount.setOnClickListener {
+            dialog.dismiss()
+            userEditViewModel.deleteAccount(args.student)
+            userEditViewModel.deleteStatus.observe(viewLifecycleOwner){ uiState ->
+                when(uiState){
+                    LOADING -> {
+                        loadingDialog.show()
+                    }
+                    SUCCESS -> {
+                        loadingDialog.dismiss()
+                        showToast(requireContext(), "Delete Account Success.")
+                        requireActivity().finishAffinity()
+                        val loginIntent = Intent(requireContext(), AuthActivity::class.java)
+                        loginIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                        startActivity(loginIntent)
+                    }
+                    FAILURE -> {
+                        loadingDialog.dismiss()
+                        showToast(requireContext(), "Error while deleting.")
+                    }
+                }
+            }
+        }
+        dialog.setContentView(bottomSheet)
+        dialog.show()
     }
 
     private fun handleUploadResponse() {

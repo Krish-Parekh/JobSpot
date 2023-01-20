@@ -104,7 +104,7 @@ class InputValidationTest {
     // Mobile Validation
     @Test
     fun `isMobileNumberValid should return true for valid mobile number`() {
-        val (isValid, errorMessage) = InputValidation.isMobileNumberValid("+919876543210")
+        val (isValid, errorMessage) = InputValidation.isMobileNumberValid("9876543210")
         assertThat(isValid).isTrue()
         assertThat(errorMessage).isEmpty()
     }
@@ -117,36 +117,29 @@ class InputValidationTest {
     }
 
     @Test
-    fun `isMobileNumberValid should return false for mobile number not starting with +91`() {
-        val (isValid, errorMessage) = InputValidation.isMobileNumberValid("919876543210")
-        assertThat(isValid).isFalse()
-        assertThat(errorMessage).isEqualTo("Mobile number must start with +91.")
-    }
-
-    @Test
     fun `isMobileNumberValid should return false for mobile number not being 13 characters long`() {
-        val (isValid, errorMessage) = InputValidation.isMobileNumberValid("+9198765432")
+        val (isValid, errorMessage) = InputValidation.isMobileNumberValid("98765432")
         assertThat(isValid).isFalse()
-        assertThat(errorMessage).isEqualTo("Mobile number must be 13 characters.")
+        assertThat(errorMessage).isEqualTo("Mobile number must be 10 characters.")
     }
 
     @Test
     fun `isMobileNumberValid should return false for mobile number containing non-digit characters`() {
-        val (isValid, errorMessage) = InputValidation.isMobileNumberValid("+919876543a01")
+        val (isValid, errorMessage) = InputValidation.isMobileNumberValid("9876543a01")
         assertThat(isValid).isFalse()
         assertThat(errorMessage).isEqualTo("Mobile number can only contain digits.")
     }
 
     @Test
     fun `isMobileNumberValid should return false for mobile number starting with 000`() {
-        val (isValid, errorMessage) = InputValidation.isMobileNumberValid("+910007654321")
+        val (isValid, errorMessage) = InputValidation.isMobileNumberValid("0007654321")
         assertThat(isValid).isFalse()
         assertThat(errorMessage).isEqualTo("Mobile number cannot start with 000.")
     }
 
     @Test
     fun `isMobileNumberValid should return false for mobile number with all digits same`() {
-        val (isValid, errorMessage) = InputValidation.isMobileNumberValid("+911111111111")
+        val (isValid, errorMessage) = InputValidation.isMobileNumberValid("1111111111")
         assertThat(isValid).isFalse()
         assertThat(errorMessage).isEqualTo("All the digits in mobile number cannot be same.")
     }
