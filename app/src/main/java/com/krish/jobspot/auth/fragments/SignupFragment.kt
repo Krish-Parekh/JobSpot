@@ -6,37 +6,27 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthUserCollisionException
-import com.google.firebase.auth.UserProfileChangeRequest
-import com.google.firebase.firestore.FirebaseFirestore
 import com.krish.jobspot.R
+import com.krish.jobspot.auth.viewmodel.AuthViewModel
 import com.krish.jobspot.databinding.FragmentSignupBinding
 import com.krish.jobspot.user_details.UserDetailActivity
 import com.krish.jobspot.util.*
-import com.krish.jobspot.util.Constants.Companion.COLLECTION_PATH_ROLE
-import com.krish.jobspot.util.Constants.Companion.ROLE_TYPE_STUDENT
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-
-
-private const val TAG = "SignupFragment"
+import com.krish.jobspot.util.Status.*
 
 class SignupFragment : Fragment() {
     private var _binding: FragmentSignupBinding? = null
     private val binding get() = _binding!!
 
-    private val mAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
-    private val mFirestore : FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
+    private val authViewModel by viewModels<AuthViewModel>()
     private val loadingDialog : LoadingDialog by lazy { LoadingDialog(requireContext()) }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,12 +34,13 @@ class SignupFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentSignupBinding.inflate(inflater, container, false)
 
-        setupView()
+        setupUI()
+        setupObserver()
 
         return binding.root
     }
 
-    private fun setupView() {
+    private fun setupUI() {
         binding.apply {
             tvLogin.text = createLoginText()
             tvLogin.setOnClickListener {
@@ -65,7 +56,7 @@ class SignupFragment : Fragment() {
                 val email = binding.etEmail.getInputValue()
                 val password = binding.etPassword.getInputValue()
                 if (detailVerification(username, email, password)) {
-                    authenticateUser(username, email, password)
+                    authViewModel.signup(username, email, password)
                     clearField()
                 }
             }
@@ -81,30 +72,21 @@ class SignupFragment : Fragment() {
         return loginText
     }
 
-    private fun authenticateUser(
-        username: String,
-        email: String,
-        password: String
-    ) {
-        lifecycleScope.launch {
-            try {
-                loadingDialog.show()
-                mAuth.createUserWithEmailAndPassword(email, password).await()
-                val currentUser = mAuth.currentUser!!
-                val profileUpdates = UserProfileChangeRequest.Builder().setDisplayName(username).build()
-                val currentUserRole = hashMapOf("role" to ROLE_TYPE_STUDENT)
-
-                mFirestore.collection(COLLECTION_PATH_ROLE).document(currentUser.uid).set(currentUserRole).await()
-                currentUser.updateProfile(profileUpdates).await()
-                showToast(requireContext(), getString(R.string.auth_pass))
-                navigateToUserDetail(username, email)
-            }catch (error : FirebaseAuthUserCollisionException){
-                showToast(requireContext(), "Email already exists")
-            }catch (error : Exception) {
-                showToast(requireContext(), getString(R.string.auth_fail))
-                Log.d(TAG, "Exception : ${error.message}")
-            } finally {
-                loadingDialog.dismiss()
+    private fun setupObserver() {
+        authViewModel.signupStatus.observe(viewLifecycleOwner) { signupState ->
+            when(signupState.status){
+                LOADING -> {
+                    loadingDialog.show()
+                }
+                SUCCESS -> {
+                    loadingDialog.dismiss()
+                    val (username, email) = signupState.data!!
+                    navigateToUserDetail(username, email)
+                }
+                ERROR -> {
+                    showToast(requireContext(), signupState.message.toString())
+                    loadingDialog.dismiss()
+                }
             }
         }
     }

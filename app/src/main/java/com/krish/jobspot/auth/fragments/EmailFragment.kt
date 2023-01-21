@@ -4,10 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
-import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.UnderlineSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,30 +26,36 @@ class EmailFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentEmailBinding.inflate(inflater, container, false)
 
-        setupView()
+        setupUI()
 
         return binding.root
     }
 
-    private fun setupView() {
+    private fun setupUI() {
+        binding.apply {
+
+            tvEmailResend.text = createResendText()
+
+            btnBackToLogin.setOnClickListener {
+                findNavController().popBackStack(R.id.loginFragment, false)
+            }
+
+            btnOpenEmail.setOnClickListener {
+                val mailIntent = Intent(Intent.ACTION_MAIN)
+                mailIntent.addCategory(Intent.CATEGORY_APP_EMAIL)
+                mailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                activity?.startActivity(mailIntent)
+            }
+        }
+    }
+
+    private fun createResendText(): SpannableString {
         val resendText = SpannableString(getString(R.string.email_resend_prompt))
         val color = ContextCompat.getColor(requireActivity(), R.color.on_boarding_span_text_color)
         val resendColor = ForegroundColorSpan(color)
-
         resendText.setSpan(UnderlineSpan(), 33, resendText.length, 0)
         resendText.setSpan(resendColor, 33, resendText.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-        binding.tvEmailResend.text = resendText
-
-        binding.btnBackToLogin.setOnClickListener {
-            findNavController().popBackStack(R.id.loginFragment, false)
-        }
-
-        binding.btnOpenEmail.setOnClickListener {
-            val mailIntent = Intent(Intent.ACTION_MAIN)
-            mailIntent.addCategory(Intent.CATEGORY_APP_EMAIL)
-            mailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            activity?.startActivity(mailIntent)
-        }
+        return resendText
     }
 
     override fun onDestroyView() {
