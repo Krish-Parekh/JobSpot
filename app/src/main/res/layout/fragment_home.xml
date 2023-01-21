@@ -122,7 +122,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="@dimen/medium_margin"
                         android:fontFamily="@font/dm_sans_bold"
-                        android:text="50"
+                        android:text="0"
                         android:textAlignment="center"
                         android:textColor="@color/text_color"
                         android:textSize="22sp" />
@@ -178,7 +178,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="@dimen/medium_margin"
                         android:fontFamily="@font/dm_sans_bold"
-                        android:text="50"
+                        android:text="0"
                         android:textAlignment="center"
                         android:textColor="@color/text_color"
                         android:textSize="22sp" />

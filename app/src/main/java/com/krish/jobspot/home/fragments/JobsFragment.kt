@@ -15,6 +15,8 @@ import com.krish.jobspot.databinding.FragmentJobsBinding
 import com.krish.jobspot.home.adapter.JobListAdapter
 import com.krish.jobspot.home.viewmodel.HomeViewModel
 import com.krish.jobspot.model.Job
+import com.krish.jobspot.util.Status
+import com.krish.jobspot.util.showToast
 
 
 class JobsFragment : Fragment() {
@@ -48,10 +50,20 @@ class JobsFragment : Fragment() {
             rvJobs.adapter = jobListAdapter
             rvJobs.layoutManager = LinearLayoutManager(requireContext())
 
-            homeViewModel.jobs.observe(viewLifecycleOwner, Observer { jobList ->
-                jobs.clear()
-                jobs.addAll(jobList)
-                jobListAdapter.setJobListData(newJobs = jobs)
+            homeViewModel.jobs.observe(viewLifecycleOwner, Observer { jobStatus ->
+                when (jobStatus.status) {
+                    Status.LOADING -> Unit
+                    Status.SUCCESS -> {
+                        jobs.clear()
+                        val jobList = jobStatus.data!!
+                        jobs.addAll(jobList)
+                        jobListAdapter.setJobListData(jobList)
+                    }
+                    Status.ERROR -> {
+                        val errorMessage = jobStatus.message!!
+                        showToast(requireContext(), errorMessage)
+                    }
+                }
             })
         }
     }
@@ -63,9 +75,9 @@ class JobsFragment : Fragment() {
                 val inputText = text.toString().lowercase()
                 title.contains(inputText)
             }
-            jobListAdapter.setJobListData(newJobs = filteredJobList)
+            jobListAdapter.setJobListData(filteredJobList)
         } else {
-            jobListAdapter.setJobListData(newJobs = jobs)
+            jobListAdapter.setJobListData(jobs)
         }
     }
 

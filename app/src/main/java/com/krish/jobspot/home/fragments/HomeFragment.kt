@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
@@ -21,7 +20,9 @@ import com.krish.jobspot.home.activity.UserActivity
 import com.krish.jobspot.home.adapter.JobListAdapter
 import com.krish.jobspot.home.viewmodel.HomeViewModel
 import com.krish.jobspot.model.Job
+import com.krish.jobspot.util.Status.*
 import com.krish.jobspot.util.counterAnimation
+import com.krish.jobspot.util.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -32,38 +33,35 @@ class HomeFragment : Fragment() {
 
     private var _jobListAdapter: JobListAdapter? = null
     private val jobListAdapter get() = _jobListAdapter!!
-    private val homeViewModel: HomeViewModel by viewModels()
+
+    private val homeViewModel by viewModels<HomeViewModel>()
     private val mAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         _jobListAdapter = JobListAdapter(::onItemClick, requireActivity())
-        setupView()
+
+        setupUI()
+        setupObserver()
 
         return binding.root
     }
 
-    private fun setupView() {
-        homeViewModel.fetchJobs()
-        homeViewModel.fetchMetricForCurrentUser()
+    private fun setupUI() {
         binding.apply {
-
-            homeViewModel.countUpdater.observe(viewLifecycleOwner) { counterValue ->
-                if (counterValue != null){
-                    counterAnimation(0, counterValue.first, tvCompaniesCount)
-                    counterAnimation(0, counterValue.second, tvJobAppliedCount)
-                }
-            }
+            homeViewModel.fetchMetrics()
+            homeViewModel.fetchJobs()
 
             lifecycleScope.launch(Dispatchers.Main) {
-                repeatOnLifecycle(Lifecycle.State.STARTED){
-                    binding.tvWelcomeHeading.text = getString(R.string.field_welcome_text, mAuth.currentUser?.displayName)
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    tvWelcomeHeading.text =
+                        getString(R.string.field_welcome_text, mAuth.currentUser?.displayName)
                     ivProfileImage.load(mAuth.currentUser?.photoUrl)
                 }
             }
-
 
             ivProfileImage.setOnClickListener {
                 navigateToUserActivity()
@@ -71,16 +69,43 @@ class HomeFragment : Fragment() {
 
             rvRecentJobs.adapter = jobListAdapter
             rvRecentJobs.layoutManager = LinearLayoutManager(requireContext())
+        }
+    }
 
-            homeViewModel.jobs.observe(viewLifecycleOwner, Observer { jobs ->
-                jobListAdapter.setJobListData(newJobs = jobs.take(3))
-            })
+    private fun setupObserver() {
+        homeViewModel.metrics.observe(viewLifecycleOwner) { metrics ->
+            when (metrics.status) {
+                LOADING -> Unit
+                SUCCESS -> {
+                    val (companiesCount, jobsAppliedCount) = metrics.data!!
+                    counterAnimation(0, companiesCount, binding.tvCompaniesCount)
+                    counterAnimation(0, jobsAppliedCount, binding.tvJobAppliedCount)
+                }
+                ERROR -> {
+                    val errorMessage = metrics.message!!
+                    showToast(requireContext(), errorMessage)
+                }
+            }
+        }
+
+        homeViewModel.jobs.observe(viewLifecycleOwner) { jobs ->
+            when (jobs.status) {
+                LOADING -> Unit
+                SUCCESS -> {
+                    val jobList = jobs.data!!
+                    jobListAdapter.setJobListData(jobList)
+                }
+                ERROR -> {
+                    val errorMessage = jobs.message!!
+                    showToast(requireContext(), errorMessage)
+                }
+            }
         }
     }
 
     private fun navigateToUserActivity() {
-        val intent = Intent(requireContext(), UserActivity::class.java)
-        startActivity(intent)
+        val userActivity = Intent(requireContext(), UserActivity::class.java)
+        startActivity(userActivity)
     }
 
     private fun onItemClick(job: Job) {

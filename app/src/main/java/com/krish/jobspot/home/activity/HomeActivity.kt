@@ -14,10 +14,10 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupNavigation()
+        setupBottomNavigation()
     }
 
-    private fun setupNavigation() {
+    private fun setupBottomNavigation() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.homeNavHostContainer) as NavHostFragment
         val navController = navHostFragment.navController
         val popMenu = PopupMenu(this, null)
