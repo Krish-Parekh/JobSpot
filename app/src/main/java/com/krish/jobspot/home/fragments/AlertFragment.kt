@@ -1,20 +1,18 @@
 package com.krish.jobspot.home.fragments
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.krish.jobspot.R
 import com.krish.jobspot.databinding.FragmentAlertBinding
 import com.krish.jobspot.home.adapter.AlertAdapter
 import com.krish.jobspot.home.viewmodel.AlertViewModel
+import com.krish.jobspot.util.Status.*
+import com.krish.jobspot.util.showToast
 
-private const val TAG = "ALERTFRAGMENT"
 class AlertFragment : Fragment() {
     private var _binding : FragmentAlertBinding? = null
     private val binding get() = _binding!!
@@ -32,22 +30,31 @@ class AlertFragment : Fragment() {
 
         setupUI()
         setupObserver()
+
         return binding.root
     }
 
     private fun setupUI() {
         binding.apply {
             alertViewModel.fetchNotifications()
-
             rvNotification.adapter = alertAdapter
             rvNotification.layoutManager = LinearLayoutManager(requireContext())
         }
     }
 
     private fun setupObserver() {
-        alertViewModel.notifications.observe(viewLifecycleOwner){ notifications ->
-            Log.d(TAG, "Notifications: ${notifications}")
-            alertAdapter.setData(notifications)
+        alertViewModel.notificationStatus.observe(viewLifecycleOwner){ notificationState ->
+            when(notificationState.status){
+                LOADING -> Unit
+                SUCCESS -> {
+                    val notifications = notificationState.data!!
+                    alertAdapter.setData(notifications)
+                }
+                ERROR -> {
+                    val errorMessage = notificationState.message!!
+                    showToast(requireContext(), errorMessage)
+                }
+            }
         }
     }
     override fun onDestroyView() {

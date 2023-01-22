@@ -22,12 +22,11 @@ import com.krish.jobspot.util.showToast
 class JobsFragment : Fragment() {
     private var _binding : FragmentJobsBinding? = null
     private val binding get() = _binding!!
-
-    private val homeViewModel : HomeViewModel by viewModels()
-    private val jobs: MutableList<Job> by lazy { mutableListOf() }
-
     private var _jobListAdapter: JobListAdapter? = null
     private val jobListAdapter get() = _jobListAdapter!!
+
+    private val homeViewModel by viewModels<HomeViewModel>()
+    private val jobs: MutableList<Job> by lazy { mutableListOf() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,12 +34,14 @@ class JobsFragment : Fragment() {
     ): View? {
         _binding = FragmentJobsBinding.inflate(inflater, container, false)
         _jobListAdapter = JobListAdapter(::onItemClick, requireActivity())
-        setupViews()
+
+        setupUI()
+        setupObserver()
 
         return binding.root
     }
 
-    private fun setupViews() {
+    private fun setupUI() {
         homeViewModel.fetchJobs()
         binding.apply {
 
@@ -49,22 +50,24 @@ class JobsFragment : Fragment() {
             }
             rvJobs.adapter = jobListAdapter
             rvJobs.layoutManager = LinearLayoutManager(requireContext())
+        }
+    }
 
-            homeViewModel.jobs.observe(viewLifecycleOwner, Observer { jobStatus ->
-                when (jobStatus.status) {
-                    Status.LOADING -> Unit
-                    Status.SUCCESS -> {
-                        jobs.clear()
-                        val jobList = jobStatus.data!!
-                        jobs.addAll(jobList)
-                        jobListAdapter.setJobListData(jobList)
-                    }
-                    Status.ERROR -> {
-                        val errorMessage = jobStatus.message!!
-                        showToast(requireContext(), errorMessage)
-                    }
+    private fun setupObserver() {
+        homeViewModel.jobs.observe(viewLifecycleOwner){ jobStatus ->
+            when (jobStatus.status) {
+                Status.LOADING -> Unit
+                Status.SUCCESS -> {
+                    val jobList = jobStatus.data!!
+                    jobs.clear()
+                    jobs.addAll(jobList)
+                    jobListAdapter.setJobListData(jobList)
                 }
-            })
+                Status.ERROR -> {
+                    val errorMessage = jobStatus.message!!
+                    showToast(requireContext(), errorMessage)
+                }
+            }
         }
     }
 
