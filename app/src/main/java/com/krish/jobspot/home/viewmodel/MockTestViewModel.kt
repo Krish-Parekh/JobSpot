@@ -8,14 +8,15 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import com.krish.jobspot.model.Mock
 import com.krish.jobspot.model.MockDetail
 import com.krish.jobspot.model.MockTestState
 import com.krish.jobspot.util.Constants.Companion.COLLECTION_PATH_MOCK
 import com.krish.jobspot.util.Constants.Companion.COLLECTION_PATH_STUDENT
-import com.krish.jobspot.util.UiState
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
+import com.krish.jobspot.util.Resource
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -25,83 +26,108 @@ class MockTestViewModel : ViewModel() {
 
     private val mFirestore: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
     private val mRealtimeDb: DatabaseReference by lazy { FirebaseDatabase.getInstance().reference }
-    private val mFirebaseAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
-    private val studentId by lazy { mFirebaseAuth.currentUser?.uid.toString() }
+    private val mAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
+    private val studentId by lazy { mAuth.currentUser?.uid.toString() }
 
-    private val _mockTestStatus: MutableLiveData<MutableList<MockTestState>> =
-        MutableLiveData(mutableListOf())
-    val mockTestStatus: LiveData<MutableList<MockTestState>> = _mockTestStatus
+    private val _mockTestStatus: MutableLiveData<Resource<List<MockTestState>>> = MutableLiveData()
+    val mockTestStatus: LiveData<Resource<List<MockTestState>>> = _mockTestStatus
 
-    var mock: Mock = Mock()
+    private val _mock: MutableLiveData<Resource<Mock>> = MutableLiveData()
+    val mock: LiveData<Resource<Mock>> = _mock
 
-    private val eventChannel = Channel<UiState>()
-    val eventFlow = eventChannel.receiveAsFlow()
+    private val mockPath = "$COLLECTION_PATH_STUDENT/$studentId/$COLLECTION_PATH_MOCK"
+    private val mockRef = mRealtimeDb.child(mockPath)
+    var attemptedQuizIdsListener: ValueEventListener? = null
+    var mockStateListener: ListenerRegistration? = null
 
     var mockAnswer: Array<String?> = arrayOfNulls(10)
 
     fun fetchMockTestStatus() {
-        mRealtimeDb
-            .child(COLLECTION_PATH_STUDENT)
-            .child(studentId)
-            .child(COLLECTION_PATH_MOCK)
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val attemptedQuizIds =
-                        snapshot.children.map { it.getValue(String::class.java) ?: "" }
-
-                    mFirestore.collection(COLLECTION_PATH_MOCK)
-                        .addSnapshotListener { value, error ->
-                            if (error != null) {
-                                return@addSnapshotListener
-                            }
-
-                            val mockStates = value!!.documents
-                                .map { it.toObject(Mock::class.java)!! }
-                                .map { createQuizState(it, attemptedQuizIds) }
-                                .toMutableList()
-
-                            _mockTestStatus.postValue(mockStates)
-                        }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Log.d(TAG, "Error : ${error.message}")
-                }
-            })
+        viewModelScope.launch(IO) {
+            try {
+                _mockTestStatus.postValue(Resource.loading())
+                val attemptedQuizIds = getAttemptedMockIds()
+                val mockStates = getMockStates(attemptedQuizIds)
+                Log.d(TAG, "MockStates : ${mockStates}")
+                _mockTestStatus.postValue(Resource.success(mockStates))
+            } catch (error: Exception) {
+                _mockTestStatus.postValue(Resource.error(error.message!!))
+            }
+        }
     }
 
-    fun createQuizState(mock: Mock, attemptedQuizIds: List<String>): MockTestState {
+    private suspend fun getAttemptedMockIds(): List<String> {
+        val attemptedQuizIdsDeffered = CompletableDeferred<List<String>>()
+        attemptedQuizIdsListener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val attemptedQuizIds = snapshot.children.map { it.key!! }
+                attemptedQuizIdsDeffered.complete(attemptedQuizIds)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                attemptedQuizIdsDeffered.completeExceptionally(error.toException())
+            }
+        }
+        mockRef.addValueEventListener(attemptedQuizIdsListener!!)
+        return attemptedQuizIdsDeffered.await()
+    }
+
+    private suspend fun getMockStates(
+        attemptedQuizIds: List<String>
+    ): List<MockTestState> {
+        val mockRef = mFirestore.collection(COLLECTION_PATH_MOCK)
+        val mockStateDeffered = CompletableDeferred<List<MockTestState>>()
+        mockStateListener = mockRef.addSnapshotListener { value, error ->
+            if (error != null) {
+                mockStateDeffered.completeExceptionally(error)
+                return@addSnapshotListener
+            }
+            val mockStates = value!!.documents
+                .map { it.toObject(Mock::class.java)!! }
+                .map { createMockState(it, attemptedQuizIds) }
+            mockStateDeffered.complete(mockStates)
+        }
+        return mockStateDeffered.await()
+    }
+
+    private fun createMockState(mock: Mock, attemptedQuizIds: List<String>): MockTestState {
         val hasAttempted = attemptedQuizIds.contains(mock.uid)
         return MockTestState(quizUid = mock.uid, hasAttempted = hasAttempted, quizName = mock.title)
     }
 
     fun updateStudentTestStatus(mockId: String) {
         viewModelScope.launch {
-            mRealtimeDb
-                .child(COLLECTION_PATH_STUDENT)
-                .child(studentId)
-                .child(COLLECTION_PATH_MOCK)
-                .child(mockId)
-                .setValue(mockId)
-                .await()
-
+            val mockResultPath = "$COLLECTION_PATH_STUDENT/$studentId/$COLLECTION_PATH_MOCK/$mockId"
+            mRealtimeDb.child(mockResultPath).setValue(mockId).await()
             val mockDetailRef = mRealtimeDb.child(COLLECTION_PATH_MOCK).child(mockId).get().await()
             val mockDetail = mockDetailRef.getValue(MockDetail::class.java)!!
+            mockDetail.studentCount = mockDetail.studentIds.size.toString()
             mockDetail.studentIds.add(studentId)
-
             mRealtimeDb.child(COLLECTION_PATH_MOCK).child(mockId).setValue(mockDetail).await()
         }
     }
 
     fun fetchMockTest(mockTestId: String) {
-        viewModelScope.launch {
-            eventChannel.trySend(UiState.LOADING)
-            val mockRef =
-                mFirestore.collection(COLLECTION_PATH_MOCK).document(mockTestId).get().await()
-            val mockTest = mockRef.toObject(Mock::class.java)!!
-            mock = mockTest
-            eventChannel.trySend(UiState.SUCCESS)
+        viewModelScope.launch(IO) {
+            try {
+                _mock.postValue(Resource.loading())
+                val mockRef = mFirestore.collection(COLLECTION_PATH_MOCK).document(mockTestId)
+                val mockSnapshot = mockRef.get().await()
+                val mock = mockSnapshot.toObject(Mock::class.java)!!
+                _mock.postValue(Resource.success(mock))
+            } catch (error: Exception) {
+                _mock.postValue(Resource.error(error.message!!))
+            }
         }
     }
 
+    override fun onCleared() {
+        attemptedQuizIdsListener?.let { eventListener ->
+            mockRef.removeEventListener(eventListener)
+        }
+        mockStateListener?.remove()
+        attemptedQuizIdsListener = null
+        mockStateListener = null
+        super.onCleared()
+    }
 }

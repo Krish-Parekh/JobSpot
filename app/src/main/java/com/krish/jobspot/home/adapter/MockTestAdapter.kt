@@ -1,47 +1,49 @@
 package com.krish.jobspot.home.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.card.MaterialCardView
-import com.krish.jobspot.R
+import com.krish.jobspot.databinding.MockTestCardLayoutBinding
 import com.krish.jobspot.home.fragments.MockTestFragment
 import com.krish.jobspot.model.MockTestState
 
-class MockTestAdapter(private val listener : MockTestFragment) : RecyclerView.Adapter<MockTestAdapter.MockTestViewHolder>() {
+class MockTestAdapter(private val listener: MockTestFragment) :
+    RecyclerView.Adapter<MockTestAdapter.MockTestViewHolder>() {
 
     private val mockTestState: MutableList<MockTestState> = mutableListOf()
 
-    inner class MockTestViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val tvQuizName: TextView = itemView.findViewById(R.id.tvMockTestName)
-        private val tvQuizAttempted: TextView = itemView.findViewById(R.id.tvMockTestAttemptStatus)
-        private val cvQuiz : MaterialCardView = itemView.findViewById(R.id.cvMockTest)
-
-        fun bind(mockTestState: MockTestState) {
-            tvQuizName.text = mockTestState.quizName
-            if (mockTestState.hasAttempted) {
-                tvQuizAttempted.text = "Already Attempted"
-            } else {
-                tvQuizAttempted.text = "Not Attempted"
-            }
-            cvQuiz.setOnClickListener {
-                cvQuiz.isEnabled = false
-                if (mockTestState.hasAttempted){
-                    listener.navigateToMockResultActivity(mockTestState)
+    inner class MockTestViewHolder(
+        private val binding: MockTestCardLayoutBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(mockTestState: MockTestState){
+            binding.apply {
+                tvMockTestName.text = mockTestState.quizName
+                if (mockTestState.hasAttempted) {
+                    tvMockTestAttemptStatus.text = "Already Attempted."
                 } else {
-                    listener.navigateToMockTestActivity(mockTestState)
+                    tvMockTestAttemptStatus.text = "Not Attempted."
                 }
-                cvQuiz.isEnabled = true
+                cvMockTest.setOnClickListener {
+                    cvMockTest.isEnabled = false
+                    if (mockTestState.hasAttempted){
+                        listener.navigateToMockResult(mockTestState)
+                    } else {
+                        listener.navigateToMockTest(mockTestState)
+                    }
+                    cvMockTest.isEnabled = true
+                }
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MockTestViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.mock_test_card_layout, parent, false)
-        return MockTestViewHolder(view)
+        return MockTestViewHolder(
+            MockTestCardLayoutBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: MockTestViewHolder, position: Int) {
@@ -50,7 +52,7 @@ class MockTestAdapter(private val listener : MockTestFragment) : RecyclerView.Ad
 
     override fun getItemCount(): Int = mockTestState.size
 
-    fun setQuizData(newQuizDetail: List<MockTestState>) {
+    fun setMockState(newQuizDetail: List<MockTestState>) {
         mockTestState.clear()
         mockTestState.addAll(newQuizDetail)
         notifyDataSetChanged()

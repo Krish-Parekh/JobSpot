@@ -5,13 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.krish.jobspot.model.JobApplication
 import com.krish.jobspot.util.Constants.Companion.COLLECTION_PATH_COMPANY
 import com.krish.jobspot.util.Constants.Companion.COLLECTION_PATH_STUDENT
-import com.krish.jobspot.util.UiState
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import com.krish.jobspot.util.Resource
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -20,62 +22,100 @@ private const val TAG = "StudentJobViewModelTAG"
 class StudentJobViewModel : ViewModel() {
 
     private val mRealtimeDb: DatabaseReference by lazy { FirebaseDatabase.getInstance().reference }
+    private val currentStudentId by lazy { FirebaseAuth.getInstance().currentUser?.uid }
 
-    private val _applicationStatus: MutableLiveData<UiState> = MutableLiveData(UiState.LOADING)
-    val applicationStatus: LiveData<UiState> = _applicationStatus
+    private val _applicationStatus: MutableLiveData<Resource<String>> = MutableLiveData()
+    val applicationStatus: LiveData<Resource<String>> = _applicationStatus
 
-    private val _checkJobStatus: MutableLiveData<UiState> = MutableLiveData(UiState.LOADING)
-    val checkJobStatus: LiveData<UiState> = _checkJobStatus
+    private val _jobMetric: MutableLiveData<Resource<Pair<Int, Boolean>>> = MutableLiveData()
+    val jobMetric: LiveData<Resource<Pair<Int, Boolean>>> = _jobMetric
 
-    var isJobApplicationSubmitted: Boolean = false
-
-    private val _studentAppliedCount : MutableStateFlow<String> = MutableStateFlow("0")
-    val studentAppliedCount : StateFlow<String> = _studentAppliedCount
-
-    fun fetchStudentAppliedCount(jobId : String){
-        viewModelScope.launch {
-            val studentCount = mRealtimeDb.child(COLLECTION_PATH_COMPANY).child(jobId).get().await().childrenCount
-            _studentAppliedCount.emit(studentCount.toString())
-        }
-    }
-
-    fun applyJob(jobApplication: JobApplication) {
-        viewModelScope.launch {
+    fun fetchJobMetrics(jobId: String) {
+        viewModelScope.launch(IO) {
             try {
-                _applicationStatus.postValue(UiState.LOADING)
-                val jobId = jobApplication.jobId
-                val studentId = jobApplication.studentId
-                val jobApplicationRef =
-                    mRealtimeDb.child(COLLECTION_PATH_COMPANY).child(jobId).child(studentId)
-                jobApplicationRef.setValue(jobApplication).await()
-
-                val studentJobRef = mRealtimeDb.child(COLLECTION_PATH_STUDENT).child(studentId)
-                    .child(COLLECTION_PATH_COMPANY).child(jobId)
-                studentJobRef.setValue(jobId).await()
-                _applicationStatus.postValue(UiState.SUCCESS)
-            } catch (e: Exception) {
-                Log.d(TAG, "applyJob: ${e.message}")
-                _applicationStatus.postValue(UiState.FAILURE)
+                Log.d(TAG, "fetchJobMetrics called: ")
+                _jobMetric.postValue(Resource.loading())
+                val studentCountDeffered = async { getStudentCount(jobId) }
+                val hasJobAppliedDeffered = async { getJobStatus(jobId) }
+                val studentCount = studentCountDeffered.await()
+                val hasJobApplied = hasJobAppliedDeffered.await()
+                val jobMetric = Pair(studentCount, hasJobApplied)
+                Log.d(TAG, "JobMetric : $jobMetric")
+                _jobMetric.postValue(Resource.success(jobMetric))
+            } catch (error: Exception) {
+                val errorMessage = error.message ?: ""
+                _jobMetric.postValue(Resource.error(errorMessage))
             }
         }
     }
 
-    fun checkJobStatus(jobId: String, studentId: String) {
-        _checkJobStatus.postValue(UiState.LOADING)
-        val studentJobRef = mRealtimeDb.child(COLLECTION_PATH_STUDENT).child(studentId)
-            .child(COLLECTION_PATH_COMPANY).child(jobId)
-        studentJobRef.addListenerForSingleValueEvent(object : ValueEventListener {
+    private suspend fun getStudentCount(jobId: String): Int {
+        val appliedCountPath = "$COLLECTION_PATH_COMPANY/$jobId"
+        val appliedCountRef = mRealtimeDb.child(appliedCountPath)
+        val appliedCountDeffered = CompletableDeferred<Int>()
+        val appliedCountListener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val appliedCount = snapshot.children.count()
+                Log.d(TAG, "AppliedCount : $appliedCount")
+                appliedCountDeffered.complete(appliedCount)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.d(TAG, "onCancelled: ${error.message}")
+                appliedCountDeffered.completeExceptionally(error.toException())
+            }
+        }
+        appliedCountRef.addValueEventListener(appliedCountListener)
+        appliedCountDeffered.invokeOnCompletion {
+            appliedCountRef.removeEventListener(appliedCountListener)
+        }
+        return appliedCountDeffered.await()
+    }
+
+    private suspend fun getJobStatus(jobId: String): Boolean {
+        val jobStatusPath =
+            "$COLLECTION_PATH_STUDENT/$currentStudentId/$COLLECTION_PATH_COMPANY/$jobId"
+        val jobStatusRef = mRealtimeDb.child(jobStatusPath)
+        val jobStatusDeffered = CompletableDeferred<Boolean>()
+        val jobStatusListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
-                    isJobApplicationSubmitted = true
+                    jobStatusDeffered.complete(true)
+                } else {
+                    jobStatusDeffered.complete(false)
                 }
-                _checkJobStatus.postValue(UiState.SUCCESS)
             }
 
-            override fun onCancelled(e: DatabaseError) {
-                Log.d(TAG, "applyJob: ${e.message}")
-                _checkJobStatus.postValue(UiState.FAILURE)
+            override fun onCancelled(error: DatabaseError) {
+                Log.d(TAG, "onCancelled: ${error.message}")
+                jobStatusDeffered.completeExceptionally(error.toException())
             }
-        })
+        }
+        jobStatusRef.addValueEventListener(jobStatusListener)
+        jobStatusDeffered.invokeOnCompletion {
+            jobStatusRef.removeEventListener(jobStatusListener)
+        }
+        return jobStatusDeffered.await()
+    }
+
+    fun applyJob(jobId: String) {
+        viewModelScope.launch(IO) {
+            try {
+                _applicationStatus.postValue(Resource.loading())
+                val jobApplication = JobApplication(jobId = jobId, studentId = currentStudentId!!)
+                val jobApplicationPath = "$COLLECTION_PATH_COMPANY/$jobId/$currentStudentId"
+                val studentJobApplicationPath = "$COLLECTION_PATH_STUDENT/$currentStudentId/$COLLECTION_PATH_COMPANY/$jobId"
+
+                val jobApplicationRef = mRealtimeDb.child(jobApplicationPath)
+                jobApplicationRef.setValue(jobApplication).await()
+
+                val studentJobApplicationRef = mRealtimeDb.child(studentJobApplicationPath)
+                studentJobApplicationRef.setValue(jobApplication).await()
+                _applicationStatus.postValue(Resource.success("Job applied success."))
+            } catch (error: Exception) {
+                val errorMessage = error.message ?: ""
+                _applicationStatus.postValue(Resource.error(errorMessage))
+            }
+        }
     }
 }

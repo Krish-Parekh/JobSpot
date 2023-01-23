@@ -21,20 +21,6 @@ class MockSolutionAdapter : RecyclerView.Adapter<MockSolutionAdapter.MockSolutio
                 tvOptionTwoAnswer.text = mockQuestion.options[1]
                 tvOptionThreeAnswer.text = mockQuestion.options[2]
                 tvOptionFourAnswer.text = mockQuestion.options[3]
-                when (getCorrectOption(mockQuestion.correctOption)) {
-                    0 -> {
-                        llOptionOneContainer.setBackgroundResource(R.drawable.correct_ans_border)
-                    }
-                    1 -> {
-                        llOptionTwoContainer.setBackgroundResource(R.drawable.correct_ans_border)
-                    }
-                    2 -> {
-                        llOptionThreeContainer.setBackgroundResource(R.drawable.correct_ans_border)
-                    }
-                    3 -> {
-                        llOptionFourContainer.setBackgroundResource(R.drawable.correct_ans_border)
-                    }
-                }
                 tvSolution.text = mockQuestion.feedback
             }
         }
@@ -54,17 +40,6 @@ class MockSolutionAdapter : RecyclerView.Adapter<MockSolutionAdapter.MockSolutio
     }
 
     override fun getItemCount(): Int = mockQuestion.size
-
-
-    fun getCorrectOption(correctOption: String): Int {
-        return when (correctOption) {
-            "A" -> 0
-            "B" -> 1
-            "C" -> 2
-            "D" -> 3
-            else -> -1
-        }
-    }
 
     fun setMockQuestions(newMockQuestion: List<MockQuestion>) {
         mockQuestion.clear()
