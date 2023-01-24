@@ -1,16 +1,22 @@
 package com.krish.jobspot.home.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.krish.jobspot.model.Mock
+import com.krish.jobspot.model.MockDetail
+import com.krish.jobspot.model.MockQuestion
 import com.krish.jobspot.model.MockResult
-import com.krish.jobspot.util.UiState
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
+import com.krish.jobspot.util.Constants.Companion.COLLECTION_PATH_MOCK
+import com.krish.jobspot.util.Constants.Companion.COLLECTION_PATH_MOCK_RESULT
+import com.krish.jobspot.util.Constants.Companion.COLLECTION_PATH_STUDENT
+import com.krish.jobspot.util.Resource
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.concurrent.TimeUnit
@@ -21,58 +27,63 @@ class QuestionPageViewModel : ViewModel() {
     private val mFirebaseAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
     private val mRealtimeDb: DatabaseReference by lazy { FirebaseDatabase.getInstance().reference }
     private val studentId: String by lazy { mFirebaseAuth.currentUser?.uid.toString() }
-    private val selectedAnswers = MutableList(10){ _ -> ""}
+    private val selectedAnswers = MutableList(10) { _ -> "" }
 
-    private val uiEventChannel = Channel<UiState>()
-    val uiEventFlow = uiEventChannel.receiveAsFlow()
+    private val _submitMockStatus : MutableLiveData<Resource<String>> = MutableLiveData()
+    val submitMockStatus : LiveData<Resource<String>> = _submitMockStatus
 
     fun setSelectedAnswer(questionIdx: Int, answer: String) {
         selectedAnswers[questionIdx] = answer
     }
 
-    fun submitQuiz(mock: Mock, timeRemaining: Long) {
-        viewModelScope.launch {
+    fun submitMock(mock: Mock, timeRemaining: Long) {
+        viewModelScope.launch(IO) {
             try {
-                uiEventChannel.trySend(UiState.LOADING)
-                val correctAnswers = mock.mockQuestion.map { mockQuestion ->
-                    val correctIndex = getCurrentIndex(mockQuestion.correctOption)
-                    mockQuestion.options[correctIndex]
-                }
-
-                val answerCounts = correctAnswers.mapIndexed { index, correctAnswer ->
-                    val userAnswer = selectedAnswers[index]
-                    if (userAnswer.isNotEmpty()){
-                        if (userAnswer == correctAnswer) "correct" else "incorrect"
-                    } else {
-                        "unattempted"
-                    }
-                }.groupBy { it }
-
-                val correctAnswerCount = answerCounts["correct"]?.size ?: 0
-                val incorrectAnswerCount = answerCounts["incorrect"]?.size ?: 0
-                val unAttemptedCount = answerCounts["unattempted"]?.size ?: 0
-
+                _submitMockStatus.postValue(Resource.loading())
+                val mockQuestion = mock.mockQuestion
+                val (correctCount, incorrectCount, unAttemptedCount) = getScores(mockQuestion)
                 val totalTime = TimeUnit.MINUTES.toMillis(mock.duration.toLong())
                 val timeTaken = totalTime - timeRemaining
 
                 val mockResult = MockResult(
                     mockId = mock.uid,
                     studentId = studentId,
-                    correctAns = correctAnswerCount.toString(),
-                    incorrectAns = incorrectAnswerCount.toString(),
-                    unAttempted = unAttemptedCount.toString(),
+                    correctAns = correctCount,
+                    incorrectAns = incorrectCount,
+                    unAttempted = unAttemptedCount,
                     timeTaken = timeTaken,
-                    totalQuestion = mock.mockQuestion.size.toString()
+                    totalQuestion = mockQuestion.size.toString()
                 )
-                mRealtimeDb.child("mock_result").child(mock.uid).child(studentId)
-                    .setValue(mockResult).await()
 
-                uiEventChannel.trySend(UiState.SUCCESS)
+                val mockResultPath = "$COLLECTION_PATH_MOCK_RESULT/${mock.uid}/$studentId"
+                val mockResultRef = mRealtimeDb.child(mockResultPath)
+                mockResultRef.setValue(mockResult).await()
+                _submitMockStatus.postValue(Resource.success("Mock submitted success."))
             } catch (error: Exception) {
-                Log.d(TAG, "Error : ${error.message}")
-                uiEventChannel.trySend(UiState.FAILURE)
+                val errorMessage = error.message ?: ""
+                _submitMockStatus.postValue(Resource.error(errorMessage))
             }
         }
+    }
+
+    private fun getScores(mockQuestion: List<MockQuestion>): Triple<String, String, String> {
+        val correctOptions = mockQuestion.map { question ->
+            val correctIndex = getCurrentIndex(question.correctOption)
+            question.options[correctIndex]
+        }
+        val answerCounts = correctOptions.mapIndexed { index, correctOption ->
+            val userOption = selectedAnswers[index]
+            if (userOption.isNotEmpty()) {
+                if (userOption == correctOption) "correct" else "incorrect"
+            } else {
+                "unattempted"
+            }
+        }.groupBy { it }
+
+        val correctCount = answerCounts["correct"]?.size ?: 0
+        val incorrectCount = answerCounts["incorrect"]?.size ?: 0
+        val unAttemptedCount = answerCounts["unattempted"]?.size ?: 0
+        return Triple(correctCount.toString(), incorrectCount.toString(), unAttemptedCount.toString())
     }
 
     private fun getCurrentIndex(correctOption: String): Int {
@@ -82,6 +93,24 @@ class QuestionPageViewModel : ViewModel() {
             "C" -> 2
             "D" -> 3
             else -> 0
+        }
+    }
+
+    fun updateStudentTestStatus(mockId: String) {
+        viewModelScope.launch(IO) {
+            try {
+                val mockResultPath = "${COLLECTION_PATH_STUDENT}/$studentId/${COLLECTION_PATH_MOCK}/$mockId"
+                mRealtimeDb.child(mockResultPath).setValue(mockId).await()
+                val mockDetailRef = mRealtimeDb.child(COLLECTION_PATH_MOCK).child(mockId).get().await()
+                val mockDetail = mockDetailRef.getValue(MockDetail::class.java)!!
+                mockDetail.studentCount = mockDetail.studentIds.size.toString()
+                mockDetail.studentIds.add(studentId)
+                val mockTestPath = "$COLLECTION_PATH_MOCK/$mockId"
+                val mockTestRef = mRealtimeDb.child(mockTestPath)
+                mockTestRef.setValue(mockDetail).await()
+            } catch (error : Exception){
+                Log.d(TAG, "Error: ${error.message} ")
+            }
         }
     }
 }

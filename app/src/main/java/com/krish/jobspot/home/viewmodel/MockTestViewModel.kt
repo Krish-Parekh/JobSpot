@@ -95,18 +95,6 @@ class MockTestViewModel : ViewModel() {
         return MockTestState(quizUid = mock.uid, hasAttempted = hasAttempted, quizName = mock.title)
     }
 
-    fun updateStudentTestStatus(mockId: String) {
-        viewModelScope.launch {
-            val mockResultPath = "$COLLECTION_PATH_STUDENT/$studentId/$COLLECTION_PATH_MOCK/$mockId"
-            mRealtimeDb.child(mockResultPath).setValue(mockId).await()
-            val mockDetailRef = mRealtimeDb.child(COLLECTION_PATH_MOCK).child(mockId).get().await()
-            val mockDetail = mockDetailRef.getValue(MockDetail::class.java)!!
-            mockDetail.studentCount = mockDetail.studentIds.size.toString()
-            mockDetail.studentIds.add(studentId)
-            mRealtimeDb.child(COLLECTION_PATH_MOCK).child(mockId).setValue(mockDetail).await()
-        }
-    }
-
     fun fetchMockTest(mockTestId: String) {
         viewModelScope.launch(IO) {
             try {
