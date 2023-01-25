@@ -22,8 +22,10 @@ import com.krish.jobspot.util.Constants.Companion.COLLECTION_PATH_STUDENT
 import com.krish.jobspot.util.Constants.Companion.COLLECTION_PATH_TPO
 import com.krish.jobspot.util.Constants.Companion.PROFILE_IMAGE_PATH
 import com.krish.jobspot.util.Constants.Companion.RESUME_PATH
+import com.krish.jobspot.util.Resource
 import com.krish.jobspot.util.UiState
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -31,8 +33,8 @@ private const val TAG = "UserEditViewModelTAG"
 
 class UserEditViewModel : ViewModel() {
 
-    private val firebaseAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
-    private val studentId: String by lazy { firebaseAuth.currentUser?.uid.toString() }
+    private val mAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
+    private val studentId: String by lazy { mAuth.currentUser?.uid.toString() }
     private val mStorage: StorageReference by lazy { FirebaseStorage.getInstance().reference }
     private val mFirestore: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
     private val mRealtimeDb: DatabaseReference by lazy { FirebaseDatabase.getInstance().reference }
@@ -47,49 +49,50 @@ class UserEditViewModel : ViewModel() {
         return this.imageUri
     }
 
-    private val _student: MutableLiveData<Student> = MutableLiveData()
-    val student: LiveData<Student> = _student
-
-    private val _fileData: MutableLiveData<Triple<String, String, Uri>> = MutableLiveData()
-    val fileData: LiveData<Triple<String, String, Uri>> = _fileData
+    private val _student: MutableLiveData<Resource<Student>> = MutableLiveData()
+    val student: LiveData<Resource<Student>> = _student
 
     private val _tpoList: MutableLiveData<List<Tpo>> = MutableLiveData(emptyList())
     val tpoList: LiveData<List<Tpo>> = _tpoList
 
-    private val _operationStatus: MutableLiveData<UiState> = MutableLiveData(UiState.LOADING)
-    val operationStatus: LiveData<UiState> = _operationStatus
+    private val _updateState: MutableLiveData<Resource<String>> = MutableLiveData()
+    val updateState: LiveData<Resource<String>> = _updateState
 
-    private val _resumeStatus: MutableLiveData<UiState> = MutableLiveData(UiState.LOADING)
-    val resumeStatus: LiveData<UiState> = _resumeStatus
+    private val _resumeState: MutableLiveData<Resource<Triple<String, String, Uri>>> = MutableLiveData()
+    val resumeState: LiveData<Resource<Triple<String, String, Uri>>> = _resumeState
 
-    private val _deleteStatus : MutableLiveData<UiState> = MutableLiveData(UiState.LOADING)
-    val deleteStatus : LiveData<UiState> = _deleteStatus
+    private val _deleteState: MutableLiveData<Resource<String>> = MutableLiveData()
+    val deleteState: LiveData<Resource<String>> = _deleteState
 
     fun fetchStudent() {
-        viewModelScope.launch {
-            val studentRef =
-                mFirestore.collection(COLLECTION_PATH_STUDENT).document(studentId).get().await()
-            val student = studentRef.toObject(Student::class.java)!!
-            _student.postValue(student)
+        viewModelScope.launch(IO) {
+            try {
+                _student.postValue(Resource.loading())
+                val studentRef = mFirestore.collection(COLLECTION_PATH_STUDENT).document(studentId).get().await()
+                val student = studentRef.toObject(Student::class.java)!!
+                _student.postValue(Resource.success(student))
+            } catch (error: Exception) {
+                Log.d(TAG, "Error: ${error.message}")
+                _student.postValue(Resource.error(error.message!!))
+            }
         }
     }
 
-    fun fetchStudentResume() {
-        viewModelScope.launch {
+    fun fetchResume() {
+        viewModelScope.launch(IO) {
             try {
-                _resumeStatus.postValue(UiState.LOADING)
+                _resumeState.postValue(Resource.loading())
                 val resumeRef = mStorage.child(RESUME_PATH).child(studentId)
                 val resumeUri = resumeRef.downloadUrl.await()
                 val metaData = resumeRef.metadata.await()
                 val fileName = metaData.getCustomMetadata("fileName") ?: ""
                 val fileMetaData = metaData.getCustomMetadata("fileMetaData") ?: ""
-                _fileData.postValue(Triple(fileName, fileMetaData, resumeUri))
-                _resumeStatus.postValue(UiState.SUCCESS)
+                val resumeData = Triple(fileName, fileMetaData, resumeUri)
+                _resumeState.postValue(Resource.success(resumeData))
             } catch (error: Exception) {
-                Log.d(TAG, "Error : ${error.message}")
-                _resumeStatus.postValue(UiState.FAILURE)
+                val errorMessage = error.message!!
+                _resumeState.postValue(Resource.error(errorMessage))
             }
-
         }
     }
 
@@ -109,31 +112,34 @@ class UserEditViewModel : ViewModel() {
         }
     }
 
-    fun uploadStudentData(student: Student) {
-        viewModelScope.launch {
+    fun updateStudent(student: Student) {
+        viewModelScope.launch(IO) {
             try {
-                _operationStatus.postValue(UiState.LOADING)
+                _updateState.postValue(Resource.loading())
                 val studentDetail = student.details!!
                 val firebaseStorageImagePrefix = "https://firebasestorage.googleapis.com/"
-                if (studentDetail.imageUrl.startsWith(firebaseStorageImagePrefix).not()) {
-                    val editStudentRef =
-                        mStorage.child(PROFILE_IMAGE_PATH)
-                            .child(student.uid.toString())
-                    editStudentRef.putFile(Uri.parse(studentDetail.imageUrl)).await()
-                    student.details?.imageUrl = editStudentRef.downloadUrl.await().toString()
+                if (studentDetail.imageUrl.startsWith(firebaseStorageImagePrefix).not()){
+                    val studentImagePath = "$PROFILE_IMAGE_PATH/$studentId"
+                    val studentImageRef = mStorage.child(studentImagePath)
+                    studentImageRef.putFile(Uri.parse(studentDetail.imageUrl)).await()
+                    studentDetail.imageUrl = studentImageRef.downloadUrl.await().toString()
+                    student.details = studentDetail
                 }
-                val profileUpdates =
-                    UserProfileChangeRequest.Builder().setDisplayName(studentDetail.username)
-                        .build()
-                val currentUser = firebaseAuth.currentUser!!
-                currentUser.updateProfile(profileUpdates).await()
-                val editStudentRef =
-                    mFirestore.collection(COLLECTION_PATH_STUDENT).document(student.uid.toString())
+                val userProfileBuilder = UserProfileChangeRequest.Builder()
+                val userProfile = userProfileBuilder
+                    .setDisplayName(studentDetail.username)
+                    .setPhotoUri(Uri.parse(studentDetail.imageUrl))
+                    .build()
+
+                val currentUser = mAuth.currentUser!!
+                currentUser.updateProfile(userProfile).await()
+
+                val editStudentRef = mFirestore.collection(COLLECTION_PATH_STUDENT).document(studentId)
                 editStudentRef.set(student).await()
-                _operationStatus.postValue(UiState.SUCCESS)
-            } catch (error: Exception) {
-                Log.d(TAG, "Error : ${error.message}")
-                _operationStatus.postValue(UiState.FAILURE)
+                _updateState.postValue(Resource.success("Student update success."))
+            } catch (error : Exception) {
+                val errorMessage = error.message!!
+                _updateState.postValue(Resource.error(errorMessage))
             }
         }
     }
@@ -146,9 +152,9 @@ class UserEditViewModel : ViewModel() {
                 val studentResumePath = "$RESUME_PATH/$studentId"
                 val studentDatabasePath = "$COLLECTION_PATH_STUDENT/$studentId"
 
-                _deleteStatus.postValue(UiState.LOADING)
+                _deleteState.postValue(Resource.loading())
                 // delete user from authentication
-                firebaseAuth.currentUser?.delete()
+                mAuth.currentUser?.delete()
 
                 // remove student images
                 mStorage.child(studentImagePath).delete().await()
@@ -173,13 +179,14 @@ class UserEditViewModel : ViewModel() {
 
                 // remove student from mock result in realtimeDb
                 deleteStudentFromMockResult(studentId)
-                _deleteStatus.postValue(UiState.SUCCESS)
+                _deleteState.postValue(Resource.success("Delete success."))
             } catch (error: Exception) {
                 Log.d(TAG, "Error : ${error.message} ")
-                _deleteStatus.postValue(UiState.FAILURE)
+                _deleteState.postValue(Resource.error(error.message!!))
             }
         }
     }
+
     private suspend fun deleteStudentFromCompany(studentId: String) {
         val companiesRef = mRealtimeDb.child(COLLECTION_PATH_COMPANY)
         val studentDeleteFromCompaniesDeffered = CompletableDeferred<Unit>()
@@ -187,7 +194,7 @@ class UserEditViewModel : ViewModel() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 snapshot.children.forEach { companyNode ->
                     val doStudentExist = companyNode.hasChild(studentId)
-                    if (doStudentExist){
+                    if (doStudentExist) {
                         companyNode.ref.child(studentId).removeValue()
 
                     }
@@ -207,6 +214,7 @@ class UserEditViewModel : ViewModel() {
         }
         studentDeleteFromCompaniesDeffered.await()
     }
+
     private suspend fun deleteStudentFromMockTest(studentId: String) {
         val mockTestRef = mRealtimeDb.child(COLLECTION_PATH_MOCK)
         val studentMockTestDeffered = CompletableDeferred<Unit>()
@@ -218,14 +226,17 @@ class UserEditViewModel : ViewModel() {
                     studentIdsRef.addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
                             val studentIds = snapshot.value as List<*>?
-                            if (studentIds != null){
+                            if (studentIds != null) {
                                 val updateStudentIds = studentIds.filter { it != studentId }
                                 snapshot.ref.setValue(updateStudentIds)
                                     .addOnSuccessListener {
                                         studentMockTestDeffered.complete(Unit)
                                     }
                                     .addOnFailureListener { exception ->
-                                        Log.d(TAG, "deleteStudentFromMockTest: ${exception.message}")
+                                        Log.d(
+                                            TAG,
+                                            "deleteStudentFromMockTest: ${exception.message}"
+                                        )
                                         studentMockTestDeffered.completeExceptionally(exception)
                                     }
                             }
@@ -251,6 +262,7 @@ class UserEditViewModel : ViewModel() {
         }
         studentMockTestDeffered.await()
     }
+
     private suspend fun deleteStudentFromMockResult(studentId: String) {
         val mockResultRef = mRealtimeDb.child(COLLECTION_PATH_MOCK_RESULT)
         val studentDeleteFromMockResultDeffered = CompletableDeferred<Unit>()
@@ -258,7 +270,7 @@ class UserEditViewModel : ViewModel() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 snapshot.children.forEach { mockResultNode ->
                     val doStudentExist = mockResultNode.hasChild(studentId)
-                    if (doStudentExist){
+                    if (doStudentExist) {
                         mockResultNode.child(studentId).ref.removeValue()
                     }
                 }

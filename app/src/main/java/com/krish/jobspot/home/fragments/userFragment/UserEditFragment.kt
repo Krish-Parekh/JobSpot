@@ -17,24 +17,23 @@ import androidx.navigation.fragment.navArgs
 import coil.load
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.button.MaterialButton
-import com.google.firebase.auth.FirebaseAuth
 import com.krish.jobspot.R
 import com.krish.jobspot.auth.AuthActivity
+import com.krish.jobspot.databinding.BottomSheetDeleteStudentBinding
 import com.krish.jobspot.databinding.FragmentUserEditBinding
 import com.krish.jobspot.home.viewmodel.UserEditViewModel
 import com.krish.jobspot.util.*
-import com.krish.jobspot.util.UiState.*
+import com.krish.jobspot.util.Status.*
 
 class UserEditFragment : Fragment() {
     private var _binding: FragmentUserEditBinding? = null
     private val binding get() = _binding!!
-    private val args: UserEditFragmentArgs by navArgs()
+    private val args by navArgs<UserEditFragmentArgs>()
     private val startForProfileImageResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             handleCapturedImage(result)
         }
-    private val userEditViewModel: UserEditViewModel by viewModels()
+    private val userEditViewModel by viewModels<UserEditViewModel>()
     private val loadingDialog: LoadingDialog by lazy { LoadingDialog(requireContext()) }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,31 +41,33 @@ class UserEditFragment : Fragment() {
     ): View? {
         _binding = FragmentUserEditBinding.inflate(inflater, container, false)
 
-        setupView()
+        setupUI()
+        setupObserver()
 
         return binding.root
     }
 
-    private fun setupView() {
+    private fun setupUI() {
         binding.apply {
-            profileImage.load(args.student.details?.imageUrl)
-            etUsername.setText(args.student.details?.username)
-            etEmail.setText(args.student.details?.email)
-            etSapId.setText(args.student.details?.sapId)
-            etMobile.setText(args.student.details?.mobile)
+            val studentDetails = args.student.details!!
+            profileImage.load(studentDetails.imageUrl)
+            etUsername.setText(studentDetails.username)
+            etEmail.setText(studentDetails.email)
+            etSapId.setText(studentDetails.sapId)
+            etMobile.setText(studentDetails.mobile)
 
             ivPopOut.setOnClickListener {
                 findNavController().popBackStack()
             }
 
             if (userEditViewModel.getImageUri() != null) {
-                profileImage.setImageURI(userEditViewModel.getImageUri())
+                val imageUri = userEditViewModel.getImageUri()
+                profileImage.setImageURI(imageUri)
             }
 
             profileImage.setOnClickListener {
                 startCrop()
             }
-
 
             ivDeleteStudent.setOnClickListener {
                 deleteBottomSheet()
@@ -83,78 +84,83 @@ class UserEditFragment : Fragment() {
                 val email = etEmail.getInputValue()
                 val sapId = etSapId.getInputValue()
                 val mobile = etMobile.getInputValue()
-                val imageUrl: Uri =
-                    userEditViewModel.getImageUri() ?: Uri.parse(args.student.details?.imageUrl)
+                val imageUrl = userEditViewModel.getImageUri() ?: Uri.parse(args.student.details?.imageUrl)
 
                 if (detailVerification(imageUrl, username, email, sapId, mobile)) {
-                    args.student.details?.username = username
-                    args.student.details?.email = email
-                    args.student.details?.sapId = sapId
-                    args.student.details?.mobile = mobile
-                    args.student.details?.imageUrl = imageUrl.toString()
-
-                    userEditViewModel.uploadStudentData(student = args.student)
-                    handleUploadResponse()
+                    studentDetails.username = username
+                    studentDetails.email = email
+                    studentDetails.sapId = sapId
+                    studentDetails.mobile = mobile
+                    studentDetails.imageUrl = imageUrl.toString()
+                    args.student.details = studentDetails
+                    userEditViewModel.updateStudent(student = args.student)
                 }
 
                 btnSaveChange.isEnabled = true
             }
-
         }
     }
 
-    private fun deleteBottomSheet() {
-        val dialog = BottomSheetDialog(requireContext())
-        val bottomSheet = layoutInflater.inflate(R.layout.bottom_sheet_delete_student, null)
-        val btnNot: MaterialButton = bottomSheet.findViewById(R.id.btnNo)
-        val btnDeleteAccount: MaterialButton = bottomSheet.findViewById(R.id.btnDeleteAccount)
-        btnNot.setOnClickListener {
-            dialog.dismiss()
-        }
-        btnDeleteAccount.setOnClickListener {
-            dialog.dismiss()
-            userEditViewModel.deleteAccount(args.student)
-            userEditViewModel.deleteStatus.observe(viewLifecycleOwner){ uiState ->
-                when(uiState){
-                    LOADING -> {
-                        loadingDialog.show()
-                    }
-                    SUCCESS -> {
-                        loadingDialog.dismiss()
-                        showToast(requireContext(), "Delete Account Success.")
-                        requireActivity().finishAffinity()
-                        val loginIntent = Intent(requireContext(), AuthActivity::class.java)
-                        loginIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                        startActivity(loginIntent)
-                    }
-                    FAILURE -> {
-                        loadingDialog.dismiss()
-                        showToast(requireContext(), "Error while deleting.")
-                    }
-                }
-            }
-        }
-        dialog.setContentView(bottomSheet)
-        dialog.show()
-    }
-
-    private fun handleUploadResponse() {
-        userEditViewModel.operationStatus.observe(viewLifecycleOwner) { uiState ->
-            when (uiState) {
+    private fun setupObserver() {
+        userEditViewModel.updateState.observe(viewLifecycleOwner) { updateState ->
+            when (updateState.status) {
                 LOADING -> {
                     loadingDialog.show()
                 }
                 SUCCESS -> {
-                    showToast(requireContext(), "Update Success")
+                    val status = updateState.data!!
+                    showToast(requireContext(), status)
                     loadingDialog.dismiss()
                 }
-                FAILURE -> {
+                ERROR -> {
+                    val errorMessage = updateState.message!!
+                    showToast(requireContext(), errorMessage)
                     loadingDialog.dismiss()
                 }
-
-                else -> Unit
             }
         }
+
+        userEditViewModel.deleteState.observe(viewLifecycleOwner) { deleteState ->
+            when (deleteState.status) {
+                LOADING -> {
+                    loadingDialog.show()
+                }
+                SUCCESS -> {
+                    loadingDialog.dismiss()
+                    val deleteStatus = deleteState.data!!
+                    showToast(requireContext(), deleteStatus)
+                    navigateToLogin()
+                }
+                ERROR -> {
+                    val errorMessage = deleteState.message!!
+                    showToast(requireContext(), errorMessage)
+                    loadingDialog.dismiss()
+                }
+            }
+        }
+    }
+
+    private fun navigateToLogin() {
+        requireActivity().finishAffinity()
+        val authActivity = Intent(requireContext(), AuthActivity::class.java)
+        authActivity.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        startActivity(authActivity)
+    }
+
+    private fun deleteBottomSheet() {
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val studentDeleteSheetBinding = BottomSheetDeleteStudentBinding.inflate(layoutInflater)
+        bottomSheetDialog.setContentView(studentDeleteSheetBinding.root)
+        studentDeleteSheetBinding.apply {
+            btnNo.setOnClickListener {
+                bottomSheetDialog.dismiss()
+            }
+            btnDeleteAccount.setOnClickListener {
+                bottomSheetDialog.dismiss()
+                userEditViewModel.deleteAccount(args.student)
+            }
+        }
+        bottomSheetDialog.show()
     }
 
     private fun startCrop() {
@@ -218,9 +224,7 @@ class UserEditFragment : Fragment() {
                 return isSapIdValid
             }
 
-            val (isMobileNumberValid, mobileNumberError) = InputValidation.isMobileNumberValid(
-                mobile
-            )
+            val (isMobileNumberValid, mobileNumberError) = InputValidation.isMobileNumberValid(mobile)
             if (isMobileNumberValid.not()) {
                 etMobileContainer.error = mobileNumberError
                 return isMobileNumberValid

@@ -1,79 +1,68 @@
 package com.krish.jobspot.home.fragments.userFragment
 
-import android.content.ContentResolver.MimeTypeInfo
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.MimeTypeMap
-import androidx.browser.customtabs.CustomTabsIntent
-import androidx.core.content.MimeTypeFilter
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.krish.jobspot.R
 import com.krish.jobspot.databinding.FragmentUserResumeEditBinding
 import com.krish.jobspot.home.viewmodel.UserEditViewModel
 import com.krish.jobspot.util.LoadingDialog
-import com.krish.jobspot.util.UiState
-import com.krish.jobspot.util.UiState.*
+import com.krish.jobspot.util.Status.*
+import com.krish.jobspot.util.showToast
 
 class UserResumeEditFragment : Fragment() {
-    private var _binding : FragmentUserResumeEditBinding? = null
+    private var _binding: FragmentUserResumeEditBinding? = null
     private val binding get() = _binding!!
-    private val userEditViewModel : UserEditViewModel by viewModels()
-    private val loadingDialog : LoadingDialog by lazy { LoadingDialog(requireContext()) }
+    private val userEditViewModel by viewModels<UserEditViewModel>()
+    private val loadingDialog: LoadingDialog by lazy { LoadingDialog(requireContext()) }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentUserResumeEditBinding.inflate(inflater, container, false)
 
-        setupViews()
+        setupUI()
+        setupObserver()
 
         return binding.root
     }
 
-    private fun setupViews() {
-
-        binding.ivPopOut.setOnClickListener {
-            findNavController().popBackStack()
-        }
-
-        binding.layoutUploadedPdf.llFileRemoveContainer.visibility = View.GONE
-
-        userEditViewModel.fetchStudentResume()
-        setupObserver()
-        userEditViewModel.fileData.observe(viewLifecycleOwner, Observer { pdfMetaData ->
-            if (pdfMetaData != null){
-                binding.layoutUploadedPdf.tvFileName.text = pdfMetaData.first
-                binding.layoutUploadedPdf.tvFileMetaData.text = pdfMetaData.second
-                binding.layoutUploadedPdf.root.setOnClickListener {
-                    setPdfIntent(pdfMetaData.third)
-                }
+    private fun setupUI() {
+        userEditViewModel.fetchResume()
+        binding.apply {
+            ivPopOut.setOnClickListener {
+                findNavController().popBackStack()
             }
-        })
+            layoutUploadedPdf.llFileRemoveContainer.visibility = View.GONE
+        }
     }
 
     private fun setupObserver() {
-        userEditViewModel.resumeStatus.observe(viewLifecycleOwner){ uiState ->
-            when(uiState){
+        userEditViewModel.resumeState.observe(viewLifecycleOwner) { resumeState ->
+            when (resumeState.status) {
                 LOADING -> {
                     loadingDialog.show()
                 }
                 SUCCESS -> {
+                    val (fileName, fileMetaData, resumeUri) = resumeState.data!!
+                    binding.layoutUploadedPdf.tvFileName.text = fileName
+                    binding.layoutUploadedPdf.tvFileMetaData.text = fileMetaData
+                    binding.layoutUploadedPdf.root.setOnClickListener {
+                        setPdfIntent(resumeUri)
+                    }
                     loadingDialog.dismiss()
                 }
-                FAILURE -> {
+                ERROR -> {
+                    val errorMessage = resumeState.message!!
+                    showToast(requireContext(), errorMessage)
                     loadingDialog.dismiss()
                 }
-                else -> Unit
             }
-
         }
     }
 

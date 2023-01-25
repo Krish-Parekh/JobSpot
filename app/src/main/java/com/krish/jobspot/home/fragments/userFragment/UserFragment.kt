@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import coil.load
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -18,63 +17,84 @@ import com.krish.jobspot.auth.AuthActivity
 import com.krish.jobspot.databinding.FragmentUserBinding
 import com.krish.jobspot.home.viewmodel.UserEditViewModel
 import com.krish.jobspot.model.Student
+import com.krish.jobspot.util.LoadingDialog
+import com.krish.jobspot.util.Status.*
+import com.krish.jobspot.util.showToast
 
 
 class UserFragment : Fragment() {
     private var _binding: FragmentUserBinding? = null
     private val binding get() = _binding!!
-    private val userEditViewModel : UserEditViewModel by viewModels()
-    private var student : Student? = null
+    private val userEditViewModel by viewModels<UserEditViewModel>()
+    private val loadingDialog by lazy { LoadingDialog(requireContext()) }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentUserBinding.inflate(inflater, container, false)
-        setupViews()
+
+        setupUI()
+        setupObserver()
+
         return binding.root
     }
 
-    private fun setupViews() {
-
-        binding.ivPopOut.setOnClickListener {
-            requireActivity().finish()
-        }
-
+    private fun setupUI() {
         userEditViewModel.fetchStudent()
-        userEditViewModel.student.observe(viewLifecycleOwner, Observer { student ->
-            if (student != null){
-                this.student = student
-                binding.tvUsername.text = student.details?.username
-                binding.tvUserEmail.text = student.details?.email
-                binding.profileImage.load(student.details?.imageUrl)
-            }
-        })
+        binding.apply {
 
-        binding.cvManageAccount.setOnClickListener {
-            if (this.student != null){
-                val directions = UserFragmentDirections.actionUserFragmentToUserEditFragment(this.student!!)
-                findNavController().navigate(directions)
+            ivPopOut.setOnClickListener {
+                requireActivity().finish()
             }
-        }
 
-        binding.cvUpdateResume.setOnClickListener {
-            if (this.student != null){
-                findNavController().navigate(R.id.action_userFragment_to_userResumeEditFragment)
+            cvContactTpo.setOnClickListener {
+                navigateToContactTpo()
+            }
+
+            cvLogout.setOnClickListener {
+                logoutBottomSheet()
             }
         }
-
-        binding.cvContactTpo.setOnClickListener {
-            findNavController().navigate(R.id.action_userFragment_to_userTpoContact)
-        }
-
-        binding.cvLogout.setOnClickListener {
-            logoutBottomSheet()
+    }
+    private fun setupObserver() {
+        userEditViewModel.student.observe(viewLifecycleOwner){ studentState ->
+            when(studentState.status){
+                LOADING -> {
+                    loadingDialog.show()
+                }
+                SUCCESS -> {
+                    val student = studentState.data!!
+                    binding.tvUsername.text = student.details?.username
+                    binding.tvUserEmail.text = student.details?.email
+                    binding.profileImage.load(student.details?.imageUrl)
+                    binding.cvManageAccount.setOnClickListener {
+                        navigateToUserEdit(student)
+                    }
+                    binding.cvUpdateResume.setOnClickListener {
+                        navigateToUpdateResume()
+                    }
+                    loadingDialog.dismiss()
+                }
+                ERROR -> {
+                    val errorMessage = studentState.message!!
+                    showToast(requireContext(), errorMessage)
+                    loadingDialog.dismiss()
+                }
+            }
         }
     }
 
-    override fun onDestroyView() {
-        _binding = null
-        super.onDestroyView()
+    private fun navigateToUserEdit(student: Student) {
+        val direction = UserFragmentDirections.actionUserFragmentToUserEditFragment(student)
+        findNavController().navigate(direction)
+    }
+
+    private fun navigateToUpdateResume() {
+        findNavController().navigate(R.id.action_userFragment_to_userResumeEditFragment)
+    }
+
+    private fun navigateToContactTpo(){
+        findNavController().navigate(R.id.action_userFragment_to_userTpoContact)
     }
 
     private fun logoutBottomSheet(){
@@ -95,6 +115,11 @@ class UserFragment : Fragment() {
         }
         dialog.setContentView(bottomSheet)
         dialog.show()
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 
 }
