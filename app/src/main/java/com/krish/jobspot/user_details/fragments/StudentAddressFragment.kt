@@ -1,7 +1,6 @@
 package com.krish.jobspot.user_details.fragments
 
 import android.os.Bundle
-import android.renderscript.ScriptGroup.Input
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.krish.jobspot.R
 import com.krish.jobspot.databinding.FragmentStudentAddressBinding
 import com.krish.jobspot.util.InputValidation
 import com.krish.jobspot.util.addTextWatcher
@@ -28,11 +26,13 @@ class StudentAddressFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentStudentAddressBinding.inflate(inflater, container, false)
-        setupView()
+
+        setupUI()
+
         return binding.root
     }
 
-    private fun setupView() {
+    private fun setupUI() {
         binding.apply {
             ivPopOut.setOnClickListener {
                 findNavController().popBackStack()

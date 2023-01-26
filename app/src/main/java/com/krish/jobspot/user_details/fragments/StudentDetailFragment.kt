@@ -60,15 +60,16 @@ class StudentDetailFragment : Fragment() {
             email = requireActivity().intent.extras?.getString("EMAIL").toString()
         }
 
-        setupView()
+        setupUI()
 
         return binding.root
     }
 
-    private fun setupView() {
+    private fun setupUI() {
         binding.apply {
             if (userDetailViewModel.getImageUri() != null) {
-                profileImage.setImageURI(userDetailViewModel.getImageUri())
+                val imageUri = userDetailViewModel.getImageUri()
+                profileImage.setImageURI(imageUri)
             }
 
             profileImage.setOnClickListener {
@@ -77,6 +78,12 @@ class StudentDetailFragment : Fragment() {
 
             etDate.isCursorVisible = false
             etDate.keyListener = null
+            etDate.setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus){
+                    showCalendar()
+                }
+            }
+
             etDateContainer.setEndIconOnClickListener {
                 showCalendar()
             }
@@ -94,7 +101,6 @@ class StudentDetailFragment : Fragment() {
                 val sapId = etSapId.getInputValue()
                 val mobile = etMobile.getInputValue()
                 val dob = etDate.getInputValue()
-
                 val imageUri = userDetailViewModel.getImageUri()
                 val uid = mAuth.currentUser?.uid
                 if (detailVerification(sapId, mobile, dob, gender, imageUri)) {
@@ -203,10 +209,7 @@ class StudentDetailFragment : Fragment() {
     }
 
     private fun navigateToAddress(student: Student) {
-        val direction =
-            StudentDetailFragmentDirections.actionStudentDetailFragmentToStudentAddressFragment(
-                student = student
-            )
+        val direction = StudentDetailFragmentDirections.actionStudentDetailFragmentToStudentAddressFragment(student = student)
         findNavController().navigate(direction)
     }
 

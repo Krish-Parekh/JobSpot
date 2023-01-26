@@ -105,7 +105,7 @@ class AuthViewModel : ViewModel() {
                 .addOnSuccessListener {
                     _resendPasswordStatus.postValue(Resource.success("Resend password send success."))
                 }
-                .addOnFailureListener { error ->
+                .addOnFailureListener {
                     _resendPasswordStatus.postValue(Resource.error("Resend password failed."))
                 }
         }

@@ -23,7 +23,6 @@ import com.krish.jobspot.util.Constants.Companion.COLLECTION_PATH_TPO
 import com.krish.jobspot.util.Constants.Companion.PROFILE_IMAGE_PATH
 import com.krish.jobspot.util.Constants.Companion.RESUME_PATH
 import com.krish.jobspot.util.Resource
-import com.krish.jobspot.util.UiState
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
