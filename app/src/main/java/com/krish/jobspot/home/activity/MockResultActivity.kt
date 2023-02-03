@@ -1,79 +1,81 @@
 package com.krish.jobspot.home.activity
 
 import android.os.Bundle
-
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-
 import androidx.recyclerview.widget.LinearLayoutManager
-
 import com.krish.jobspot.R
 import com.krish.jobspot.databinding.ActivityMockResultBinding
 import com.krish.jobspot.home.adapter.MockSolutionAdapter
 import com.krish.jobspot.home.viewmodel.MockSolutionViewModel
-
+import com.krish.jobspot.util.LoadingDialog
+import com.krish.jobspot.util.Status.*
 import com.krish.jobspot.util.checkTimeUnit
-
-
-private const val TAG = "MockResultActivity"
+import com.krish.jobspot.util.showToast
 
 class MockResultActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMockResultBinding
     private var _mockSolutionAdapter: MockSolutionAdapter? = null
     private val mockSolutionAdapter get() = _mockSolutionAdapter!!
-    private val mockSolutionViewModel: MockSolutionViewModel by viewModels()
+    private val mockSolutionViewModel by viewModels<MockSolutionViewModel>()
+    private val loadingDialog by lazy { LoadingDialog(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMockResultBinding.inflate(layoutInflater)
+        _mockSolutionAdapter = MockSolutionAdapter()
         setContentView(binding.root)
         val mockId = intent.extras?.getString("MOCK_ID")!!
         mockSolutionViewModel.fetchMockResult(mockId)
-        _mockSolutionAdapter = MockSolutionAdapter()
-        setupView()
+
+        setupUI()
+        setupObserver()
     }
 
-    private fun setupView() {
-        binding.apply {
+    private fun setupUI() {
+        binding.rvSolution.adapter = mockSolutionAdapter
+        binding.rvSolution.layoutManager = LinearLayoutManager(this)
+    }
 
-            rvSolution.adapter = mockSolutionAdapter
-            rvSolution.layoutManager = LinearLayoutManager(this@MockResultActivity)
-
-            mockSolutionViewModel.mockScore.observe(
-                this@MockResultActivity,
-                Observer { mockResult ->
-                    if (mockResult != null) {
-                        val totalQuestion = mockResult.totalQuestion.toFloat()
-                        val correctAns = mockResult.correctAns.toInt()
+    private fun setupObserver() {
+        mockSolutionViewModel.mockResultState.observe(this) { mockResultState ->
+            when (mockResultState.status) {
+                LOADING -> {
+                    loadingDialog.show()
+                }
+                SUCCESS -> {
+                    loadingDialog.dismiss()
+                    val mockSolutionState = mockResultState.data
+                    if (mockSolutionState != null) {
+                        val totalQuestion = mockSolutionState.mockResult.totalQuestion.toFloat()
+                        val correctAns = mockSolutionState.mockResult.correctAns.toInt()
                         val progress = (correctAns / totalQuestion) * 100
-                        scoreProgressBar.progress = progress.toInt()
-                        tvScore.text = getString(
+                        binding.scoreProgressBar.progress = progress.toInt()
+                        binding.tvScore.text = getString(
                             R.string.field_score,
-                            mockResult.correctAns,
-                            mockResult.totalQuestion
+                            mockSolutionState.mockResult.correctAns,
+                            mockSolutionState.mockResult.totalQuestion
                         )
-                        tvIncorrectScore.text = getString(
+                        binding.tvIncorrectScore.text = getString(
                             R.string.field_score,
-                            mockResult.incorrectAns,
-                            mockResult.totalQuestion
+                            mockSolutionState.mockResult.incorrectAns,
+                            mockSolutionState.mockResult.totalQuestion
                         )
-                        tvUnAttemptedScore.text = getString(
+                        binding.tvUnAttemptedScore.text = getString(
                             R.string.field_score,
-                            mockResult.unAttempted,
-                            mockResult.totalQuestion
+                            mockSolutionState.mockResult.unAttempted,
+                            mockSolutionState.mockResult.totalQuestion
                         )
-                        tvTimeTakenScore.text = checkTimeUnit(mockResult.timeTaken)
+                        binding.tvTimeTakenScore.text = checkTimeUnit(mockSolutionState.mockResult.timeTaken)
+                        mockSolutionAdapter.setMockQuestions(mockSolutionState.mockQuestions)
                     }
-                })
-
-            mockSolutionViewModel.mockSolution.observe(
-                this@MockResultActivity,
-                Observer { mockQuestions ->
-                    if (mockQuestions.isNotEmpty()) {
-                        mockSolutionAdapter.setMockQuestions(newMockQuestion = mockQuestions)
-                    }
-                })
+                }
+                ERROR -> {
+                    loadingDialog.dismiss()
+                    val errorMessage = mockResultState.message!!
+                    showToast(this, errorMessage)
+                }
+            }
 
         }
     }

@@ -1,11 +1,15 @@
 package com.krish.jobspot.home.fragments
 
+import android.app.ActivityManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -45,6 +49,17 @@ class MockTestFragment : Fragment() {
         setupUI()
         setupObserver()
 
+        parentFragmentManager.fragments.forEach {
+            Log.d("BackStack", "Fragment Activity : ${it.activity}")
+            Log.d("BackStack", "Fragment Context : ${it.context}")
+            Log.d("BackStack", "Fragment : ${it}")
+        }
+
+        val activityManager = requireActivity().getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val appTasks = activityManager.appTasks
+        for (task in appTasks) {
+            Log.d("BackStack", "Activity: ${task.taskInfo.baseActivity?.className}")
+        }
         return binding.root
     }
 
@@ -105,8 +120,7 @@ class MockTestFragment : Fragment() {
                 LOADING -> Unit
                 SUCCESS -> {
                     val mock = mockState.data!!
-                    val direction =
-                        MockTestFragmentDirections.actionMockTestFragmentToMockQuestionActivity(mock)
+                    val direction = MockTestFragmentDirections.actionMockTestFragmentToMockQuestionActivity(mock)
                     findNavController().navigate(direction)
                 }
                 ERROR -> {

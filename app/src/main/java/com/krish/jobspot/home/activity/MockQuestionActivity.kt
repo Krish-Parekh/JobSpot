@@ -10,6 +10,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
 import androidx.navigation.navArgs
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -130,6 +131,7 @@ class MockQuestionActivity : AppCompatActivity() {
         mockResultActivity.putExtra("MOCK_ID", mock.uid)
         startActivity(mockResultActivity)
         finish()
+        supportFragmentManager.popBackStack()
     }
 
     private fun instructionDialog() {
