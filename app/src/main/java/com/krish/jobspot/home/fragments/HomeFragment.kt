@@ -55,10 +55,9 @@ class HomeFragment : Fragment() {
             homeViewModel.fetchMetrics()
             homeViewModel.fetchJobs()
 
-            lifecycleScope.launch(Dispatchers.Main) {
-                repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    tvWelcomeHeading.text =
-                        getString(R.string.field_welcome_text, mAuth.currentUser?.displayName)
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    tvWelcomeHeading.text = getString(R.string.field_welcome_text, mAuth.currentUser?.displayName)
                     ivProfileImage.load(mAuth.currentUser?.photoUrl)
                 }
             }

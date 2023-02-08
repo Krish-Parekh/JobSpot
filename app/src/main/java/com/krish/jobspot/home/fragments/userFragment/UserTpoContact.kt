@@ -15,7 +15,6 @@ import com.krish.jobspot.home.viewmodel.UserEditViewModel
 class UserTpoContact : Fragment() {
     private var _binding : FragmentUserTpoContactBinding? = null
     private val binding get() = _binding!!
-
     private var _tpoAdapter : TpoAdapter? = null
     private val tpoAdapter get() = _tpoAdapter!!
     private val userEditViewModel by viewModels<UserEditViewModel>()
@@ -25,12 +24,13 @@ class UserTpoContact : Fragment() {
     ): View? {
         _binding = FragmentUserTpoContactBinding.inflate(inflater, container, false)
         _tpoAdapter = TpoAdapter()
-        setupView()
+        setupUI()
+        setupObserver()
 
         return binding.root
     }
 
-    private fun setupView() {
+    private fun setupUI() {
         userEditViewModel.fetchTpo()
 
         binding.ivPopOut.setOnClickListener {
@@ -39,7 +39,9 @@ class UserTpoContact : Fragment() {
 
         binding.rvContactTPO.adapter = tpoAdapter
         binding.rvContactTPO.layoutManager = LinearLayoutManager(requireContext())
+    }
 
+    private fun setupObserver() {
         userEditViewModel.tpoList.observe(viewLifecycleOwner){ tpoList ->
             tpoAdapter.setData(tpoList)
         }

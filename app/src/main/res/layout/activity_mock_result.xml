@@ -8,6 +8,18 @@
     app:layoutDescription="@xml/activity_mock_result_scene"
     tools:context=".home.activity.MockResultActivity">
 
+    <ImageView
+        android:id="@+id/ivPopOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/medium_margin"
+        android:contentDescription="@null"
+        android:paddingVertical="@dimen/small_padding"
+        android:src="@drawable/ic_arrow_left"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/icon_tint" />
+
     <TextView
         android:id="@+id/tvReportHeading"
         android:layout_width="wrap_content"
@@ -17,8 +29,9 @@
         android:text="@string/field_report_header"
         android:textColor="@color/text_color"
         android:textSize="32sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@id/ivPopOut"
+        app:layout_constraintLeft_toRightOf="@id/ivPopOut"
+        app:layout_constraintTop_toTopOf="@+id/ivPopOut" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cvReport"
@@ -76,8 +89,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:padding="@dimen/small_padding"
                     android:contentDescription="@null"
+                    android:padding="@dimen/small_padding"
                     android:src="@drawable/ic_correct" />
 
                 <TextView
@@ -118,8 +131,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:padding="@dimen/small_padding"
                     android:contentDescription="@null"
+                    android:padding="@dimen/small_padding"
                     android:src="@drawable/ic_un_attempted" />
 
                 <TextView
@@ -160,8 +173,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:padding="@dimen/small_padding"
                     android:contentDescription="@null"
+                    android:padding="@dimen/small_padding"
                     android:src="@drawable/ic_time" />
 
                 <TextView

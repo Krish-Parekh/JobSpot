@@ -14,7 +14,8 @@ import com.krish.jobspot.util.checkTimeUnit
 import com.krish.jobspot.util.showToast
 
 class MockResultActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMockResultBinding
+    private var _binding: ActivityMockResultBinding? = null
+    private val binding get() = _binding!!
     private var _mockSolutionAdapter: MockSolutionAdapter? = null
     private val mockSolutionAdapter get() = _mockSolutionAdapter!!
     private val mockSolutionViewModel by viewModels<MockSolutionViewModel>()
@@ -22,7 +23,7 @@ class MockResultActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMockResultBinding.inflate(layoutInflater)
+        _binding = ActivityMockResultBinding.inflate(layoutInflater)
         _mockSolutionAdapter = MockSolutionAdapter()
         setContentView(binding.root)
         val mockId = intent.extras?.getString("MOCK_ID")!!
@@ -33,6 +34,11 @@ class MockResultActivity : AppCompatActivity() {
     }
 
     private fun setupUI() {
+
+        binding.ivPopOut.setOnClickListener {
+            finish()
+        }
+
         binding.rvSolution.adapter = mockSolutionAdapter
         binding.rvSolution.layoutManager = LinearLayoutManager(this)
     }
@@ -82,7 +88,7 @@ class MockResultActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         _mockSolutionAdapter = null
-        binding.rvSolution.adapter = null
+        _binding = null
         super.onDestroy()
     }
 }

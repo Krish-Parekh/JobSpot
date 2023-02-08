@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.krish.jobspot.model.Student
@@ -37,6 +38,7 @@ class UserEditViewModel : ViewModel() {
     private val mStorage: StorageReference by lazy { FirebaseStorage.getInstance().reference }
     private val mFirestore: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
     private val mRealtimeDb: DatabaseReference by lazy { FirebaseDatabase.getInstance().reference }
+    private var tpoListener : ListenerRegistration? = null
 
     private var imageUri: Uri? = null
 
@@ -96,8 +98,8 @@ class UserEditViewModel : ViewModel() {
     }
 
     fun fetchTpo() {
-        viewModelScope.launch {
-            mFirestore.collection(COLLECTION_PATH_TPO)
+        viewModelScope.launch(IO) {
+            tpoListener = mFirestore.collection(COLLECTION_PATH_TPO)
                 .addSnapshotListener { value, error ->
                     if (error != null) {
                         return@addSnapshotListener
@@ -287,5 +289,10 @@ class UserEditViewModel : ViewModel() {
             mockResultRef.removeEventListener(studentMockResultDeleteListener)
         }
         studentDeleteFromMockResultDeffered.await()
+    }
+
+    override fun onCleared() {
+        tpoListener?.remove()
+        super.onCleared()
     }
 }

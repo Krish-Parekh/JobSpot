@@ -14,6 +14,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.firebase.auth.FirebaseAuth
 import com.krish.jobspot.R
 import com.krish.jobspot.auth.AuthActivity
+import com.krish.jobspot.databinding.BottomSheetLogoutBinding
 import com.krish.jobspot.databinding.FragmentUserBinding
 import com.krish.jobspot.home.viewmodel.UserEditViewModel
 import com.krish.jobspot.model.Student
@@ -98,23 +99,23 @@ class UserFragment : Fragment() {
     }
 
     private fun logoutBottomSheet(){
-        val dialog = BottomSheetDialog(requireContext())
-        val bottomSheet = layoutInflater.inflate(R.layout.bottom_sheet_logout, null)
-        val btnNot: MaterialButton = bottomSheet.findViewById(R.id.btnNo)
-        val btnRemove: MaterialButton = bottomSheet.findViewById(R.id.btnLogout)
-        btnNot.setOnClickListener {
-            dialog.dismiss()
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val logoutSheetBinding = BottomSheetLogoutBinding.inflate(layoutInflater)
+        bottomSheetDialog.setContentView(logoutSheetBinding.root)
+        logoutSheetBinding.apply {
+            btnNo.setOnClickListener {
+                bottomSheetDialog.dismiss()
+            }
+            btnLogout.setOnClickListener {
+                bottomSheetDialog.dismiss()
+                FirebaseAuth.getInstance().signOut()
+                requireActivity().finishAffinity()
+                val loginIntent = Intent(requireContext(), AuthActivity::class.java)
+                loginIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                startActivity(loginIntent)
+            }
         }
-        btnRemove.setOnClickListener {
-            dialog.dismiss()
-            FirebaseAuth.getInstance().signOut()
-            requireActivity().finishAffinity()
-            val loginIntent = Intent(requireContext(), AuthActivity::class.java)
-            loginIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-            startActivity(loginIntent)
-        }
-        dialog.setContentView(bottomSheet)
-        dialog.show()
+        bottomSheetDialog.show()
     }
 
     override fun onDestroyView() {

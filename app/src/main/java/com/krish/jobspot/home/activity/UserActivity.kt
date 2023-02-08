@@ -5,10 +5,16 @@ import android.os.Bundle
 import com.krish.jobspot.databinding.ActivityUserBinding
 
 class UserActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityUserBinding
+    private var _binding: ActivityUserBinding? = null
+    private val binding get() = _binding!!
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityUserBinding.inflate(layoutInflater)
+        _binding = ActivityUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
+    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
     }
 }

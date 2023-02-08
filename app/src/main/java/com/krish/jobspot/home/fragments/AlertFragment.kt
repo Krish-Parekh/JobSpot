@@ -16,10 +16,8 @@ import com.krish.jobspot.util.showToast
 class AlertFragment : Fragment() {
     private var _binding : FragmentAlertBinding? = null
     private val binding get() = _binding!!
-
     private var _alertAdapter : AlertAdapter? = null
     private val alertAdapter get() = _alertAdapter!!
-
     private val alertViewModel by viewModels<AlertViewModel>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
