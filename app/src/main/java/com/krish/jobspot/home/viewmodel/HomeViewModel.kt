@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.Query.Direction.DESCENDING
 import com.krish.jobspot.model.Job
 import com.krish.jobspot.util.Constants.Companion.COLLECTION_PATH_COMPANY
 import com.krish.jobspot.util.Constants.Companion.COLLECTION_PATH_STUDENT
@@ -16,7 +18,6 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import com.google.firebase.firestore.Query.Direction.DESCENDING
 
 
 private const val TAG = "HomeViewModelTAG"
@@ -26,12 +27,13 @@ class HomeViewModel : ViewModel() {
     private val mRealtimeDb: DatabaseReference by lazy { FirebaseDatabase.getInstance().reference }
     private val mAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
     private val currentUserId = mAuth.currentUser?.uid!!
+    private var jobListener: ListenerRegistration? = null
 
     private val _metrics: MutableLiveData<Resource<Pair<Int, Int>>> = MutableLiveData()
     val metrics: LiveData<Resource<Pair<Int, Int>>> = _metrics
 
-    private val _jobs : MutableLiveData<Resource<List<Job>>> = MutableLiveData()
-    val jobs : LiveData<Resource<List<Job>>> = _jobs
+    private val _jobs: MutableLiveData<Resource<List<Job>>> = MutableLiveData()
+    val jobs: LiveData<Resource<List<Job>>> = _jobs
 
     fun fetchMetrics() {
         viewModelScope.launch(IO) {
@@ -51,6 +53,7 @@ class HomeViewModel : ViewModel() {
             }
         }
     }
+
     private suspend fun getCompaniesCount(): Int {
         val companiesCountDeffered = CompletableDeferred<Int>()
         val companiesRef = mFirestore.collection(COLLECTION_PATH_COMPANY)
@@ -71,6 +74,7 @@ class HomeViewModel : ViewModel() {
         }
         return companiesCountDeffered.await()
     }
+
     private suspend fun getJobsAppliedCount(): Int {
         val jobAppliedPath = "$COLLECTION_PATH_STUDENT/$currentUserId/$COLLECTION_PATH_COMPANY"
         val jobAppliedRef = mRealtimeDb.child(jobAppliedPath)
@@ -92,11 +96,12 @@ class HomeViewModel : ViewModel() {
         }
         return jobAppliedCountDeffered.await()
     }
+
     fun fetchJobs() {
         viewModelScope.launch(IO) {
             _jobs.postValue(Resource.loading())
             val jobsRef = mFirestore.collection(COLLECTION_PATH_COMPANY).orderBy("uid", DESCENDING)
-            jobsRef.addSnapshotListener { value, error ->
+            jobListener = jobsRef.addSnapshotListener { value, error ->
                 if (error != null) {
                     _jobs.postValue(Resource.error(error.message!!))
                     return@addSnapshotListener
@@ -108,5 +113,10 @@ class HomeViewModel : ViewModel() {
                 _jobs.postValue(Resource.success(jobList))
             }
         }
+    }
+
+    override fun onCleared() {
+        jobListener?.remove()
+        super.onCleared()
     }
 }

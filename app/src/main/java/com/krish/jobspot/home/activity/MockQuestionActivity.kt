@@ -30,7 +30,8 @@ import java.util.concurrent.TimeUnit
 private const val TAG = "MockQuestionActivityTAG"
 
 class MockQuestionActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMockQuestionBinding
+    private var _binding: ActivityMockQuestionBinding? = null
+    private val binding get() = _binding!!
     private val questionPageViewModel by viewModels<QuestionPageViewModel>()
     private val args by navArgs<MockQuestionActivityArgs>()
     private val mock by lazy { args.mock }
@@ -45,7 +46,7 @@ class MockQuestionActivity : AppCompatActivity() {
     private var backPressCallBack: OnBackPressedCallback? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMockQuestionBinding.inflate(layoutInflater)
+        _binding = ActivityMockQuestionBinding.inflate(layoutInflater)
         setContentView(binding.root)
         timeRemaining = TimeUnit.MINUTES.toMillis(mock.duration.toLong())
         if (savedInstanceState != null) {
@@ -54,8 +55,6 @@ class MockQuestionActivity : AppCompatActivity() {
             timerStarted = savedInstanceState.getBoolean("TIMER_STARTED")
         }
         setupUI()
-        setupObserver()
-
     }
 
     private fun setupUI() {
@@ -131,7 +130,6 @@ class MockQuestionActivity : AppCompatActivity() {
         mockResultActivity.putExtra("MOCK_ID", mock.uid)
         startActivity(mockResultActivity)
         finish()
-        supportFragmentManager.popBackStack()
     }
 
     private fun instructionDialog() {
@@ -182,6 +180,7 @@ class MockQuestionActivity : AppCompatActivity() {
             .setMessage(message)
             .setPositiveButton("Yes") { _, _ ->
                 questionPageViewModel.submitMock(mock = mock, timeRemaining)
+                setupObserver()
             }
             .setNegativeButton("No") { dialog, _ ->
                 dialog.dismiss()
@@ -206,6 +205,7 @@ class MockQuestionActivity : AppCompatActivity() {
         pageChangeListener = null
         tabLayoutMediator = null
         questionAdapter = null
+        _binding = null
         super.onDestroy()
     }
 }

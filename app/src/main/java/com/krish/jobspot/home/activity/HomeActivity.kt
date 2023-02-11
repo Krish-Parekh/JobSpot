@@ -8,10 +8,11 @@ import com.krish.jobspot.R
 import com.krish.jobspot.databinding.ActivityHomeBinding
 
 class HomeActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityHomeBinding
+    private var _binding: ActivityHomeBinding? = null
+    private val binding get() = _binding!!
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityHomeBinding.inflate(layoutInflater)
+        _binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setupBottomNavigation()
@@ -24,5 +25,10 @@ class HomeActivity : AppCompatActivity() {
         popMenu.inflate(R.menu.home_menu)
         val menu = popMenu.menu
         binding.bottomHomeNav.setupWithNavController(navController = navController, menu = menu)
+    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
     }
 }

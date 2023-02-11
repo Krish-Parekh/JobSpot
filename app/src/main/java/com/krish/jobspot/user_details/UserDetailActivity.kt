@@ -1,16 +1,20 @@
 package com.krish.jobspot.user_details
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
-import com.krish.jobspot.R
+import androidx.appcompat.app.AppCompatActivity
 import com.krish.jobspot.databinding.ActivityUserDetailBinding
 
 class UserDetailActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityUserDetailBinding
+    private var _binding: ActivityUserDetailBinding? = null
+    private val binding get() = _binding!!
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityUserDetailBinding.inflate(layoutInflater)
+        _binding = ActivityUserDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
     }
 }

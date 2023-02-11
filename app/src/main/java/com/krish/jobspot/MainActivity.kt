@@ -13,17 +13,18 @@ import com.krish.jobspot.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
+    private var _binding: ActivityMainBinding? = null
+    private val binding get() = _binding!!
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupViews()
+        setupUI()
     }
 
-    private fun setupViews() {
+    private fun setupUI() {
         val headingText = SpannableString(getString(R.string.on_boarding_heading))
         val color = getColor(R.color.on_boarding_span_text_color)
         val headingColor = ForegroundColorSpan(color)

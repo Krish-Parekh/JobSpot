@@ -20,13 +20,14 @@ import com.krish.jobspot.util.showToast
 private const val TAG = "JobViewActivity"
 
 class JobViewActivity : AppCompatActivity() {
-    private lateinit var binding : ActivityJobViewBinding
+    private var _binding: ActivityJobViewBinding? = null
+    private val binding get() = _binding!!
     private val args by navArgs<JobViewActivityArgs>()
     private val studentJobViewModel by viewModels<StudentJobViewModel>()
     private val loadingDialog by lazy { LoadingDialog(this) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityJobViewBinding.inflate(layoutInflater)
+        _binding = ActivityJobViewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setupUI()
@@ -110,5 +111,10 @@ class JobViewActivity : AppCompatActivity() {
         chip.setTextColor(this@JobViewActivity.getColor(R.color.chip_text_color))
         chip.chipCornerRadius = 8f
         binding.requiredSkillSetChipGroup.addView(chip)
+    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
     }
 }

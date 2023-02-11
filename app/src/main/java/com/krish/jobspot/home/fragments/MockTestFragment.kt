@@ -112,6 +112,11 @@ class MockTestFragment : Fragment() {
                     val mock = mockState.data!!
                     val direction =
                         MockTestFragmentDirections.actionMockTestFragmentToMockQuestionActivity(mock)
+                    findNavController().backQueue.forEach {
+                        Log.d(TAG, "Id: ${it.id}")
+                        Log.d(TAG, "Destination: ${it.destination}")
+                        Log.d(TAG, "Id: ${it}")
+                    }
                     findNavController().navigate(direction)
                 }
                 ERROR -> {

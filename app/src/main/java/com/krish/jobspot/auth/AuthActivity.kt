@@ -1,15 +1,20 @@
 package com.krish.jobspot.auth
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.krish.jobspot.R
+import androidx.appcompat.app.AppCompatActivity
 import com.krish.jobspot.databinding.ActivityAuthBinding
 
 class AuthActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityAuthBinding
+    private var _binding: ActivityAuthBinding? = null
+    private val binding get() = _binding!!
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAuthBinding.inflate(layoutInflater)
+        _binding = ActivityAuthBinding.inflate(layoutInflater)
         setContentView(binding.root)
+    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
     }
 }
