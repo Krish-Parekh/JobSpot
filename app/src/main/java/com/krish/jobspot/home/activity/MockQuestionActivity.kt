@@ -10,9 +10,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.navArgs
-import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
@@ -21,9 +19,9 @@ import com.krish.jobspot.databinding.ActivityMockQuestionBinding
 import com.krish.jobspot.databinding.MockTestRuleLayoutBinding
 import com.krish.jobspot.home.adapter.MockQuestionPageAdapter
 import com.krish.jobspot.home.viewmodel.QuestionPageViewModel
+import com.krish.jobspot.model.Mock
 import com.krish.jobspot.util.LoadingDialog
 import com.krish.jobspot.util.Status.*
-import com.krish.jobspot.util.showToast
 import java.util.concurrent.TimeUnit
 
 
@@ -33,70 +31,42 @@ class MockQuestionActivity : AppCompatActivity() {
     private var _binding: ActivityMockQuestionBinding? = null
     private val binding get() = _binding!!
     private val questionPageViewModel by viewModels<QuestionPageViewModel>()
-    private val args by navArgs<MockQuestionActivityArgs>()
-    private val mock by lazy { args.mock }
+    private var mock: Mock = Mock()
+    private var mockId: String = ""
     private var timer: CountDownTimer? = null
     private var timeRemaining: Long = 0
-    private var ruleDisplayed: Boolean = false
     private var timerStarted: Boolean = false
-    private var tabLayoutMediator: TabLayoutMediator? = null
-    private var questionAdapter: MockQuestionPageAdapter? = null
-    private var pageChangeListener: OnPageChangeCallback? = null
-    private val loadingDialog: LoadingDialog by lazy { LoadingDialog(this) }
-    private var backPressCallBack: OnBackPressedCallback? = null
+    private var mediator: TabLayoutMediator? = null // done
+    private val loadingDialog by lazy { LoadingDialog(this) }
+    private var pageChangeListener: ViewPager2.OnPageChangeCallback? = null // done
+    private var backPressCallBack: OnBackPressedCallback? = null // done
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMockQuestionBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        timeRemaining = TimeUnit.MINUTES.toMillis(mock.duration.toLong())
         if (savedInstanceState != null) {
             timeRemaining = savedInstanceState.getLong("TIME_REMAINING")
-            ruleDisplayed = savedInstanceState.getBoolean("RULE_DISPLAYED")
             timerStarted = savedInstanceState.getBoolean("TIMER_STARTED")
         }
         setupUI()
+        setupObserver()
     }
 
     private fun setupUI() {
+        val bundle = intent.extras!!
+        mockId = bundle.getString("MOCK_ID")!!
+        questionPageViewModel.fetchMockTest(mockId)
         backPressCallBack = this@MockQuestionActivity.onBackPressedDispatcher.addCallback {
             submitDialog("Quit Mock", "Are you sure you want to quit?")
-        }
-        if (ruleDisplayed.not()) {
-            instructionDialog()
-            ruleDisplayed = true
         }
         if (timerStarted) {
             startTimer()
         }
-        binding.apply {
+
+        with(binding) {
             ivPopOut.setOnClickListener {
                 submitDialog("Quit Mock", "Are you sure you want to quit?")
             }
-            val mockQuestion = mock.mockQuestion
-            questionAdapter = MockQuestionPageAdapter(supportFragmentManager, mockQuestion, lifecycle)
-            questionPager.adapter = questionAdapter
-            questionPager.offscreenPageLimit = mockQuestion.size
-            tabLayoutMediator = TabLayoutMediator(questionCountTabLayout, questionPager) { tab, position ->
-                    tab.text = getString(R.string.field_tab_text, position + 1)
-                }
-            tabLayoutMediator?.attach()
-            mockQuestion.forEachIndexed { index, _ ->
-                val inflater = LayoutInflater.from(this@MockQuestionActivity)
-                val tabTitle = inflater.inflate(R.layout.tab_title, null, false) as TextView
-                questionCountTabLayout.getTabAt(index)?.customView = tabTitle
-            }
-
-            pageChangeListener = object : OnPageChangeCallback() {
-                override fun onPageSelected(position: Int) {
-                    super.onPageSelected(position)
-                    if (position == mockQuestion.lastIndex) {
-                        btnSubmitQuiz.visibility = View.VISIBLE
-                    } else {
-                        btnSubmitQuiz.visibility = View.GONE
-                    }
-                }
-            }
-            questionPager.registerOnPageChangeCallback(pageChangeListener!!)
 
             btnSubmitQuiz.setOnClickListener {
                 submitDialog("Submit Mock", "Are you sure you want to submit this mock?")
@@ -105,20 +75,40 @@ class MockQuestionActivity : AppCompatActivity() {
     }
 
     private fun setupObserver() {
-        questionPageViewModel.submitMockStatus.observe(this){ submitState ->
-            when(submitState.status){
+        questionPageViewModel.mock.observe(this) { resource ->
+            when (resource.status) {
                 LOADING -> {
                     loadingDialog.show()
                 }
                 SUCCESS -> {
-                    val message = submitState.data!!
-                    showToast(this, message)
-                    navigateToResultActivity()
                     loadingDialog.dismiss()
+                    mock = resource.data!!
+                    timeRemaining = TimeUnit.MINUTES.toMillis(mock.duration.toLong())
+                    questionPageViewModel.ruleDisplayed.observe(this) { value ->
+                        value?.let { ruleDisplayed ->
+                            if (ruleDisplayed.not()) {
+                                instructionDialog()
+                                setupViewPager()
+                            }
+                        }
+                    }
                 }
                 ERROR -> {
-                    val errorMessage = submitState.message!!
-                    showToast(this, errorMessage)
+                    loadingDialog.dismiss()
+                }
+            }
+        }
+
+        questionPageViewModel.submitMockStatus.observe(this) { resource ->
+            when (resource.status) {
+                LOADING -> {
+                    loadingDialog.show()
+                }
+                SUCCESS -> {
+                    loadingDialog.dismiss()
+                    navigateToResultActivity()
+                }
+                ERROR -> {
                     loadingDialog.dismiss()
                 }
             }
@@ -126,10 +116,42 @@ class MockQuestionActivity : AppCompatActivity() {
     }
 
     private fun navigateToResultActivity() {
-        val mockResultActivity = Intent(this, MockResultActivity::class.java)
-        mockResultActivity.putExtra("MOCK_ID", mock.uid)
-        startActivity(mockResultActivity)
+        val mockResult = Intent(this, MockResultActivity::class.java)
+        mockResult.putExtra("MOCK_ID", mockId)
+        startActivity(mockResult)
         finish()
+    }
+
+    private fun setupViewPager() {
+        val mockQuestion = mock.mockQuestion
+        binding.questionPager.adapter =
+            MockQuestionPageAdapter(supportFragmentManager, mockQuestion, lifecycle)
+        binding.questionPager.offscreenPageLimit = mockQuestion.size
+        mediator = TabLayoutMediator(
+            binding.questionCountTabLayout,
+            binding.questionPager
+        ) { tab, position ->
+            tab.text = getString(R.string.field_tab_text, position + 1)
+        }
+        mediator?.attach()
+        mockQuestion.forEachIndexed { index, _ ->
+            val inflater = LayoutInflater.from(this@MockQuestionActivity)
+            val tabTitle = inflater.inflate(R.layout.tab_title, null, false) as TextView
+            binding.questionCountTabLayout.getTabAt(index)?.customView = tabTitle
+        }
+
+        pageChangeListener = object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                if (position == mockQuestion.lastIndex) {
+                    binding.btnSubmitQuiz.visibility = View.VISIBLE
+                } else {
+                    binding.btnSubmitQuiz.visibility = View.GONE
+                }
+            }
+        }
+
+        binding.questionPager.registerOnPageChangeCallback(pageChangeListener!!)
     }
 
     private fun instructionDialog() {
@@ -143,6 +165,7 @@ class MockQuestionActivity : AppCompatActivity() {
             bottomSheetDialog.setCancelable(false)
             btnStartTest.setOnClickListener {
                 questionPageViewModel.updateStudentTestStatus(mockId = mock.uid)
+                questionPageViewModel.ruleDisplayed.postValue(true)
                 bottomSheetDialog.dismiss()
                 startTimer()
                 timerStarted = true
@@ -164,7 +187,6 @@ class MockQuestionActivity : AppCompatActivity() {
 
             override fun onFinish() {
                 timeRemaining = 0
-                showToast(this@MockQuestionActivity, "Time up.")
                 questionPageViewModel.submitMock(mock, timeRemaining)
             }
         }
@@ -180,7 +202,6 @@ class MockQuestionActivity : AppCompatActivity() {
             .setMessage(message)
             .setPositiveButton("Yes") { _, _ ->
                 questionPageViewModel.submitMock(mock = mock, timeRemaining)
-                setupObserver()
             }
             .setNegativeButton("No") { dialog, _ ->
                 dialog.dismiss()
@@ -191,20 +212,19 @@ class MockQuestionActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putLong("TIME_REMAINING", timeRemaining)
-        outState.putBoolean("RULE_DISPLAYED", ruleDisplayed)
         outState.putBoolean("TIMER_STARTED", timerStarted)
     }
 
     override fun onDestroy() {
         pageChangeListener?.let { listener ->
             binding.questionPager.unregisterOnPageChangeCallback(listener)
+            pageChangeListener = null
         }
         timer?.cancel()
-        tabLayoutMediator?.detach()
         backPressCallBack?.remove()
-        pageChangeListener = null
-        tabLayoutMediator = null
-        questionAdapter = null
+        mediator?.detach()
+        timer = null
+        mediator = null
         _binding = null
         super.onDestroy()
     }

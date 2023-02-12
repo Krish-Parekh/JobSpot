@@ -10,7 +10,6 @@ import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.krish.jobspot.model.Mock
-import com.krish.jobspot.model.MockDetail
 import com.krish.jobspot.model.MockTestState
 import com.krish.jobspot.util.Constants.Companion.COLLECTION_PATH_MOCK
 import com.krish.jobspot.util.Constants.Companion.COLLECTION_PATH_STUDENT
@@ -18,7 +17,6 @@ import com.krish.jobspot.util.Resource
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 
 private const val TAG = "MockTestViewModelTAG"
 
@@ -32,8 +30,7 @@ class MockTestViewModel : ViewModel() {
     private val _mockTestStatus: MutableLiveData<Resource<List<MockTestState>>> = MutableLiveData()
     val mockTestStatus: LiveData<Resource<List<MockTestState>>> = _mockTestStatus
 
-    private val _mock: MutableLiveData<Resource<Mock>> = MutableLiveData()
-    val mock: LiveData<Resource<Mock>> = _mock
+
 
     private val mockPath = "$COLLECTION_PATH_STUDENT/$studentId/$COLLECTION_PATH_MOCK"
     private val mockRef = mRealtimeDb.child(mockPath)
@@ -93,20 +90,6 @@ class MockTestViewModel : ViewModel() {
     private fun createMockState(mock: Mock, attemptedQuizIds: List<String>): MockTestState {
         val hasAttempted = attemptedQuizIds.contains(mock.uid)
         return MockTestState(quizUid = mock.uid, hasAttempted = hasAttempted, quizName = mock.title)
-    }
-
-    fun fetchMockTest(mockTestId: String) {
-        viewModelScope.launch(IO) {
-            try {
-                _mock.postValue(Resource.loading())
-                val mockRef = mFirestore.collection(COLLECTION_PATH_MOCK).document(mockTestId)
-                val mockSnapshot = mockRef.get().await()
-                val mock = mockSnapshot.toObject(Mock::class.java)!!
-                _mock.postValue(Resource.success(mock))
-            } catch (error: Exception) {
-                _mock.postValue(Resource.error(error.message!!))
-            }
-        }
     }
 
     override fun onCleared() {

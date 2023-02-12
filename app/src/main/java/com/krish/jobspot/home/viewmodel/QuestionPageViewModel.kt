@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
 import com.krish.jobspot.model.Mock
 import com.krish.jobspot.model.MockDetail
 import com.krish.jobspot.model.MockQuestion
@@ -24,13 +25,34 @@ import java.util.concurrent.TimeUnit
 private const val TAG = "QuestionPageViewModel"
 
 class QuestionPageViewModel : ViewModel() {
+
+    private val mFirestore: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
     private val mFirebaseAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
     private val mRealtimeDb: DatabaseReference by lazy { FirebaseDatabase.getInstance().reference }
     private val studentId: String by lazy { mFirebaseAuth.currentUser?.uid.toString() }
     private val selectedAnswers = MutableList(10) { _ -> "" }
 
-    private val _submitMockStatus : MutableLiveData<Resource<String>> = MutableLiveData()
-    val submitMockStatus : LiveData<Resource<String>> = _submitMockStatus
+    val ruleDisplayed = MutableLiveData(false)
+
+    private val _submitMockStatus: MutableLiveData<Resource<String>> = MutableLiveData()
+    val submitMockStatus: LiveData<Resource<String>> = _submitMockStatus
+
+    private val _mock: MutableLiveData<Resource<Mock>> = MutableLiveData()
+    val mock: LiveData<Resource<Mock>> = _mock
+
+    fun fetchMockTest(mockTestId: String) {
+        viewModelScope.launch(IO) {
+            try {
+                _mock.postValue(Resource.loading())
+                val mockRef = mFirestore.collection(COLLECTION_PATH_MOCK).document(mockTestId)
+                val mockSnapshot = mockRef.get().await()
+                val mock = mockSnapshot.toObject(Mock::class.java)!!
+                _mock.postValue(Resource.success(mock))
+            } catch (error: Exception) {
+                _mock.postValue(Resource.error(error.message!!))
+            }
+        }
+    }
 
     fun setSelectedAnswer(questionIdx: Int, answer: String) {
         selectedAnswers[questionIdx] = answer
@@ -83,7 +105,11 @@ class QuestionPageViewModel : ViewModel() {
         val correctCount = answerCounts["correct"]?.size ?: 0
         val incorrectCount = answerCounts["incorrect"]?.size ?: 0
         val unAttemptedCount = answerCounts["unattempted"]?.size ?: 0
-        return Triple(correctCount.toString(), incorrectCount.toString(), unAttemptedCount.toString())
+        return Triple(
+            correctCount.toString(),
+            incorrectCount.toString(),
+            unAttemptedCount.toString()
+        )
     }
 
     private fun getCurrentIndex(correctOption: String): Int {
@@ -99,18 +125,22 @@ class QuestionPageViewModel : ViewModel() {
     fun updateStudentTestStatus(mockId: String) {
         viewModelScope.launch(IO) {
             try {
-                val mockResultPath = "${COLLECTION_PATH_STUDENT}/$studentId/${COLLECTION_PATH_MOCK}/$mockId"
+                val mockResultPath =
+                    "${COLLECTION_PATH_STUDENT}/$studentId/${COLLECTION_PATH_MOCK}/$mockId"
                 mRealtimeDb.child(mockResultPath).setValue(mockId).await()
-                val mockDetailRef = mRealtimeDb.child(COLLECTION_PATH_MOCK).child(mockId).get().await()
+                val mockDetailRef =
+                    mRealtimeDb.child(COLLECTION_PATH_MOCK).child(mockId).get().await()
                 val mockDetail = mockDetailRef.getValue(MockDetail::class.java)!!
                 mockDetail.studentCount = mockDetail.studentIds.size.toString()
                 mockDetail.studentIds.add(studentId)
                 val mockTestPath = "$COLLECTION_PATH_MOCK/$mockId"
                 val mockTestRef = mRealtimeDb.child(mockTestPath)
                 mockTestRef.setValue(mockDetail).await()
-            } catch (error : Exception){
+            } catch (error: Exception) {
                 Log.d(TAG, "Error: ${error.message} ")
             }
         }
     }
+
+
 }

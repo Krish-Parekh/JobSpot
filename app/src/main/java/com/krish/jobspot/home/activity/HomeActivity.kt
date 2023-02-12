@@ -7,6 +7,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.krish.jobspot.R
 import com.krish.jobspot.databinding.ActivityHomeBinding
 
+private const val TAG = "HomeActivityTAG"
 class HomeActivity : AppCompatActivity() {
     private var _binding: ActivityHomeBinding? = null
     private val binding get() = _binding!!
@@ -14,7 +15,6 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         setupBottomNavigation()
     }
 

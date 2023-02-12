@@ -23,7 +23,7 @@ class QuestionViewFragment : Fragment() {
     private val binding get() = _binding!!
     private var questionId: Int = 0
     private var selectedOption: Int = -1
-    private val questionPageViewModel : QuestionPageViewModel by activityViewModels()
+    private val questionPageViewModel by activityViewModels<QuestionPageViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

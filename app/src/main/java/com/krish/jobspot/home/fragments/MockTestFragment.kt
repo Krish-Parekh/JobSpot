@@ -16,6 +16,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.krish.jobspot.databinding.FragmentMockTestBinding
+import com.krish.jobspot.home.activity.MockQuestionActivity
 import com.krish.jobspot.home.activity.MockResultActivity
 import com.krish.jobspot.home.adapter.MockTestAdapter
 import com.krish.jobspot.home.viewmodel.MockTestViewModel
@@ -103,33 +104,15 @@ class MockTestFragment : Fragment() {
     }
 
 
-    fun navigateToMockTest(mockTestState: MockTestState) {
-        mockTestViewModel.fetchMockTest(mockTestId = mockTestState.quizUid)
-        mockTestViewModel.mock.observe(viewLifecycleOwner) { mockState ->
-            when (mockState.status) {
-                LOADING -> Unit
-                SUCCESS -> {
-                    val mock = mockState.data!!
-                    val direction =
-                        MockTestFragmentDirections.actionMockTestFragmentToMockQuestionActivity(mock)
-                    findNavController().backQueue.forEach {
-                        Log.d(TAG, "Id: ${it.id}")
-                        Log.d(TAG, "Destination: ${it.destination}")
-                        Log.d(TAG, "Id: ${it}")
-                    }
-                    findNavController().navigate(direction)
-                }
-                ERROR -> {
-                    val errorMessage = mockState.message!!
-                    showToast(requireContext(), errorMessage)
-                }
-            }
-        }
+    fun navigateToMockQuestion(mockId: String) {
+        val mockQuestion = Intent(requireContext(), MockQuestionActivity::class.java)
+        mockQuestion.putExtra("MOCK_ID", mockId)
+        startActivity(mockQuestion)
     }
 
-    fun navigateToMockResult(mockTestState: MockTestState) {
+    fun navigateToMockResult(mockId: String) {
         val mockResult = Intent(requireContext(), MockResultActivity::class.java)
-        mockResult.putExtra("MOCK_ID", mockTestState.quizUid)
+        mockResult.putExtra("MOCK_ID", mockId)
         startActivity(mockResult)
     }
 

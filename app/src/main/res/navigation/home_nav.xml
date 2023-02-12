@@ -33,26 +33,13 @@
             app:argType="com.krish.jobspot.model.Job" />
     </activity>
     <fragment
-        android:id="@+id/mockTestFragment"
-        android:name="com.krish.jobspot.home.fragments.MockTestFragment"
-        android:label="fragment_mock_test"
-        tools:layout="@layout/fragment_mock_test">
-        <action
-            android:id="@+id/action_mockTestFragment_to_mockQuestionActivity"
-            app:destination="@id/mockQuestionActivity" />
-    </fragment>
-    <activity
-        android:id="@+id/mockQuestionActivity"
-        android:name="com.krish.jobspot.home.activity.MockQuestionActivity"
-        android:label="activity_mock_question"
-        tools:layout="@layout/activity_mock_question">
-        <argument
-            android:name="mock"
-            app:argType="com.krish.jobspot.model.Mock" />
-    </activity>
-    <fragment
         android:id="@+id/alertFragment"
         android:name="com.krish.jobspot.home.fragments.AlertFragment"
         android:label="fragment_alert"
         tools:layout="@layout/fragment_alert" />
+    <fragment
+        android:id="@+id/mockTestFragment"
+        android:name="com.krish.jobspot.home.fragments.MockTestFragment"
+        android:label="fragment_mock_test"
+        tools:layout="@layout/fragment_mock_test" />
 </navigation>

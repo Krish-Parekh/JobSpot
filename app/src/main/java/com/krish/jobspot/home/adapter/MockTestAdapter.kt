@@ -26,9 +26,9 @@ class MockTestAdapter(private val listener: MockTestFragment) :
                 cvMockTest.setOnClickListener {
                     cvMockTest.isEnabled = false
                     if (mockTestState.hasAttempted){
-                        listener.navigateToMockResult(mockTestState)
+                        listener.navigateToMockResult(mockTestState.quizUid)
                     } else {
-                        listener.navigateToMockTest(mockTestState)
+                        listener.navigateToMockQuestion(mockTestState.quizUid)
                     }
                     cvMockTest.isEnabled = true
                 }
