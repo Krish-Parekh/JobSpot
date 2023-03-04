@@ -22,24 +22,45 @@ import kotlinx.coroutines.launch
 
 private const val TAG = "HomeViewModelTAG"
 
+/**
+ * The [HomeViewModel] class is responsible for handling data operations related to the home screen.
+ * It extends [ViewModel] and provides [LiveData] objects to observe changes in the data.
+ */
 class HomeViewModel : ViewModel() {
+    // Initialize Firestore, Realtime Database, and Firebase Auth instances using lazy initialization
     private val mFirestore: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
     private val mRealtimeDb: DatabaseReference by lazy { FirebaseDatabase.getInstance().reference }
     private val mAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
+
+    // Get the ID of the currently logged-in user
     private val currentUserId = mAuth.currentUser?.uid!!
+    // ListenerRegistration object to remove the snapshot listener when the ViewModel is cleared
     private var jobListener: ListenerRegistration? = null
 
+    /*
+    * MutableLiveData objects to hold changes in the metrics
+    * LiveData objects to observe changes in the metrics
+    * */
     private val _metrics: MutableLiveData<Resource<Pair<Int, Int>>> = MutableLiveData()
     val metrics: LiveData<Resource<Pair<Int, Int>>> = _metrics
 
+    /*
+    * MutableLiveData objects to hold changes in the jobs
+    * LiveData objects to observe changes in the jobs
+    * */
     private val _jobs: MutableLiveData<Resource<List<Job>>> = MutableLiveData()
     val jobs: LiveData<Resource<List<Job>>> = _jobs
 
+    /**
+     * Fetches the metrics related to the home screen (e.g. number of companies, number of jobs applied to).
+     * The result is posted to the [_metrics] LiveData object.
+     */
     fun fetchMetrics() {
         viewModelScope.launch(IO) {
             try {
                 _metrics.postValue(Resource.loading())
 
+                // Get the companies count and jobs applied count using coroutines
                 val companiesCountDeffered = async { getCompaniesCount() }
                 val jobsAppliedCountDeffered = async { getJobsAppliedCount() }
                 val companiesCount = companiesCountDeffered.await()
@@ -54,6 +75,10 @@ class HomeViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Gets the count of companies in the Firestore database.
+     * @return The count of companies.
+     */
     private suspend fun getCompaniesCount(): Int {
         val companiesCountDeffered = CompletableDeferred<Int>()
         val companiesRef = mFirestore.collection(COLLECTION_PATH_COMPANY)
@@ -74,7 +99,10 @@ class HomeViewModel : ViewModel() {
         }
         return companiesCountDeffered.await()
     }
-
+    /**
+     * Gets the count of jobs applied to by the current user in the Realtime Database.
+     * @return The count of jobs applied to.
+     */
     private suspend fun getJobsAppliedCount(): Int {
         val jobAppliedPath = "$COLLECTION_PATH_STUDENT/$currentUserId/$COLLECTION_PATH_COMPANY"
         val jobAppliedRef = mRealtimeDb.child(jobAppliedPath)
@@ -97,6 +125,10 @@ class HomeViewModel : ViewModel() {
         return jobAppliedCountDeffered.await()
     }
 
+    /**
+     * Fetches a list of jobs from the Firestore database and updates the [_jobs] live data.
+     * If an error occurs during the fetch, the [_jobs] live data is updated with an error resource.
+     */
     fun fetchJobs() {
         viewModelScope.launch(IO) {
             _jobs.postValue(Resource.loading())

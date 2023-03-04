@@ -20,6 +20,9 @@ import kotlinx.coroutines.launch
 
 private const val TAG = "MockTestViewModelTAG"
 
+/**
+ * ViewModel for handling mock test related functionality.
+ */
 class MockTestViewModel : ViewModel() {
 
     private val mFirestore: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
@@ -39,6 +42,9 @@ class MockTestViewModel : ViewModel() {
 
     var mockAnswer: Array<String?> = arrayOfNulls(10)
 
+    /**
+     * Fetches the status of the mock test.
+     */
     fun fetchMockTestStatus() {
         viewModelScope.launch(IO) {
             try {
@@ -53,6 +59,11 @@ class MockTestViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Retrieves the attempted mock ids from the database.
+     *
+     * @return A list of attempted mock ids.
+     */
     private suspend fun getAttemptedMockIds(): List<String> {
         val attemptedQuizIdsDeffered = CompletableDeferred<List<String>>()
         attemptedQuizIdsListener = object : ValueEventListener {
@@ -69,6 +80,12 @@ class MockTestViewModel : ViewModel() {
         return attemptedQuizIdsDeffered.await()
     }
 
+    /**
+     * Retrieves the states of the mock tests from the Firestore database.
+     *
+     * @param attemptedQuizIds The list of attempted mock ids.
+     * @return A list of mock test states.
+     */
     private suspend fun getMockStates(
         attemptedQuizIds: List<String>
     ): List<MockTestState> {
@@ -87,6 +104,14 @@ class MockTestViewModel : ViewModel() {
         return mockStateDeffered.await()
     }
 
+    /**
+     * Creates a [MockTestState] object from a [Mock] object and a list of attempted quiz IDs.
+     *
+     * @param mock The [Mock] object to create the [MockTestState] from.
+     * @param attemptedQuizIds A list of attempted quiz IDs for the current user.
+     *
+     * @return A [MockTestState] object representing the status of the mock test.
+     */
     private fun createMockState(mock: Mock, attemptedQuizIds: List<String>): MockTestState {
         val hasAttempted = attemptedQuizIds.contains(mock.uid)
         return MockTestState(quizUid = mock.uid, hasAttempted = hasAttempted, quizName = mock.title)

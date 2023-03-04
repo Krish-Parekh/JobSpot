@@ -1,6 +1,5 @@
-# JobSpot 👜
-
-JobSpot is an android application designed to help students find job opportunities and prepare for them. The app offers a range of features to help students apply for jobs, take mock tests, and stay updated on their application status.
+<h1 align="center"> JobSpot 👜 </h1>
+<p align="center"> JobSpot is an android application designed to help students find job opportunities and prepare for them. The app offers a range of features to help students apply for jobs, take mock tests, and stay updated on their application status. </p>
 
 ## Features
 - **Job search**: The app allows students to search for job opportunities based on their preferences and qualifications.

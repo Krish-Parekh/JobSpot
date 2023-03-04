@@ -22,11 +22,20 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
+/**
+ * Represents the state of the mock solution.
+ *
+ * @property mockResult The mock result object.
+ * @property mockQuestions The list of mock questions.
+ */
 data class MockSolutionState(
     val mockResult: MockResult = MockResult(),
     val mockQuestions: List<MockQuestion> = emptyList()
 )
 
+/**
+ * ViewModel class for the mock solution screen.
+ */
 class MockSolutionViewModel : ViewModel() {
     private val mAuth by lazy { FirebaseAuth.getInstance() }
     private val mFirestore by lazy { FirebaseFirestore.getInstance() }
@@ -35,12 +44,20 @@ class MockSolutionViewModel : ViewModel() {
     private val _mockResultState : MutableLiveData<Resource<MockSolutionState>> = MutableLiveData()
     val mockResultState : LiveData<Resource<MockSolutionState>> = _mockResultState
 
+    /**
+     * Fetches the mock result and mock test for a given mock id.
+     *
+     * @param mockId The id of the mock.
+     */
     fun fetchMockResult(mockId: String) {
         viewModelScope.launch(IO) {
             try {
                 _mockResultState.postValue(Resource.loading())
+                // Get mock result and mock test in parallel using coroutines
                 val mockResultDeffered = async { getMockResult(mockId) }
                 val mockTestDeffered = async { getMockTest(mockId) }
+
+                // Wait for both deferred values to be available and create a MockSolutionState object
                 val mockResult = mockResultDeffered.await()
                 val mockTest = mockTestDeffered.await()
                 val mockSolutionState = MockSolutionState(
@@ -55,6 +72,13 @@ class MockSolutionViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Retrieves the mock result from Firebase Realtime Database for the current student and mock ID
+     *
+     * @param mockId The ID of the mock test for which to retrieve the result
+     * @return The [MockResult] object representing the result of the mock test
+     * @throws Exception if an error occurs while retrieving the mock result from Firebase Realtime Database
+     */
     private suspend fun getMockResult(mockId: String) : MockResult {
         val studentId = mAuth.currentUser?.uid!!
         val mockResultPath = "$COLLECTION_PATH_MOCK_RESULT/$mockId/$studentId"
@@ -79,6 +103,13 @@ class MockSolutionViewModel : ViewModel() {
         return mockResultDeffered.await()
     }
 
+    /**
+     * Fetches the [Mock] associated with the given [mockId] from the Firestore database.
+     *
+     * @param mockId The ID of the [Mock] to fetch.
+     * @return The fetched [Mock] object.
+     * @throws Exception If an error occurs while fetching the [Mock] object from the Firestore database.
+     */
     private suspend fun getMockTest(mockId: String) : Mock {
         val mockTestRef = mFirestore.collection(COLLECTION_PATH_MOCK).document(mockId)
         val mockTestDoc = mockTestRef.get().await()
