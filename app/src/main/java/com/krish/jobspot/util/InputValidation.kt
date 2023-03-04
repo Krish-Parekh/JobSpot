@@ -5,6 +5,10 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.regex.Pattern
 
+
+/**
+ * Provides a set of utility functions for validating user input.
+ */
 class InputValidation {
     companion object {
         private val EMAIL_ADDRESS_PATTERN =
@@ -21,10 +25,23 @@ class InputValidation {
         private val PASSWORD_PATTERN =
             Pattern.compile("^.*(?=.{4,})(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!&\$%&?#_@ ]).*\$")
 
+        /**
+         * Checks if the input string is not null or empty.
+         *
+         * @param input The string to check.
+         * @return `true` if the input string is not null or empty, `false` otherwise.
+         */
         fun checkNullity(input: String): Boolean {
-            return input.isNotEmpty();
+            return input.isNotEmpty()
         }
 
+        /**
+         * Checks if the given username is valid.
+         *
+         * @param username The username to validate.
+         * @return A [Pair] object containing a boolean value indicating whether the username is valid, and a string
+         * message describing the validation result.
+         */
         fun isUsernameValid(username: String): Pair<Boolean, String> {
             if (username.isEmpty()) {
                 return Pair(false, "Username cannot be empty.")
@@ -41,6 +58,13 @@ class InputValidation {
             return Pair(true, "")
         }
 
+        /**
+         * Checks if the given email address is valid.
+         *
+         * @param email The email address to validate.
+         * @return A [Pair] object containing a boolean value indicating whether the email address is valid, and a string
+         * message describing the validation result.
+         */
         fun isEmailValid(email: String): Pair<Boolean, String> {
             if (email.isEmpty()) {
                 return Pair(false, "Email cannot be empty.")
@@ -54,6 +78,13 @@ class InputValidation {
             return Pair(true, "")
         }
 
+        /**
+         * Checks if the given password is valid.
+         *
+         * @param password The password to validate.
+         * @return A [Pair] object containing a boolean value indicating whether the password is valid, and a string
+         * message describing the validation result.
+         */
         fun isPasswordValid(password: String): Pair<Boolean, String> {
             if (password.isEmpty()) {
                 return Pair(false, "Password cannot be empty.")
@@ -64,6 +95,13 @@ class InputValidation {
             return Pair(true, "")
         }
 
+        /**
+         * Validates if a SAP ID is valid.
+         *
+         * @param sapId the SAP ID to validate
+         * @return a [Pair] of [Boolean] and [String] where the boolean represents if the SAP ID is valid and the
+         * string contains an error message in case the validation fails.
+         */
         fun isSapIdValid(sapId: String): Pair<Boolean, String> {
             if (sapId.isEmpty()) {
                 return Pair(false, "SAP ID cannot be empty.")
@@ -77,6 +115,13 @@ class InputValidation {
             return Pair(true, "")
         }
 
+        /**
+         * Validates if a mobile number is valid.
+         *
+         * @param mobileNumber the mobile number to validate
+         * @return a [Pair] of [Boolean] and [String] where the boolean represents if the mobile number is valid and the
+         * string contains an error message in case the validation fails.
+         */
         fun isMobileNumberValid(mobileNumber: String): Pair<Boolean, String> {
             if (mobileNumber.isEmpty()) {
                 return Pair(false, "Mobile number cannot be empty.")
@@ -97,6 +142,13 @@ class InputValidation {
             return Pair(true, "")
         }
 
+        /**
+         * Validates if a date of birth is valid.
+         *
+         * @param dob the date of birth to validate in the format yyyy-MM-dd
+         * @return a [Pair] of [Boolean] and [String] where the boolean represents if the date of birth is valid and the
+         * string contains an error message in case the validation fails.
+         */
         fun isDOBValid(dob: String): Pair<Boolean, String> {
             if (dob.isEmpty()) {
                 return Pair(false, "Date of Birth cannot be empty.")
@@ -110,10 +162,23 @@ class InputValidation {
             return Pair(true, "")
         }
 
+        /**
+         * Validates if the gender is valid.
+         *
+         * @param gender the gender to validate
+         * @return a [Boolean] representing if the gender is valid.
+         */
         fun genderValidation(gender: String): Boolean {
             return checkNullity(gender)
         }
 
+        /**
+         * This function checks if the given address is valid.
+         *
+         * @param address The address to check.
+         * @return A [Pair] of [Boolean] and [String] where the Boolean value indicates if the address is valid and the
+         * String value is an error message in case the address is not valid.
+         */
         fun isAddressValid(address: String): Pair<Boolean, String> {
             if (address.isEmpty()) {
                 return Pair(false, "Address cannot be empty.")
@@ -127,6 +192,13 @@ class InputValidation {
             return Pair(true, "")
         }
 
+        /**
+         * This function checks if the given city is valid.
+         *
+         * @param city The city to check.
+         * @return A [Pair] of [Boolean] and [String] where the Boolean value indicates if the city is valid and the
+         * String value is an error message in case the city is not valid.
+         */
         fun isCityValid(city: String): Pair<Boolean, String> {
             if (city.isEmpty()) {
                 return Pair(false, "City cannot be empty.")
@@ -140,6 +212,13 @@ class InputValidation {
             return Pair(true, "")
         }
 
+        /**
+         * This function checks if the given state is valid.
+         *
+         * @param state The state to check.
+         * @return A [Pair] of [Boolean] and [String] where the Boolean value indicates if the state is valid and the
+         * String value is an error message in case the state is not valid.
+         */
         fun isStateValid(state: String): Pair<Boolean, String> {
             if (state.isEmpty()) {
                 return Pair(false, "State cannot be empty.")
@@ -152,7 +231,13 @@ class InputValidation {
             }
             return Pair(true, "")
         }
-
+        /**
+         * Determines whether a given zip code is valid or not.
+         *
+         * @param zipCode the zip code to be validated
+         * @return a Pair indicating whether the zip code is valid (true) or not (false),
+         *         along with an error message (if applicable)
+         */
         fun isZipCodeValid(zipCode: String): Pair<Boolean, String> {
             if (zipCode.isEmpty()) {
                 return Pair(false, "Zip code cannot be empty.")
@@ -166,6 +251,13 @@ class InputValidation {
             return Pair(true, "")
         }
 
+        /**
+         * Determines whether a given score is valid or not.
+         *
+         * @param score the score to be validated
+         * @return a Pair indicating whether the score is valid (true) or not (false),
+         *         along with an error message (if applicable)
+         */
         fun isScoreValid(score: String): Pair<Boolean, String> {
             if (score.isEmpty()) {
                 return Pair(false, "Score cannot be empty.")

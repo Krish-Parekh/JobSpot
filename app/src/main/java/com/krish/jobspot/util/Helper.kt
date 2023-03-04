@@ -17,6 +17,9 @@ import com.google.android.material.textfield.TextInputLayout
 import com.krish.jobspot.R
 import java.util.*
 
+/**
+ * Adds a text watcher to the TextInputLayout's EditText to clear its error message when its text changes.
+ */
 fun TextInputLayout.addTextWatcher() {
     editText?.addTextChangedListener(object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -27,19 +30,40 @@ fun TextInputLayout.addTextWatcher() {
     })
 }
 
+/**
+ * Clears the text of the TextInputEditText and removes its focus.
+ */
 fun TextInputEditText.clearText() {
     setText("")
     clearFocus()
 }
 
+/**
+ * Returns the trimmed input value of the TextInputEditText as a String.
+ *
+ * @return The input value of the TextInputEditText as a String.
+ */
 fun TextInputEditText.getInputValue(): String {
     return text.toString().trim()
 }
 
+/**
+ * Shows a toast message with the given message string.
+ *
+ * @param context The Context to use for creating the toast message.
+ * @param message The message string to display in the toast message.
+ */
 fun showToast(context: Context, message: String) {
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }
 
+/**
+ * Creates and returns a formatted SpannableString that represents a salary value.
+ *
+ * @param salary The salary value as a String.
+ * @param requireActivity The Activity object to use for getting color resources.
+ * @return The formatted SpannableString representing the salary value.
+ */
 fun createSalaryText(salary: String, requireActivity: Activity): SpannableString {
     val shortSalary = convertToShortString(salary.toLong())
     val salaryText = SpannableString("₹$shortSalary/year")
@@ -57,6 +81,13 @@ fun createSalaryText(salary: String, requireActivity: Activity): SpannableString
     return salaryText
 }
 
+/**
+ * Animates a counter value from the start value to the end value in a TextView.
+ *
+ * @param start The start value of the counter.
+ * @param end The end value of the counter.
+ * @param textView The TextView to display the counter value.
+ */
 fun counterAnimation(start: Int, end: Int, textView: TextView) {
     val animator = ValueAnimator.ofInt(start, end)
     animator.duration = 500
@@ -69,7 +100,12 @@ fun counterAnimation(start: Int, end: Int, textView: TextView) {
     animator.start()
 }
 
-
+/**
+ * Converts a long value to a short string representation with a suffix.
+ *
+ * @param value The long value to convert.
+ * @return The short string representation of the value with a suffix.
+ */
 fun convertToShortString(value: Long): String {
     if (value < 1000) {
         return value.toString()
@@ -82,7 +118,12 @@ fun convertToShortString(value: Long): String {
     }
 }
 
-
+/**
+ * Returns the duration in minutes or seconds based on the provided milliseconds.
+ *
+ * @param milliSeconds The duration in milliseconds.
+ * @return The duration in minutes (m) or seconds (s).
+ */
 fun checkTimeUnit(milliSeconds: Long): String {
     val seconds = milliSeconds / 1000
     val minutes = seconds / 60
@@ -93,6 +134,12 @@ fun checkTimeUnit(milliSeconds: Long): String {
     }
 }
 
+/**
+ * Converts a given [timestamp] date into a human-readable elapsed time string.
+ *
+ * @param timestamp The date to convert to elapsed time.
+ * @return A string representing the elapsed time between the current date and the given [timestamp] date.
+ */
 fun convertTimeStamp(timestamp: Date): String {
     val timestampDate = timestamp
     val currentDate = Date()
