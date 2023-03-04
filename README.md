@@ -2,6 +2,7 @@
 <p align="center"> JobSpot is an android application designed to help students find job opportunities and prepare for them. The app offers a range of features to help students apply for jobs, take mock tests, and stay updated on their application status. </p>
 
 ## Features
+
 - **Job search**: The app allows students to search for job opportunities based on their preferences and qualifications.
 - **Mock tests**: Students can take mock tests to prepare for the job selection process and improve their chances of getting hired.
 - **Application tracking**: The app enables students to stay updated on the status of their job applications, including interview schedules and application status.
@@ -23,37 +24,44 @@
 - [PowerSpinner](https://github.com/skydoves/PowerSpinner) - A lightweight dropdown popup spinner, fully customizable with an arrow and animations for Android.
 - [SmoothBottomBar](https://github.com/ibrahimsn98/SmoothBottomBar) - A lightweight Android material bottom navigation bar library.
 
-
 ## Installation Guide
 
 - Clone the repository by running the following command in your terminal:
+
 ```bash
  git clone https://github.com/Krish-Parekh/JobSpot.git
 ```
 
-- Add the ```google-service.json``` file to your application. This file contains your Firebase project's configuration details and is required for your app to function properly. To get this file, follow these steps:
-    - Go to the Firebase console and select your project.
-    - Navigate to the project settings and select the "General" tab.
-    - Scroll down to the section titled "Your apps" and select the Android app you've already created.
-    - Click on the "Download google-services.json" button to download the file.
-    - Copy the downloaded file into the ```app``` directory of your cloned repository.
+- Add the `google-service.json` file to your application. This file contains your Firebase project's configuration details and is required for your app to function properly. To get this file, follow these steps:
+
+  - Go to the Firebase console and select your project.
+  - Navigate to the project settings and select the "General" tab.
+  - Scroll down to the section titled "Your apps" and select the Android app you've already created.
+  - Click on the "Download google-services.json" button to download the file.
+  - Copy the downloaded file into the `app` directory of your cloned repository.
 
 - Build the app by running the following command in your terminal:
+
 ```bash
 ./gradlew build
 ```
+
 This command will download any required dependencies, build the app, and generate an APK file.
 
 - Run unit tests by running the following command in your terminal:
+
 ```bash
 ./gradlew test
 ```
+
 This command will execute all unit tests defined in the project.
 
 - Run the app by running the following command in your terminal:
+
 ```bash
 ./gradlew installDebug
 ```
+
 This command will install the app on your connected Android device or emulator and launch it.
 
 Congratulations 🎉, you've successfully installed and launched the app and run unit tests!
@@ -104,7 +112,23 @@ Make sure to test your changes thoroughly before submitting a pull request. You 
 
     ./gradlew test
 
-
 ## Reporting Bugs
 
 If you find any bugs or issues with the project, please report them by opening a new issue on the GitHub repository.
+
+## Preview
+| Login Signup Screen | Add Details Screen |
+| --- | --- |
+| ![Login Signup Screen](./preview/login_signup_screen.png) | ![Add Details Screen](./preview/add_details_light.png) |
+
+| Home Notification Screen | Job Screen |
+| --- | --- |
+| ![Home Notification Screen](./preview/home_and_notification_light.png) | ![Job Screen](./preview/job_list_light.png) |
+
+| Mock Test Screen | Mock Test Question Screen |
+| --- | --- |
+| ![Mock Test Screen](./preview/mock_test_list_light.png) | ![Mock Test Question Screen](./preview/mock_test_question_report_light.png) |
+
+| Profile Edit Screen | Logout Delete Screen |
+| --- | --- |
+| ![Profile Edit Screen](./preview/profile_edit_light.png) | ![Logout Delete Screen](./preview/logout_delete_account_light.png) |
