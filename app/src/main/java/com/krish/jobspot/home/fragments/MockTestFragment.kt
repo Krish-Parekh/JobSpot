@@ -47,10 +47,6 @@ class MockTestFragment : Fragment() {
         setupUI()
         setupObserver()
 
-        findNavController().backQueue.forEach {
-            Log.d(TAG, "onCreateView: ${it.destination.displayName}")
-        }
-
         return binding.root
     }
 
