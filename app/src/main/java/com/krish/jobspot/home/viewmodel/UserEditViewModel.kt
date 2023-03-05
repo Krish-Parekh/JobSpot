@@ -126,6 +126,7 @@ class UserEditViewModel : ViewModel() {
                     studentDetail.imageUrl = studentImageRef.downloadUrl.await().toString()
                     student.details = studentDetail
                 }
+
                 val userProfileBuilder = UserProfileChangeRequest.Builder()
                 val userProfile = userProfileBuilder
                     .setDisplayName(studentDetail.username)
@@ -134,7 +135,10 @@ class UserEditViewModel : ViewModel() {
 
                 val currentUser = mAuth.currentUser!!
                 currentUser.updateProfile(userProfile).await()
-
+                val currentUserEmail = currentUser.email!!
+                if ((currentUserEmail != student.details!!.email)){
+                    currentUser.updateEmail(student.details!!.email).await()
+                }
                 val editStudentRef = mFirestore.collection(COLLECTION_PATH_STUDENT).document(studentId)
                 editStudentRef.set(student).await()
                 _updateState.postValue(Resource.success("Student update success."))
