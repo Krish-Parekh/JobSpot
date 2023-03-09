@@ -50,7 +50,7 @@ class MockTestViewModel : ViewModel() {
             try {
                 _mockTestStatus.postValue(Resource.loading())
                 val attemptedQuizIds = getAttemptedMockIds()
-                val mockStates = getMockStates(attemptedQuizIds)
+                val mockStates = getMockStates(attemptedQuizIds).sortedByDescending { it.quizUid }
                 Log.d(TAG, "MockStates : ${mockStates}")
                 _mockTestStatus.postValue(Resource.success(mockStates))
             } catch (error: Exception) {
