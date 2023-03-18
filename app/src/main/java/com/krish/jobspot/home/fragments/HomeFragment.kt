@@ -2,9 +2,13 @@ package com.krish.jobspot.home.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -22,6 +26,7 @@ import com.krish.jobspot.home.viewmodel.HomeViewModel
 import com.krish.jobspot.model.Job
 import com.krish.jobspot.util.Status.*
 import com.krish.jobspot.util.counterAnimation
+import com.krish.jobspot.util.getGreeting
 import com.krish.jobspot.util.showToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -57,7 +62,8 @@ class HomeFragment : Fragment() {
 
             viewLifecycleOwner.lifecycleScope.launch {
                 viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    tvWelcomeHeading.text = getString(R.string.field_welcome_text, mAuth.currentUser?.displayName)
+                    val username = mAuth.currentUser?.displayName!!
+                    tvWelcomeHeading.text = createGreetingText(username.replaceFirstChar { it.uppercase() })
                     ivProfileImage.load(mAuth.currentUser?.photoUrl)
                 }
             }
@@ -112,6 +118,17 @@ class HomeFragment : Fragment() {
         findNavController().navigate(direction)
     }
 
+    private fun createGreetingText(username: String): SpannableString {
+        val greeting = getGreeting()
+        val greetingWithUsername = "$greeting\n$username"
+        val color = ContextCompat.getColor(requireActivity(), R.color.on_boarding_span_text_color)
+        val greetingColor = ForegroundColorSpan(color)
+        val greetingText = SpannableString(greetingWithUsername)
+        val userNameStart = greetingWithUsername.indexOf(username)
+        val userNameEnd = userNameStart + username.length
+        greetingText.setSpan(greetingColor, userNameStart, userNameEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        return greetingText
+    }
     override fun onDestroyView() {
         _jobListAdapter = null
         _binding = null

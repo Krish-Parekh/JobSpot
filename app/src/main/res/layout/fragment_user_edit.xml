@@ -31,9 +31,10 @@
             android:fontFamily="@font/dm_sans_bold"
             android:text="Manage Account"
             android:textColor="@color/text_color"
-            android:textSize="26sp"
-            app:layout_constraintLeft_toLeftOf="@+id/ivPopOut"
-            app:layout_constraintTop_toBottomOf="@+id/ivPopOut" />
+            android:textSize="22sp"
+            app:layout_constraintBottom_toBottomOf="@id/ivPopOut"
+            app:layout_constraintLeft_toRightOf="@id/ivPopOut"
+            app:layout_constraintTop_toTopOf="@id/ivPopOut" />
 
 
         <ImageView

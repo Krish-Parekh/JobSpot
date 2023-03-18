@@ -110,6 +110,7 @@ class JobViewActivity : AppCompatActivity() {
             ContextCompat.getColorStateList(this@JobViewActivity, R.color.chip_background_color)
         chip.setTextColor(this@JobViewActivity.getColor(R.color.chip_text_color))
         chip.chipCornerRadius = 8f
+        chip.textSize = 14.0f
         binding.requiredSkillSetChipGroup.addView(chip)
     }
 

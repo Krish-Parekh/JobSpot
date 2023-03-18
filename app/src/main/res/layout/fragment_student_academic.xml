@@ -23,14 +23,14 @@
         android:id="@+id/tvAddressHeading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/medium_margin"
         android:paddingVertical="@dimen/small_padding"
         android:fontFamily="@font/dm_sans_bold"
         android:text="@string/student_academic_fragment_heading"
         android:textColor="@color/text_color"
-        android:textSize="26sp"
-        app:layout_constraintLeft_toLeftOf="@id/ivPopOut"
-        app:layout_constraintTop_toBottomOf="@+id/ivPopOut" />
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="@id/ivPopOut"
+        app:layout_constraintLeft_toRightOf="@id/ivPopOut"
+        app:layout_constraintTop_toTopOf="@id/ivPopOut" />
 
     <LinearLayout
         android:layout_width="match_parent"

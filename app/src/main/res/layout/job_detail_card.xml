@@ -40,7 +40,7 @@
                 android:layout_marginTop="@dimen/small_margin"
                 android:fontFamily="@font/dm_sans_bold"
                 android:textColor="@color/text_color"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 app:layout_constraintLeft_toRightOf="@+id/ivCompanyLogo"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -49,6 +49,7 @@
             <TextView
                 android:id="@+id/tvCompanyNameLocation"
                 android:layout_width="0dp"
+                android:layout_marginTop="@dimen/extra_small_margin"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/dm_sans_regular"
                 android:textColor="@color/subheading_color"
@@ -68,7 +69,7 @@
             android:padding="@dimen/small_padding"
             android:text="$15k/Mo"
             android:textColor="@color/text_color"
-            android:textSize="20sp" />
+            android:textSize="16sp" />
 
 
         <LinearLayout
@@ -85,6 +86,7 @@
                 android:textColor="@color/chip_text_color"
                 android:layout_weight="2"
                 android:text="Intern"
+                android:textSize="14sp"
                 android:textAlignment="center"
                 app:chipCornerRadius="8dp" />
 
@@ -98,6 +100,7 @@
                 android:textColor="@color/chip_text_color"
                 android:textAlignment="center"
                 app:chipCornerRadius="8dp"
+                android:textSize="14sp"
                 tools:text="Full time" />
 
             <com.google.android.material.chip.Chip
@@ -107,6 +110,7 @@
                 android:layout_marginHorizontal="@dimen/small_margin"
                 android:layout_weight="1"
                 android:text="@string/field_apply"
+                android:textSize="14sp"
                 android:textAlignment="center"
                 app:chipBackgroundColor="@color/light_orange"
                 app:chipCornerRadius="8dp" />

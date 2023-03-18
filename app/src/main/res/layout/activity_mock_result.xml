@@ -24,11 +24,11 @@
         android:id="@+id/tvReportHeading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/medium_margin"
+        android:paddingVertical="@dimen/small_padding"
         android:fontFamily="@font/dm_sans_bold"
         android:text="@string/field_report_header"
         android:textColor="@color/text_color"
-        android:textSize="32sp"
+        android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="@id/ivPopOut"
         app:layout_constraintLeft_toRightOf="@id/ivPopOut"
         app:layout_constraintTop_toTopOf="@+id/ivPopOut" />
@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/medium_margin"
-        android:layout_marginTop="@dimen/large_margin"
+        android:layout_marginTop="@dimen/medium_margin"
         app:cardBackgroundColor="@color/card_background"
         app:cardCornerRadius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,12 +48,12 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingVertical="@dimen/large_padding">
+            android:paddingVertical="@dimen/medium_padding">
 
             <ProgressBar
                 android:id="@+id/scoreProgressBar"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:indeterminateOnly="false"
                 android:progressDrawable="@drawable/circular_progress_bar_background"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/dm_sans_bold"
                 android:textColor="@color/text_color"
-                android:textSize="26sp"
+                android:textSize="22sp"
                 app:layout_constraintBottom_toBottomOf="@+id/scoreProgressBar"
                 app:layout_constraintEnd_toEndOf="@+id/scoreProgressBar"
                 app:layout_constraintStart_toStartOf="@+id/scoreProgressBar"
@@ -90,7 +90,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:contentDescription="@null"
-                    android:padding="@dimen/small_padding"
                     android:src="@drawable/ic_correct" />
 
                 <TextView
@@ -99,10 +98,11 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
+                    android:paddingHorizontal="@dimen/small_padding"
                     android:fontFamily="@font/dm_sans_regular"
                     android:text="@string/field_in_correct"
                     android:textColor="@color/text_color"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/tvIncorrectScore"
@@ -111,7 +111,7 @@
                     android:layout_gravity="center"
                     android:fontFamily="@font/dm_sans_bold"
                     android:textColor="@color/text_color"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     tools:text="2/10" />
             </LinearLayout>
 
@@ -132,7 +132,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:contentDescription="@null"
-                    android:padding="@dimen/small_padding"
                     android:src="@drawable/ic_un_attempted" />
 
                 <TextView
@@ -141,10 +140,11 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
+                    android:paddingHorizontal="@dimen/small_padding"
                     android:fontFamily="@font/dm_sans_regular"
                     android:text="@string/field_un_attempted"
                     android:textColor="@color/text_color"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/tvUnAttemptedScore"
@@ -153,7 +153,7 @@
                     android:layout_gravity="center"
                     android:fontFamily="@font/dm_sans_bold"
                     android:textColor="@color/text_color"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     tools:text="5/10" />
             </LinearLayout>
 
@@ -174,7 +174,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:contentDescription="@null"
-                    android:padding="@dimen/small_padding"
                     android:src="@drawable/ic_time" />
 
                 <TextView
@@ -183,19 +182,21 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
+                    android:paddingHorizontal="@dimen/small_padding"
                     android:fontFamily="@font/dm_sans_regular"
                     android:text="@string/field_time_taken"
                     android:textColor="@color/text_color"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/tvTimeTakenScore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+
                     android:fontFamily="@font/dm_sans_bold"
                     android:textColor="@color/text_color"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     tools:text="50m" />
             </LinearLayout>
 
@@ -212,7 +213,7 @@
         android:fontFamily="@font/dm_sans_bold"
         android:text="@string/field_solution"
         android:textColor="@color/text_color"
-        android:textSize="32sp"
+        android:textSize="22sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cvReport" />
 

@@ -18,7 +18,7 @@
         android:paddingVertical="@dimen/small_padding"
         android:text="@string/header_all_jobs"
         android:textColor="@color/text_color"
-        android:textSize="26sp"
+        android:textSize="22sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

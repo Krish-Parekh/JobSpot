@@ -29,8 +29,8 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profileImage"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:src="@drawable/ic_image_picker" />
 
         <TextView
@@ -42,7 +42,7 @@
             android:paddingVertical="@dimen/small_padding"
             android:textAlignment="center"
             android:textColor="@color/text_color"
-            android:textSize="22sp"
+            android:textSize="20sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Krish Parekh" />
@@ -54,7 +54,7 @@
             android:fontFamily="@font/dm_sans_regular"
             android:textAlignment="center"
             android:textColor="@color/text_color"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="krish@gmail.com" />
@@ -106,7 +106,7 @@
                     android:fontFamily="@font/dm_sans_bold"
                     android:text="Manage Account"
                     android:textColor="@color/text_color"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     app:layout_constraintLeft_toRightOf="@+id/ivManageAccountLogo"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -114,7 +114,7 @@
                     android:id="@+id/tvManageAccountSubHeading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/small_margin"
+                    android:layout_marginTop="@dimen/extra_small_margin"
                     android:fontFamily="@font/dm_sans_regular"
                     android:text="Edit or delete your account"
                     android:textColor="@color/text_color"
@@ -175,7 +175,7 @@
                     android:fontFamily="@font/dm_sans_bold"
                     android:text="Uploaded Resume"
                     android:textColor="@color/text_color"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     app:layout_constraintLeft_toRightOf="@+id/ivUpdateResumeLogo"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -183,7 +183,7 @@
                     android:id="@+id/tvUpdateResumeSubHeading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/small_margin"
+                    android:layout_marginTop="@dimen/extra_small_margin"
                     android:fontFamily="@font/dm_sans_regular"
                     android:text="View your uploaded resume here"
                     android:textColor="@color/text_color"
@@ -244,7 +244,7 @@
                     android:fontFamily="@font/dm_sans_bold"
                     android:text="Contact TPO"
                     android:textColor="@color/text_color"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     app:layout_constraintLeft_toRightOf="@+id/ivContactTpoLogo"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -252,7 +252,7 @@
                     android:id="@+id/tvContactTpoSubHeading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/small_margin"
+                    android:layout_marginTop="@dimen/extra_small_margin"
                     android:fontFamily="@font/dm_sans_regular"
                     android:text="Contact details of TPO are given"
                     android:textColor="@color/text_color"
@@ -312,7 +312,7 @@
                     android:fontFamily="@font/dm_sans_bold"
                     android:text="Logout"
                     android:textColor="@color/text_color"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     app:layout_constraintLeft_toRightOf="@+id/ivLogout"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -320,7 +320,7 @@
                     android:id="@+id/tvLogoutSubHeading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/small_margin"
+                    android:layout_marginTop="@dimen/extra_small_margin"
                     android:fontFamily="@font/dm_sans_regular"
                     android:text="Logout from your account"
                     android:textColor="@color/text_color"

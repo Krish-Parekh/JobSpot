@@ -26,8 +26,8 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/ivCompanyLogo"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginTop="@dimen/medium_margin"
             android:src="@drawable/ic_apple_logo"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -45,7 +45,7 @@
             android:paddingVertical="@dimen/small_padding"
             android:textAlignment="center"
             android:textColor="@color/text_color"
-            android:textSize="26sp"
+            android:textSize="20sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivCompanyLogo"
@@ -62,7 +62,7 @@
             android:paddingVertical="@dimen/small_padding"
             android:textAlignment="center"
             android:textColor="@color/text_color"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvRole"
@@ -89,8 +89,8 @@
 
                 <ImageView
                     android:id="@+id/ivStudentLogo"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:contentDescription="@null"
                     android:src="@drawable/ic_student"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -104,7 +104,7 @@
                     android:fontFamily="@font/dm_sans_bold"
                     android:text="@string/heading_student_applied"
                     android:textColor="@color/text_color"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     app:layout_constraintLeft_toRightOf="@+id/ivStudentLogo"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -112,7 +112,7 @@
                     android:id="@+id/tvStudentCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/small_margin"
+                    android:layout_marginTop="@dimen/extra_small_margin"
                     android:fontFamily="@font/dm_sans_regular"
                     android:text="50"
                     android:textColor="@color/text_color"
@@ -134,7 +134,7 @@
             android:paddingVertical="@dimen/small_padding"
             android:text="@string/header_job_description"
             android:textColor="@color/text_color"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cvStudentApplied" />
 
@@ -147,7 +147,7 @@
             android:layout_marginTop="@dimen/small_margin"
             android:layout_marginRight="@dimen/medium_margin"
             android:fontFamily="@font/dm_sans_regular"
-            android:textSize="16sp"
+            android:textSize="14sp"
             app:layout_constraintLeft_toLeftOf="@+id/tvJobDescriptionHeader"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvJobDescriptionHeader"
@@ -163,7 +163,7 @@
             android:paddingVertical="@dimen/small_padding"
             android:text="@string/header_salary"
             android:textColor="@color/text_color"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvJobDescription" />
 
@@ -174,9 +174,8 @@
             android:layout_marginStart="@dimen/medium_margin"
             android:layout_marginTop="@dimen/small_margin"
             android:fontFamily="@font/dm_sans_bold"
-            android:paddingVertical="@dimen/small_padding"
             android:textColor="@color/text_color"
-            android:textSize="16sp"
+            android:textSize="14sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvSalaryHeader"
             tools:text="15K/Mo" />
@@ -190,7 +189,7 @@
             android:paddingVertical="@dimen/small_padding"
             android:text="@string/header_responsibilities"
             android:textColor="@color/text_color"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvSalary" />
 
@@ -202,7 +201,7 @@
             android:layout_marginTop="@dimen/small_margin"
             android:layout_marginRight="@dimen/medium_margin"
             android:fontFamily="@font/dm_sans_regular"
-            android:textSize="16sp"
+            android:textSize="14sp"
             app:layout_constraintLeft_toLeftOf="@+id/tvJobDescriptionHeader"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvResponsibilityHeader"
@@ -217,7 +216,7 @@
             android:paddingVertical="@dimen/small_padding"
             android:text="@string/header_skill_set"
             android:textColor="@color/text_color"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvResponsibility" />
 
