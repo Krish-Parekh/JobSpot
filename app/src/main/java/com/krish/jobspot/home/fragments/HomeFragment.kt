@@ -97,7 +97,7 @@ class HomeFragment : Fragment() {
             when (jobs.status) {
                 LOADING -> Unit
                 SUCCESS -> {
-                    val jobList = jobs.data!!
+                    val jobList = jobs.data!!.take(3)
                     jobListAdapter.setJobListData(jobList)
                 }
                 ERROR -> {

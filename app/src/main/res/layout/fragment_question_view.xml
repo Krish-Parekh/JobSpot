@@ -19,7 +19,7 @@
             android:fontFamily="@font/dm_sans_bold"
             android:paddingVertical="@dimen/small_padding"
             android:textColor="@color/text_color"
-            android:textSize="26sp"
+            android:textSize="22sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Question 1" />
